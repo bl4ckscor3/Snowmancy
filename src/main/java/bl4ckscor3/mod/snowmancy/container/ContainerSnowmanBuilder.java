@@ -34,12 +34,10 @@ public class ContainerSnowmanBuilder extends Container
 		}
 
 		IStackValidator coalValidator = (stack) -> {
-			return Items.COAL.getRegistryName().equals(stack.getItem().getRegistryName()) || OreDictionary.itemMatches(new ItemStack(Items.COAL), stack, false);
+			return OreDictionary.itemMatches(new ItemStack(Items.COAL), stack, false);
 		};
 		IStackValidator snowValidator = (stack) -> {
-			Item snow = Item.getItemFromBlock(Blocks.SNOW);
-
-			return snow.getRegistryName().equals(stack.getItem().getRegistryName()) || OreDictionary.itemMatches(new ItemStack(snow), stack, false);
+			return OreDictionary.itemMatches(new ItemStack(Item.getItemFromBlock(Blocks.SNOW)), stack, false);
 		};
 
 		//hat slot
@@ -50,7 +48,7 @@ public class ContainerSnowmanBuilder extends Container
 		addSlotToContainer(new SlotRestricted(te.getInventory(), 1, 59, 18, 1, coalValidator));
 		//nose slot
 		addSlotToContainer(new SlotRestricted(te.getInventory(), 2, 80, 28, 1, (stack) -> {
-			return Items.CARROT.getRegistryName().equals(stack.getItem().getRegistryName()) || OreDictionary.itemMatches(new ItemStack(Items.CARROT), stack, false);
+			return OreDictionary.itemMatches(new ItemStack(Items.CARROT), stack, false);
 		}));
 		//right eye slot
 		addSlotToContainer(new SlotRestricted(te.getInventory(), 3, 101, 18, 1, coalValidator));
