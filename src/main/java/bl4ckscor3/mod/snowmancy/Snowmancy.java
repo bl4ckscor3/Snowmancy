@@ -1,6 +1,8 @@
 package bl4ckscor3.mod.snowmancy;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import bl4ckscor3.mod.snowmancy.block.BlockSnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
@@ -18,9 +20,11 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEve
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
@@ -37,9 +41,13 @@ public class Snowmancy
 	//	public static final String DEPENDENCIES = "";
 	//	@SidedProxy(clientSide="bl4ckscor3.mod.snowmancy.proxy.ClientProxy", serverSide="bl4ckscor3.mod.snowmancy.proxy.ServerProxy")
 	//	public static ServerProxy proxy;
+	@Instance(MODID)
+	public static Snowmancy instance;
 
 	@ObjectHolder(PREFIX + BlockSnowmanBuilder.NAME)
 	public static Block BUILDER;
+
+	private static final List<ItemBlock> ITEM_BLOCKS_TO_REGISTER = new ArrayList<>();
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
@@ -56,15 +64,32 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
 	{
-		event.getRegistry().register(new BlockSnowmanBuilder());
+		registerBlock(event, new BlockSnowmanBuilder());
 
 		GameRegistry.registerTileEntity(TileEntitySnowmanBuilder.class, new ResourceLocation(MODID, NAME));
+	}
+
+	/**
+	 * Registers a block and schedules the registering of its item block
+	 * @param event The event holding the registry to register the block to
+	 * @param block The block to register
+	 */
+	private static void registerBlock(RegistryEvent.Register<Block> event, Block block)
+	{
+		ItemBlock ib = new ItemBlock(block);
+
+		event.getRegistry().register(block);
+		ib.setRegistryName(block.getRegistryName());
+		ITEM_BLOCKS_TO_REGISTER.add(ib);
 	}
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
-		event.getRegistry().register(new ItemBlock(BUILDER));
+		for(ItemBlock ib : ITEM_BLOCKS_TO_REGISTER)
+		{
+			event.getRegistry().register(ib);
+		}
 	}
 
 	@SubscribeEvent
