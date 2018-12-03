@@ -5,10 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import bl4ckscor3.mod.snowmancy.block.BlockSnowmanBuilder;
+import bl4ckscor3.mod.snowmancy.container.ContainerSnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.gui.GuiHandler;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
@@ -62,6 +64,22 @@ public class Snowmancy
 		modMeta.description = "Build your own snowman companion!";
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+
+		Item[] weapons = {
+				Items.BOW,
+				Items.DIAMOND_SWORD,
+				Items.EGG,
+				Items.GOLDEN_SWORD,
+				Items.IRON_SWORD,
+				Items.SNOWBALL,
+				Items.STONE_SWORD,
+				Items.WOODEN_SWORD
+		};
+
+		for(Item i : weapons)
+		{
+			ContainerSnowmanBuilder.registerWeapon(i);
+		}
 	}
 
 	@SubscribeEvent

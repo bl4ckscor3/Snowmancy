@@ -1,5 +1,7 @@
 package bl4ckscor3.mod.snowmancy.container;
 
+import java.util.ArrayList;
+
 import bl4ckscor3.mod.snowmancy.container.components.SlotRestricted;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.util.ISnowmanWearable;
@@ -16,6 +18,17 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ContainerSnowmanBuilder extends Container
 {
+	public static final ArrayList<ItemStack> WEAPONS = new ArrayList<>();
+
+	/**
+	 * Registers an item to be a wearable weapon for the snowman
+	 * @param item The item to register
+	 */
+	public static void registerWeapon(Item item)
+	{
+		WEAPONS.add(new ItemStack(item));
+	}
+
 	public ContainerSnowmanBuilder(InventoryPlayer playerInv, TileEntitySnowmanBuilder te)
 	{
 		//player inventory
@@ -58,10 +71,21 @@ public class ContainerSnowmanBuilder extends Container
 		addSlotToContainer(new SlotRestricted(te.getInventory(), 6, 80, 49, 1, coalValidator));
 		addSlotToContainer(new SlotRestricted(te.getInventory(), 7, 101, 49, 1, coalValidator));
 		addSlotToContainer(new SlotRestricted(te.getInventory(), 8, 122, 38, 1, coalValidator));
-		//body slots (top to bottom)
+		//top body slots
 		addSlotToContainer(new SlotRestricted(te.getInventory(), 9, 80, 74, 1, snowValidator));
-		addSlotToContainer(new SlotRestricted(te.getInventory(), 10, 80, 103, 1, snowValidator));
-		addSlotToContainer(new SlotRestricted(te.getInventory(), 11, 80, 132, 1, snowValidator));
+		//weapon slot
+		addSlotToContainer(new SlotRestricted(te.getInventory(), 10, 105, 89, 1, (stack) -> {
+			for(ItemStack weapon : WEAPONS)
+			{
+				if(OreDictionary.itemMatches(weapon, stack, false))
+					return true;
+			}
+
+			return false;
+		}));
+		//body slots (middle to bottom)
+		addSlotToContainer(new SlotRestricted(te.getInventory(), 11, 80, 103, 1, snowValidator));
+		addSlotToContainer(new SlotRestricted(te.getInventory(), 12, 80, 132, 1, snowValidator));
 	}
 
 	@Override
