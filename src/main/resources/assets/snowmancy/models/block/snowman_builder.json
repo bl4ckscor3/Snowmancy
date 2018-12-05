@@ -1,6 +1,7 @@
 {
-    "parent": "block/cube_all",
+    "parent": "block/cube_column",
     "textures": {
-        "all": "snowmancy:blocks/snowman_builder"
+        "end": "snowmancy:blocks/top_alt2",
+        "side": "snowmancy:blocks/side_alt2"
     }
 }
