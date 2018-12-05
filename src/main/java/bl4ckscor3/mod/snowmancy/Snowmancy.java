@@ -48,7 +48,7 @@ public class Snowmancy
 	public static Snowmancy instance;
 
 	@ObjectHolder(PREFIX + BlockSnowmanBuilder.NAME)
-	public static Block BUILDER;
+	public static Block SNOWMAN_BUILDER;
 
 	private static final List<ItemBlock> ITEM_BLOCKS_TO_REGISTER = new ArrayList<>();
 
@@ -116,7 +116,7 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerModels(ModelRegistryEvent event)
 	{
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BUILDER), 0, new ModelResourceLocation(new ResourceLocation(MODID, BlockSnowmanBuilder.NAME), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(SNOWMAN_BUILDER), 0, new ModelResourceLocation(new ResourceLocation(MODID, BlockSnowmanBuilder.NAME), "inventory"));
 	}
 
 	@SubscribeEvent

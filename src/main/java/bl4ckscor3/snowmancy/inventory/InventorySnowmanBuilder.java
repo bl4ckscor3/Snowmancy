@@ -27,7 +27,7 @@ public class InventorySnowmanBuilder implements IInventory
 	@Override
 	public String getName()
 	{
-		return Snowmancy.BUILDER.getTranslationKey();
+		return Snowmancy.SNOWMAN_BUILDER.getTranslationKey();
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class InventorySnowmanBuilder implements IInventory
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TextComponentString(Snowmancy.BUILDER.getTranslationKey());
+		return new TextComponentString(Snowmancy.SNOWMAN_BUILDER.getTranslationKey());
 	}
 
 	@Override

@@ -23,8 +23,8 @@ public class BlockSnowmanBuilder extends BlockContainer
 	{
 		super(Material.ROCK);
 
-		setTranslationKey(Snowmancy.PREFIX + NAME);
 		setRegistryName(NAME);
+		setTranslationKey(Snowmancy.PREFIX + NAME);
 		setHardness(3.5F);
 		setSoundType(SoundType.STONE);
 	}
