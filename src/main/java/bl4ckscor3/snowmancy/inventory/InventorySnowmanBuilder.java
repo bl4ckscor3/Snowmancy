@@ -11,7 +11,7 @@ import net.minecraft.util.text.TextComponentString;
 
 public class InventorySnowmanBuilder implements IInventory
 {
-	public static final int SLOTS = 13;
+	public static final int SLOTS = 14;
 	private NonNullList<ItemStack> contents = NonNullList.<ItemStack>withSize(SLOTS, ItemStack.EMPTY);
 	private ItemHandlerSnowmanBuilder itemHandler;
 

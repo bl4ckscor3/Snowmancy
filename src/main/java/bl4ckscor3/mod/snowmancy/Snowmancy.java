@@ -7,6 +7,7 @@ import java.util.List;
 import bl4ckscor3.mod.snowmancy.block.BlockSnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.container.ContainerSnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.gui.GuiHandler;
+import bl4ckscor3.mod.snowmancy.item.ItemFrozenSnowman;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -49,6 +50,8 @@ public class Snowmancy
 
 	@ObjectHolder(PREFIX + BlockSnowmanBuilder.NAME)
 	public static Block SNOWMAN_BUILDER;
+	@ObjectHolder(PREFIX + ItemFrozenSnowman.NAME)
+	public static Item FROZEN_SNOWMAN;
 
 	private static final List<ItemBlock> ITEM_BLOCKS_TO_REGISTER = new ArrayList<>();
 
@@ -111,12 +114,15 @@ public class Snowmancy
 		{
 			event.getRegistry().register(ib);
 		}
+
+		event.getRegistry().register(new ItemFrozenSnowman());
 	}
 
 	@SubscribeEvent
 	public static void registerModels(ModelRegistryEvent event)
 	{
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(SNOWMAN_BUILDER), 0, new ModelResourceLocation(new ResourceLocation(MODID, BlockSnowmanBuilder.NAME), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FROZEN_SNOWMAN, 0, new ModelResourceLocation(new ResourceLocation(MODID, ItemFrozenSnowman.NAME), "inventory"));
 	}
 
 	@SubscribeEvent
