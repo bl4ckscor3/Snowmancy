@@ -51,23 +51,15 @@ public class ContainerSnowmanBuilder extends Container
 			addSlotToContainer(new Slot(playerInv, i, 8 + i * 18, 215));
 		}
 
-		IStackValidator coalValidator = (stack) -> {
-			return OreDictionary.itemMatches(new ItemStack(Items.COAL), stack, false);
-		};
-		IStackValidator snowValidator = (stack) -> {
-			return OreDictionary.itemMatches(new ItemStack(Item.getItemFromBlock(Blocks.SNOW)), stack, false);
-		};
+		IStackValidator coalValidator = (stack) -> OreDictionary.itemMatches(new ItemStack(Items.COAL), stack, false);
+		IStackValidator snowValidator = (stack) -> OreDictionary.itemMatches(new ItemStack(Item.getItemFromBlock(Blocks.SNOW)), stack, false);
 
 		int slot = 0;
 
-		//hat slot
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 7, 1, (stack) -> {
-			return stack.getItem() instanceof ISnowmanWearable || stack.getItem() == Items.IRON_HELMET; //TODO don't forget debug
-		}));
+		//hat slot //TODO don't forget debug
+		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 7, 1, (stack) -> stack.getItem() instanceof ISnowmanWearable || stack.getItem() == Items.IRON_HELMET)); //TODO don't forget debug
 		//nose slot
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 28, 1, (stack) -> {
-			return OreDictionary.itemMatches(new ItemStack(Items.CARROT), stack, false);
-		}));
+		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 28, 1, (stack) -> OreDictionary.itemMatches(new ItemStack(Items.CARROT), stack, false)));
 		//eye slots (left, right)
 		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 59, 18, 1, coalValidator));
 		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 101, 18, 1, coalValidator));
@@ -92,7 +84,7 @@ public class ContainerSnowmanBuilder extends Container
 			return false;
 		}));
 		//output (always last slot!)
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 152, 132, 1, (stack) -> {return false;}));
+		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 152, 132, 1, (stack) -> false));
 	}
 
 	@Override
