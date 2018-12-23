@@ -2,6 +2,7 @@ package bl4ckscor3.mod.snowmancy.tileentity;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.snowmancy.inventory.InventorySnowmanBuilder;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -32,7 +33,14 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 		}
 
 		if(!isCraftReady())
-			inventory.getItemHandler().setStackInSlot(inventory.getSizeInventory() - 1, new ItemStack(Snowmancy.FROZEN_SNOWMAN));
+		{
+			ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
+			NBTTagCompound tag = new NBTTagCompound();
+
+			tag.setBoolean("goldenCarrot", inventory.getStackInSlot(1).getItem() == Items.GOLDEN_CARROT);
+			stack.setTagCompound(tag);
+			inventory.getItemHandler().setStackInSlot(inventory.getSizeInventory() - 1, stack);
+		}
 	}
 
 	/**
@@ -80,13 +88,17 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 	{
 		NBTTagCompound invTag = (NBTTagCompound)tag.getTag("SnowmanBuilderInventory");
 
-		for(int i = 0; i < inventory.getContents().size(); i++)
+		if(invTag != null)
 		{
-			if(invTag.hasKey("Slot" + i))
-				inventory.setInventorySlotContents(i, new ItemStack((NBTTagCompound)invTag.getTag("Slot" + i)));
+			for(int i = 0; i < inventory.getContents().size(); i++)
+			{
+				if(invTag.hasKey("Slot" + i))
+					inventory.setInventorySlotContents(i, new ItemStack((NBTTagCompound)invTag.getTag("Slot" + i)));
+			}
+
+			progress = tag.getByte("progress");
 		}
 
-		progress = tag.getByte("progress");
 		super.readFromNBT(tag);
 	}
 

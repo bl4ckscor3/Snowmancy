@@ -56,10 +56,10 @@ public class ContainerSnowmanBuilder extends Container
 
 		int slot = 0;
 
-		//hat slot //TODO don't forget debug
+		//hat slot (always index 0!!) //TODO don't forget debug
 		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 7, 1, (stack) -> stack.getItem() instanceof ISnowmanWearable || stack.getItem() == Items.IRON_HELMET)); //TODO don't forget debug
-		//nose slot
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 28, 1, (stack) -> OreDictionary.itemMatches(new ItemStack(Items.CARROT), stack, false)));
+		//nose slot (always index 1!!)
+		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 28, 1, (stack) -> OreDictionary.itemMatches(new ItemStack(Items.CARROT), stack, false) || OreDictionary.itemMatches(new ItemStack(Items.GOLDEN_CARROT), stack, false)));
 		//eye slots (left, right)
 		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 59, 18, 1, coalValidator));
 		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 101, 18, 1, coalValidator));
@@ -73,7 +73,7 @@ public class ContainerSnowmanBuilder extends Container
 		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 74, 1, snowValidator));
 		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 103, 1, snowValidator));
 		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 132, 1, snowValidator));
-		//weapon slot
+		//weapon slot (always second last slot!)
 		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 105, 89, 1, (stack) -> {
 			for(ItemStack weapon : WEAPONS)
 			{

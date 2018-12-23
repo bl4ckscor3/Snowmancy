@@ -6,8 +6,10 @@ import java.util.List;
 
 import bl4ckscor3.mod.snowmancy.block.BlockSnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.container.ContainerSnowmanBuilder;
+import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.gui.GuiHandler;
 import bl4ckscor3.mod.snowmancy.item.ItemFrozenSnowman;
+import bl4ckscor3.mod.snowmancy.proxy.ServerProxy;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -26,10 +28,13 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
@@ -43,8 +48,8 @@ public class Snowmancy
 	public static final String MC_VERSION = "1.12";
 	public static final String PREFIX = MODID + ":";
 	//	public static final String DEPENDENCIES = "";
-	//	@SidedProxy(clientSide="bl4ckscor3.mod.snowmancy.proxy.ClientProxy", serverSide="bl4ckscor3.mod.snowmancy.proxy.ServerProxy")
-	//	public static ServerProxy proxy;
+	@SidedProxy(clientSide="bl4ckscor3.mod.snowmancy.proxy.ClientProxy", serverSide="bl4ckscor3.mod.snowmancy.proxy.ServerProxy")
+	public static ServerProxy proxy;
 	@Instance(MODID)
 	public static Snowmancy instance;
 
@@ -85,11 +90,16 @@ public class Snowmancy
 		}
 	}
 
+	@EventHandler
+	public void init(FMLInitializationEvent event)
+	{
+		proxy.registerRenderers();
+	}
+
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
 	{
 		registerBlock(event, new BlockSnowmanBuilder());
-
 		GameRegistry.registerTileEntity(TileEntitySnowmanBuilder.class, new ResourceLocation(MODID, NAME));
 	}
 
@@ -128,6 +138,11 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerEntities(RegistryEvent.Register<EntityEntry> event)
 	{
+		event.getRegistry().register(EntityEntryBuilder.create()
+				.id(new ResourceLocation(MODID, "snowman"), 0)
+				.entity(EntitySnowmanCompanion.class)
+				.name(PREFIX + "snowman")
+				.tracker(128, 1, true).build());
 	}
 
 	@SubscribeEvent
