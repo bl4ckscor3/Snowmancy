@@ -72,22 +72,14 @@ public class Snowmancy
 		modMeta.description = "Build your own snowman companion!";
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-
-		Item[] weapons = {
-				Items.BOW,
+		Arrays.asList(Items.BOW,
 				Items.DIAMOND_SWORD,
 				Items.EGG,
 				Items.GOLDEN_SWORD,
 				Items.IRON_SWORD,
 				Items.SNOWBALL,
 				Items.STONE_SWORD,
-				Items.WOODEN_SWORD
-		};
-
-		for(Item i : weapons)
-		{
-			ContainerSnowmanBuilder.registerWeapon(i);
-		}
+				Items.WOODEN_SWORD).stream().forEach(ContainerSnowmanBuilder::registerWeapon);
 	}
 
 	@EventHandler
@@ -120,11 +112,7 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
-		for(ItemBlock ib : ITEM_BLOCKS_TO_REGISTER)
-		{
-			event.getRegistry().register(ib);
-		}
-
+		ITEM_BLOCKS_TO_REGISTER.stream().forEach(event.getRegistry()::register);
 		event.getRegistry().register(new ItemFrozenSnowman());
 	}
 
