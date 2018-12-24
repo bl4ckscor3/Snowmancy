@@ -1,25 +1,43 @@
 package bl4ckscor3.mod.snowmancy.entity;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
+import bl4ckscor3.mod.snowmancy.entity.ai.SnowmanAIAttackMelee;
+import bl4ckscor3.mod.snowmancy.entity.ai.SnowmanAIAttackRanged;
+import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityEgg;
+import net.minecraft.entity.projectile.EntitySnowball;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntitySnowmanCompanion extends EntityGolem
+public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttackMob
 {
-	//TODO: add weapon and wearables
+	//TODO: add wearables
 	private static final DataParameter<Boolean> GOLDEN_NOSE = EntityDataManager.<Boolean>createKey(EntitySnowmanCompanion.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<String> ATTACK_TYPE = EntityDataManager.<String>createKey(EntitySnowmanCompanion.class, DataSerializers.STRING);
+	private static final DataParameter<Float> DAMAGE = EntityDataManager.<Float>createKey(EntitySnowmanCompanion.class, DataSerializers.FLOAT);
 
 	public EntitySnowmanCompanion(World world)
 	{
@@ -27,11 +45,13 @@ public class EntitySnowmanCompanion extends EntityGolem
 		setSize(0.35F, 0.9F);
 	}
 
-	public EntitySnowmanCompanion(World world, boolean goldenNose)
+	public EntitySnowmanCompanion(World world, boolean goldenNose, String attackType, float damage)
 	{
 		super(world);
 		setSize(0.35F, 0.9F);
 		dataManager.set(GOLDEN_NOSE, goldenNose);
+		dataManager.set(ATTACK_TYPE, attackType);
+		dataManager.set(DAMAGE, damage);
 	}
 
 	@Override
@@ -39,14 +59,19 @@ public class EntitySnowmanCompanion extends EntityGolem
 	{
 		super.entityInit();
 		dataManager.register(GOLDEN_NOSE, false);
+		dataManager.register(ATTACK_TYPE, EnumAttackType.HIT.name());
+		dataManager.register(DAMAGE, 0.0F);
 	}
 
 	@Override
 	protected void initEntityAI()
 	{
-		tasks.addTask(1, new EntityAIWanderAvoidWater(this, 1.0D, 1.0000001E-5F));
-		tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-		tasks.addTask(3, new EntityAILookIdle(this));
+		tasks.addTask(1, new SnowmanAIAttackMelee(this));
+		tasks.addTask(2, new SnowmanAIAttackRanged(this));
+		tasks.addTask(3, new EntityAIWanderAvoidWater(this, 1.0D, 1.0000001E-5F));
+		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+		tasks.addTask(5, new EntityAILookIdle(this));
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityLiving>(this, EntityLiving.class, 10, true, false, IMob.MOB_SELECTOR));
 	}
 
 	@Override
@@ -75,15 +100,44 @@ public class EntitySnowmanCompanion extends EntityGolem
 	}
 
 	@Override
+	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor)
+	{
+		EnumAttackType type = EnumAttackType.valueOf(getAttackType());
+		Entity throwableEntity;
+
+		switch(type)
+		{
+			case ARROW: throwableEntity = ((ItemArrow)Items.ARROW).createArrow(world, new ItemStack(Items.ARROW, 1), this); break;
+			case EGG: throwableEntity = new EntityEgg(world, this); break;
+			case SNOWBALL: throwableEntity = new EntitySnowball(world, this); break;
+			default: return;
+		}
+
+		double d0 = target.posY + target.getEyeHeight() - 1.100000023841858D;
+		double d1 = target.posX - posX;
+		double d2 = d0 - throwableEntity.posY;
+		double d3 = target.posZ - posZ;
+		float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
+
+		((IProjectile)throwableEntity).shoot(d1, d2 + f, d3, 1.6F, 12.0F);
+		playSound(SoundEvents.ENTITY_SNOWMAN_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
+		world.spawnEntity(throwableEntity);
+	}
+
+	@Override
 	public void readEntityFromNBT(NBTTagCompound tag)
 	{
 		dataManager.set(GOLDEN_NOSE, tag.getBoolean("goldenNose"));
+		dataManager.set(ATTACK_TYPE, tag.getString("attackType"));
+		dataManager.set(DAMAGE, tag.getFloat("damage"));
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag)
 	{
 		tag.setBoolean("goldenNose", isNoseGolden());
+		tag.setString("attackType", getAttackType());
+		tag.setFloat("damage", getDamage());
 	}
 
 	/**
@@ -93,4 +147,23 @@ public class EntitySnowmanCompanion extends EntityGolem
 	{
 		return dataManager.get(GOLDEN_NOSE);
 	}
+
+	/**
+	 * @return The attack type of the snowman (does he have to hit or throw?)
+	 */
+	public String getAttackType()
+	{
+		return dataManager.get(ATTACK_TYPE);
+	}
+
+	/**
+	 * @return The damage this snowman does when a hit type weapon is equipped
+	 */
+	public float getDamage()
+	{
+		return dataManager.get(DAMAGE);
+	}
+
+	@Override
+	public void setSwingingArms(boolean swingingArms) {}
 }

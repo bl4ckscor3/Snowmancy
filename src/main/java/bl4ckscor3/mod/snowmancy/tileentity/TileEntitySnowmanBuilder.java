@@ -1,9 +1,12 @@
 package bl4ckscor3.mod.snowmancy.tileentity;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
+import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
 import bl4ckscor3.snowmancy.inventory.InventorySnowmanBuilder;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -35,9 +38,15 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 		if(!isCraftReady())
 		{
 			ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
+			Item weapon = inventory.getStackInSlot(inventory.getSizeInventory() - 2).getItem();
 			NBTTagCompound tag = new NBTTagCompound();
+			EnumAttackType attackType = (weapon == Items.BOW ? EnumAttackType.ARROW :
+				(weapon == Items.EGG ? EnumAttackType.EGG :
+					(weapon == Items.SNOWBALL ? EnumAttackType.SNOWBALL : EnumAttackType.HIT)));
 
 			tag.setBoolean("goldenCarrot", inventory.getStackInSlot(1).getItem() == Items.GOLDEN_CARROT);
+			tag.setString("attackType", attackType.name());
+			tag.setFloat("damage", attackType == EnumAttackType.HIT && weapon instanceof ItemSword ? 4.0F + ((ItemSword)weapon).getAttackDamage() : 0.0F);
 			stack.setTagCompound(tag);
 			inventory.getItemHandler().setStackInSlot(inventory.getSizeInventory() - 1, stack);
 		}
