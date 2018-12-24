@@ -127,7 +127,7 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag)
 	{
-		dataManager.set(GOLDEN_NOSE, tag.getBoolean("goldenNose"));
+		dataManager.set(GOLDEN_NOSE, tag.getBoolean("goldenCarrot"));
 		dataManager.set(ATTACK_TYPE, tag.getString("attackType"));
 		dataManager.set(DAMAGE, tag.getFloat("damage"));
 	}
@@ -135,7 +135,7 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag)
 	{
-		tag.setBoolean("goldenNose", isNoseGolden());
+		tag.setBoolean("goldenCarrot", isNoseGolden());
 		tag.setString("attackType", getAttackType());
 		tag.setFloat("damage", getDamage());
 	}
