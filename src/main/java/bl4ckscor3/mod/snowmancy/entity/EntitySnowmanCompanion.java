@@ -65,8 +65,7 @@ public class EntitySnowmanCompanion extends EntityGolem
 			ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
 			NBTTagCompound tag = new NBTTagCompound();
 
-			//TODO: write more entity data to item
-			tag.setBoolean("goldenCarrot", isNoseGolden());
+			writeEntityToNBT(tag);
 			stack.setTagCompound(tag);
 			Block.spawnAsEntity(world, getPosition(), stack);
 			setDead();
