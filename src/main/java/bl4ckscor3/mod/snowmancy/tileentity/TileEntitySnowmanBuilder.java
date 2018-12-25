@@ -13,6 +13,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -25,30 +26,33 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 	@Override
 	public void update()
 	{
-		for(int i = 0; i < inventory.getSizeInventory() - 1; i++) //last slot is output
+		if(world.getBiome(getPos()).getTempCategory() == TempCategory.COLD) //only works in cold biomes
 		{
-			if(inventory.getStackInSlot(i).isEmpty())
+			for(int i = 0; i < inventory.getSizeInventory() - 1; i++) //last slot is output
 			{
-				inventory.getItemHandler().setStackInSlot(inventory.getSizeInventory() - 1, ItemStack.EMPTY);
-				resetProgress();
-				return;
+				if(inventory.getStackInSlot(i).isEmpty())
+				{
+					inventory.getItemHandler().setStackInSlot(inventory.getSizeInventory() - 1, ItemStack.EMPTY);
+					resetProgress();
+					return;
+				}
 			}
-		}
 
-		if(!isCraftReady())
-		{
-			ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
-			Item weapon = inventory.getStackInSlot(inventory.getSizeInventory() - 2).getItem();
-			NBTTagCompound tag = new NBTTagCompound();
-			EnumAttackType attackType = (weapon == Items.BOW ? EnumAttackType.ARROW :
-				(weapon == Items.EGG ? EnumAttackType.EGG :
-					(weapon == Items.SNOWBALL ? EnumAttackType.SNOWBALL : EnumAttackType.HIT)));
+			if(!isCraftReady())
+			{
+				ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
+				Item weapon = inventory.getStackInSlot(inventory.getSizeInventory() - 2).getItem();
+				NBTTagCompound tag = new NBTTagCompound();
+				EnumAttackType attackType = (weapon == Items.BOW ? EnumAttackType.ARROW :
+					(weapon == Items.EGG ? EnumAttackType.EGG :
+						(weapon == Items.SNOWBALL ? EnumAttackType.SNOWBALL : EnumAttackType.HIT)));
 
-			tag.setBoolean("goldenCarrot", inventory.getStackInSlot(1).getItem() == Items.GOLDEN_CARROT);
-			tag.setString("attackType", attackType.name());
-			tag.setFloat("damage", attackType == EnumAttackType.HIT && weapon instanceof ItemSword ? 4.0F + ((ItemSword)weapon).getAttackDamage() : 0.0F);
-			stack.setTagCompound(tag);
-			inventory.getItemHandler().setStackInSlot(inventory.getSizeInventory() - 1, stack);
+				tag.setBoolean("goldenCarrot", inventory.getStackInSlot(1).getItem() == Items.GOLDEN_CARROT);
+				tag.setString("attackType", attackType.name());
+				tag.setFloat("damage", attackType == EnumAttackType.HIT && weapon instanceof ItemSword ? 4.0F + ((ItemSword)weapon).getAttackDamage() : 0.0F);
+				stack.setTagCompound(tag);
+				inventory.getItemHandler().setStackInSlot(inventory.getSizeInventory() - 1, stack);
+			}
 		}
 	}
 

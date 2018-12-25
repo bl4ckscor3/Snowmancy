@@ -8,10 +8,12 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome.TempCategory;
 
 public class GuiSnowmanBuilder extends GuiContainer
 {
 	public static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Snowmancy.MODID, "textures/gui/container/" + BlockSnowmanBuilder.NAME + ".png");
+	private TileEntitySnowmanBuilder te;
 
 	public GuiSnowmanBuilder(InventoryPlayer playerInv, TileEntitySnowmanBuilder te)
 	{
@@ -19,6 +21,14 @@ public class GuiSnowmanBuilder extends GuiContainer
 
 		xSize = 176;
 		ySize = 239;
+		this.te = te;
+	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+	{
+		if(te.getWorld().getBiome(te.getPos()).getTempCategory() != TempCategory.COLD)
+			drawString(fontRenderer, "Biome too warm!", 0, -10, 0x00FFFF);
 	}
 
 	@Override
