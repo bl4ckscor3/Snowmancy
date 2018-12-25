@@ -36,7 +36,8 @@ public class ItemFrozenSnowman extends Item
 			Entity entity = new EntitySnowmanCompanion(world,
 					player.getHeldItem(hand).getTagCompound().getBoolean("goldenCarrot"),
 					player.getHeldItem(hand).getTagCompound().getString("attackType"),
-					player.getHeldItem(hand).getTagCompound().getFloat("damage"));
+					player.getHeldItem(hand).getTagCompound().getFloat("damage"),
+					player.getHeldItem(hand).getTagCompound().getBoolean("evercold"));
 
 			entity.setPosition(pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F);
 			world.spawnEntity(entity);
@@ -54,5 +55,6 @@ public class ItemFrozenSnowman extends Item
 		tooltip.add(TextFormatting.GOLD + "Golden Carrot: " + TextFormatting.GRAY + stack.getTagCompound().getBoolean("goldenCarrot"));
 		tooltip.add(TextFormatting.BLUE + "Attack Type: " + TextFormatting.GRAY + stack.getTagCompound().getString("attackType"));
 		tooltip.add(TextFormatting.RED + "Damage: " + TextFormatting.GRAY + stack.getTagCompound().getFloat("damage"));
+		tooltip.add(TextFormatting.AQUA + "Evercold: " + TextFormatting.GRAY + stack.getTagCompound().getBoolean("evercold"));
 	}
 }

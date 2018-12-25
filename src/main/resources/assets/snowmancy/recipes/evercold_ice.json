@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PIP",
+    "IPI",
+    "PIP"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:ice"
+    },
+    "P": {
+      "item": "minecraft:packed_ice"
+    }
+  },
+  "result": {
+    "item": "snowmancy:evercold_ice",
+    "count": 1
+  }
+}

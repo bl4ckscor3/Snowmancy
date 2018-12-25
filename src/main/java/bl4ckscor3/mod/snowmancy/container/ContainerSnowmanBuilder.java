@@ -13,8 +13,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -56,8 +58,9 @@ public class ContainerSnowmanBuilder extends Container
 
 		int slot = 0;
 
-		//hat slot (always index 0!!) //TODO don't forget debug
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 7, 1, (stack) -> stack.getItem() instanceof ISnowmanWearable || stack.getItem() == Items.IRON_HELMET)); //TODO don't forget debug
+		//hat slot (always index 0!!)
+		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 7, 1, (stack) -> stack.getItem() instanceof ISnowmanWearable ||
+				(stack.getItem() instanceof ItemArmor && ((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.HEAD))); //allow any helmet
 		//nose slot (always index 1!!)
 		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 28, 1, (stack) -> OreDictionary.itemMatches(new ItemStack(Items.CARROT), stack, false) || OreDictionary.itemMatches(new ItemStack(Items.GOLDEN_CARROT), stack, false)));
 		//eye slots (left, right)

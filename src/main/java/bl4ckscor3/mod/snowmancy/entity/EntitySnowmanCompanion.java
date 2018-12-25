@@ -28,9 +28,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome.TempCategory;
 
 public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttackMob
 {
@@ -38,6 +40,7 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 	private static final DataParameter<Boolean> GOLDEN_NOSE = EntityDataManager.<Boolean>createKey(EntitySnowmanCompanion.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<String> ATTACK_TYPE = EntityDataManager.<String>createKey(EntitySnowmanCompanion.class, DataSerializers.STRING);
 	private static final DataParameter<Float> DAMAGE = EntityDataManager.<Float>createKey(EntitySnowmanCompanion.class, DataSerializers.FLOAT);
+	private static final DataParameter<Boolean> EVERCOLD = EntityDataManager.<Boolean>createKey(EntitySnowmanCompanion.class, DataSerializers.BOOLEAN);
 
 	public EntitySnowmanCompanion(World world)
 	{
@@ -45,13 +48,14 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 		setSize(0.35F, 0.9F);
 	}
 
-	public EntitySnowmanCompanion(World world, boolean goldenNose, String attackType, float damage)
+	public EntitySnowmanCompanion(World world, boolean goldenNose, String attackType, float damage, boolean evercold)
 	{
 		super(world);
 		setSize(0.35F, 0.9F);
 		dataManager.set(GOLDEN_NOSE, goldenNose);
 		dataManager.set(ATTACK_TYPE, attackType);
 		dataManager.set(DAMAGE, damage);
+		dataManager.set(EVERCOLD, evercold);
 	}
 
 	@Override
@@ -61,6 +65,7 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 		dataManager.register(GOLDEN_NOSE, false);
 		dataManager.register(ATTACK_TYPE, EnumAttackType.HIT.name());
 		dataManager.register(DAMAGE, 0.0F);
+		dataManager.register(EVERCOLD, false);
 	}
 
 	@Override
@@ -80,6 +85,15 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.20000000298023224D);
+	}
+
+	@Override
+	public void onLivingUpdate()
+	{
+		super.onLivingUpdate();
+
+		if(!isEvercold() && world.getBiome(getPosition()).getTempCategory() != TempCategory.COLD)
+			attackEntityFrom(DamageSource.ON_FIRE, 1.0F);
 	}
 
 	@Override
@@ -130,6 +144,7 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 		dataManager.set(GOLDEN_NOSE, tag.getBoolean("goldenCarrot"));
 		dataManager.set(ATTACK_TYPE, tag.getString("attackType"));
 		dataManager.set(DAMAGE, tag.getFloat("damage"));
+		dataManager.set(EVERCOLD, tag.getBoolean("evercold"));
 	}
 
 	@Override
@@ -138,6 +153,7 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 		tag.setBoolean("goldenCarrot", isNoseGolden());
 		tag.setString("attackType", getAttackType());
 		tag.setFloat("damage", getDamage());
+		tag.setBoolean("evercold", isEvercold());
 	}
 
 	/**
@@ -163,6 +179,15 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 	{
 		return dataManager.get(DAMAGE);
 	}
+
+	/**
+	 * @return true if this snowman can live in biomes that are not cold
+	 */
+	public boolean isEvercold()
+	{
+		return dataManager.get(EVERCOLD);
+	}
+
 
 	@Override
 	public void setSwingingArms(boolean swingingArms) {}

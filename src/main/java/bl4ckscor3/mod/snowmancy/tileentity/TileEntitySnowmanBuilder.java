@@ -1,6 +1,7 @@
 package bl4ckscor3.mod.snowmancy.tileentity;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
+import bl4ckscor3.mod.snowmancy.item.ItemBlockEvercoldIce;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
 import bl4ckscor3.snowmancy.inventory.InventorySnowmanBuilder;
 import net.minecraft.init.Items;
@@ -50,6 +51,7 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 				tag.setBoolean("goldenCarrot", inventory.getStackInSlot(1).getItem() == Items.GOLDEN_CARROT);
 				tag.setString("attackType", attackType.name());
 				tag.setFloat("damage", attackType == EnumAttackType.HIT && weapon instanceof ItemSword ? 4.0F + ((ItemSword)weapon).getAttackDamage() : 0.0F);
+				tag.setBoolean("evercold", inventory.getStackInSlot(0).getItem() instanceof ItemBlockEvercoldIce);
 				stack.setTagCompound(tag);
 				inventory.getItemHandler().setStackInSlot(inventory.getSizeInventory() - 1, stack);
 			}
