@@ -1,1 +1,0 @@
-The raw paint.net files for some of the alternative textures
