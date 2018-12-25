@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SNS",
+    "CGC",
+    "IPI"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:snow"
+    },
+    "N": {
+      "item": "minecraft:ice"
+    },
+    "C": {
+      "item": "minecraft:cobblestone"
+    },
+    "G": {
+      "item": "minecraft:stained_glass",
+      "data": 0
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "item": "minecraft:packed_ice"
+    }
+  },
+  "result": {
+    "item": "snowmancy:snowman_builder",
+    "count": 1
+  }
+}
