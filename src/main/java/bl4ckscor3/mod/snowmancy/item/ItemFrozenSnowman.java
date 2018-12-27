@@ -52,9 +52,12 @@ public class ItemFrozenSnowman extends Item
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag)
 	{
-		tooltip.add(TextFormatting.GOLD + "Golden Carrot: " + TextFormatting.GRAY + stack.getTagCompound().getBoolean("goldenCarrot"));
-		tooltip.add(TextFormatting.BLUE + "Attack Type: " + TextFormatting.GRAY + stack.getTagCompound().getString("attackType"));
-		tooltip.add(TextFormatting.RED + "Damage: " + TextFormatting.GRAY + stack.getTagCompound().getFloat("damage"));
-		tooltip.add(TextFormatting.AQUA + "Evercold: " + TextFormatting.GRAY + stack.getTagCompound().getBoolean("evercold"));
+		if(stack.hasTagCompound())
+		{
+			tooltip.add(TextFormatting.GOLD + "Golden Carrot: " + TextFormatting.GRAY + stack.getTagCompound().getBoolean("goldenCarrot"));
+			tooltip.add(TextFormatting.BLUE + "Attack Type: " + TextFormatting.GRAY + stack.getTagCompound().getString("attackType"));
+			tooltip.add(TextFormatting.RED + "Damage: " + TextFormatting.GRAY + stack.getTagCompound().getFloat("damage"));
+			tooltip.add(TextFormatting.AQUA + "Evercold: " + TextFormatting.GRAY + stack.getTagCompound().getBoolean("evercold"));
+		}
 	}
 }
