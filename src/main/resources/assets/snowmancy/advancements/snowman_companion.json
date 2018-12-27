@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "item": "snowmancy:frozen_snowman"
+        },
+        "title": "Freezing",
+        "description": "Build your first snowman companion!"
+    },
+    "parent": "snowmancy:root",
+    "criteria": {
+        "snowman": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "snowmancy:frozen_snowman"
+                    }
+                ]
+            }
+        }
+    }
+}

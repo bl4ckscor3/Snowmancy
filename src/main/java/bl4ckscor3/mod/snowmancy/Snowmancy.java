@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import bl4ckscor3.mod.snowmancy.advancement.CraftEvercoldSnowmanTrigger;
 import bl4ckscor3.mod.snowmancy.block.BlockEvercoldIce;
 import bl4ckscor3.mod.snowmancy.block.BlockSnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.container.ContainerSnowmanBuilder;
@@ -13,6 +14,7 @@ import bl4ckscor3.mod.snowmancy.item.ItemBlockEvercoldIce;
 import bl4ckscor3.mod.snowmancy.item.ItemFrozenSnowman;
 import bl4ckscor3.mod.snowmancy.proxy.ServerProxy;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Items;
@@ -60,8 +62,9 @@ public class Snowmancy
 	public static Block EVERCOLD_ICE;
 	@ObjectHolder(PREFIX + ItemFrozenSnowman.NAME)
 	public static Item FROZEN_SNOWMAN;
-
 	private static final List<ItemBlock> ITEM_BLOCKS_TO_REGISTER = new ArrayList<>();
+
+	public static final CraftEvercoldSnowmanTrigger CRAFT_EVERCOLD_SNOWMAN = CriteriaTriggers.register(new CraftEvercoldSnowmanTrigger());
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)

@@ -2,12 +2,14 @@ package bl4ckscor3.mod.snowmancy.container;
 
 import java.util.ArrayList;
 
+import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.container.components.SlotRestricted;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.util.ISnowmanWearable;
 import bl4ckscor3.mod.snowmancy.util.IStackValidator;
 import bl4ckscor3.snowmancy.inventory.InventorySnowmanBuilder;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -102,7 +104,7 @@ public class ContainerSnowmanBuilder extends Container
 
 			if(te.getProgress() == te.getMaxProgress())
 			{
-				for(int i = 0; i < inv.getSizeInventory() - 1; i++)
+				for(int i = 0; i < inv.getSizeInventory() - 1; i++) //remove all input items
 				{
 					inv.getItemHandler().extractItem(i, 1, false);
 				}
@@ -116,6 +118,10 @@ public class ContainerSnowmanBuilder extends Container
 			if(te.getProgress() == te.getMaxProgress())
 			{
 				te.resetProgress();
+
+				if(player instanceof EntityPlayerMP && te.getInventory().getStackInSlot(te.getInventory().getSizeInventory() - 1).getTagCompound().getBoolean("evercold"))
+					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.trigger((EntityPlayerMP)player);
+
 				return super.slotClick(slotId, dragType, clickType, player);
 			}
 			else return ItemStack.EMPTY;

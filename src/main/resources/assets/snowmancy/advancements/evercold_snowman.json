@@ -1,0 +1,15 @@
+{
+    "display": {
+        "icon": {
+            "item": "snowmancy:evercold_ice"
+        },
+        "title": "Melting",
+        "description": "Keep your snowman companion from melting by giving him Evercold Ice as a hat."
+    },
+    "parent": "snowmancy:snowman_companion",
+    "criteria": {
+        "evercold_snowman": {
+            "trigger": "snowmancy:craft_evercold_snowman"
+        }
+    }
+}

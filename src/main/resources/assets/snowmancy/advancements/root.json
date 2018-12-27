@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "snowmancy:snowman_builder"
+        },
+        "title": "Snowmancy",
+        "description": "Craft the Snowman Builder",
+        "background": "snowmancy:textures/blocks/evercold_ice.png",
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "criteria": {
+        "builder": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "snowmancy:snowman_builder"
+                    }
+                ]
+            }
+        }
+    }
+}
