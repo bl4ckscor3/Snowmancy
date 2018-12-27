@@ -33,7 +33,7 @@ public class GuiSnowmanBuilder extends GuiContainer
 		if(te.getWorld().getBiome(te.getPos()).getTempCategory() != TempCategory.COLD)
 			drawString(fontRenderer, "Biome too warm!", 0, -10, 0x00FFFF);
 
-		drawRect(152, 131, 152 + length, 132, color);
+		drawRect(152, 130, 152 + length, 131, color);
 	}
 
 	@Override
