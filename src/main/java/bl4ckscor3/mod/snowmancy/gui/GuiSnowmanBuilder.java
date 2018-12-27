@@ -27,8 +27,13 @@ public class GuiSnowmanBuilder extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
+		int length = te.getProgress() * 2 + (te.isCraftReady() && te.getProgress() == 0 ? 1 : 0);
+		int color = te.getProgress() < 5 ? 0xFFFF0000 : (te.getProgress() < 8 ? 0xFFFFFF00 : 0xFF00FF00); //red, yellow, green (0xAARRGGBB)
+
 		if(te.getWorld().getBiome(te.getPos()).getTempCategory() != TempCategory.COLD)
 			drawString(fontRenderer, "Biome too warm!", 0, -10, 0x00FFFF);
+
+		drawRect(152, 131, 152 + length, 132, color);
 	}
 
 	@Override
@@ -44,7 +49,7 @@ public class GuiSnowmanBuilder extends GuiContainer
 	{
 		drawDefaultBackground();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.getTextureManager().bindTexture(new ResourceLocation(Snowmancy.MODID, "textures/gui/container/" + BlockSnowmanBuilder.NAME + ".png"));
+		mc.getTextureManager().bindTexture(GUI_TEXTURE);
 		drawTexturedModalRect((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
 	}
 }
