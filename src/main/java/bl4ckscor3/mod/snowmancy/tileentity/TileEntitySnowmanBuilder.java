@@ -27,7 +27,7 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 	@Override
 	public void update()
 	{
-		if(world.getBiome(getPos()).getTempCategory() == TempCategory.COLD) //only works in cold biomes
+		if(canOperate())
 		{
 			for(int i = 0; i < inventory.getSizeInventory() - 1; i++) //last slot is output
 			{
@@ -81,10 +81,35 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 
 	/**
 	 * Checks if the crafting status is ready by checking if the last slot (output slot) of this tile's inventory is not empty
+	 * @return true if the crafting status is ready, false otherwhise
 	 */
 	public boolean isCraftReady()
 	{
 		return !inventory.getStackInSlot(inventory.getSizeInventory() - 1).isEmpty();
+	}
+
+	/**
+	 * @return true if the machine can work in the current climate, false otherwhise
+	 */
+	public boolean canOperate()
+	{
+		int cooling = 0;
+		boolean cold = getWorld().getBiome(pos).getTempCategory() == TempCategory.COLD;
+		boolean medium = getWorld().getBiome(pos).getTempCategory() == TempCategory.MEDIUM;
+		boolean ocean = getWorld().getBiome(pos).getTempCategory() == TempCategory.OCEAN;
+		boolean warm = getWorld().getBiome(pos).getTempCategory() == TempCategory.WARM;
+
+		for(EnumFacing facing : EnumFacing.VALUES)
+		{
+			if(getWorld().getBlockState(pos.offset(facing)).getBlock() == Snowmancy.EVERCOLD_ICE)
+				cooling++;
+		}
+		switch(cooling)
+		{
+			case 0: case 1: return cold;
+			case 2: case 3: return cold || medium || ocean;
+			default: return cold || medium || ocean || warm;
+		}
 	}
 
 	/**

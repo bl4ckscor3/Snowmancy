@@ -8,7 +8,6 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome.TempCategory;
 
 public class GuiSnowmanBuilder extends GuiContainer
 {
@@ -30,7 +29,7 @@ public class GuiSnowmanBuilder extends GuiContainer
 		int length = te.getProgress() * 2 + (te.isCraftReady() && te.getProgress() == 0 ? 1 : 0);
 		int color = te.getProgress() < 5 ? 0xFFFF0000 : (te.getProgress() < 8 ? 0xFFFFFF00 : 0xFF00FF00); //red, yellow, green (0xAARRGGBB)
 
-		if(te.getWorld().getBiome(te.getPos()).getTempCategory() != TempCategory.COLD)
+		if(!te.canOperate())
 			drawString(fontRenderer, "Biome too warm!", 0, -10, 0x00FFFF);
 
 		drawRect(152, 130, 152 + length, 131, color);
