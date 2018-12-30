@@ -73,9 +73,9 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 	{
 		tasks.addTask(1, new SnowmanAIAttackMelee(this));
 		tasks.addTask(2, new SnowmanAIAttackRanged(this));
-		tasks.addTask(3, new EntityAIWanderAvoidWater(this, 1.0D, 1.0000001E-5F));
-		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-		tasks.addTask(5, new EntityAILookIdle(this));
+		tasks.addTask(4, new EntityAIWanderAvoidWater(this, 1.0D, 1.0000001E-5F));
+		tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+		tasks.addTask(6, new EntityAILookIdle(this));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityLiving>(this, EntityLiving.class, 10, true, false, IMob.MOB_SELECTOR));
 	}
 

@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.EntityAIAttackRanged;
 
 public class SnowmanAIAttackRanged extends EntityAIAttackRanged
 {
-	private EntitySnowmanCompanion snowman;
+	protected EntitySnowmanCompanion snowman;
 
 	public SnowmanAIAttackRanged(EntitySnowmanCompanion snowman)
 	{
@@ -17,8 +17,6 @@ public class SnowmanAIAttackRanged extends EntityAIAttackRanged
 	@Override
 	public boolean shouldExecute()
 	{
-		EnumAttackType type = EnumAttackType.valueOf(snowman.getAttackType());
-
-		return type != EnumAttackType.ARROW && type != EnumAttackType.HIT && super.shouldExecute();
+		return EnumAttackType.valueOf(snowman.getAttackType()) != EnumAttackType.HIT && super.shouldExecute();
 	}
 }
