@@ -49,7 +49,7 @@ public class Snowmancy
 {
 	public static final String MODID = "snowmancy";
 	public static final String NAME = "Snowmancy";
-	public static final String VERSION = "v1.0";
+	public static final String VERSION = "beta-1";
 	public static final String MC_VERSION = "1.12";
 	public static final String PREFIX = MODID + ":";
 	@SidedProxy(clientSide="bl4ckscor3.mod.snowmancy.proxy.ClientProxy", serverSide="bl4ckscor3.mod.snowmancy.proxy.ServerProxy")
