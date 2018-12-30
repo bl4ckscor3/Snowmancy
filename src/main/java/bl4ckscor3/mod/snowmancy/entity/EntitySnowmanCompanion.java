@@ -101,16 +101,24 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 	{
 		if(player.isSneaking() && hand == EnumHand.MAIN_HAND)
 		{
-			ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
-			NBTTagCompound tag = new NBTTagCompound();
-
-			writeEntityToNBT(tag);
-			stack.setTagCompound(tag);
-			Block.spawnAsEntity(world, getPosition(), stack);
+			Block.spawnAsEntity(world, getPosition(), createItem());
 			setDead();
 		}
 
 		return super.processInteract(player, hand);
+	}
+
+	/**
+	 * @return the item from this entity with which this entity can be spawned again
+	 */
+	public ItemStack createItem()
+	{
+		ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
+		NBTTagCompound tag = new NBTTagCompound();
+
+		writeEntityToNBT(tag);
+		stack.setTagCompound(tag);
+		return stack;
 	}
 
 	@Override
