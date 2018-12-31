@@ -27,6 +27,7 @@ public class BlockSnowmanBuilder extends BlockContainer
 		setTranslationKey(Snowmancy.PREFIX + NAME);
 		setHardness(3.5F);
 		setSoundType(SoundType.STONE);
+		setCreativeTab(Snowmancy.CREATIVE_TAB);
 	}
 
 	@Override

@@ -26,6 +26,7 @@ public class ItemFrozenSnowman extends Item
 
 		setRegistryName(NAME);
 		setTranslationKey(Snowmancy.PREFIX + NAME);
+		setCreativeTab(Snowmancy.CREATIVE_TAB);
 	}
 
 	@Override

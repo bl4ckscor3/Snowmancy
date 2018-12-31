@@ -21,6 +21,7 @@ public class BlockEvercoldIce extends Block
 		setTranslationKey(Snowmancy.PREFIX + NAME);
 		setHardness(2.0F);
 		setSoundType(SoundType.GLASS);
+		setCreativeTab(Snowmancy.CREATIVE_TAB);
 	}
 
 	@Override

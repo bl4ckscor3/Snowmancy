@@ -17,6 +17,7 @@ import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -67,6 +68,7 @@ public class Snowmancy
 
 	public static final CraftEvercoldSnowmanTrigger CRAFT_EVERCOLD_SNOWMAN = CriteriaTriggers.register(new CraftEvercoldSnowmanTrigger());
 	public static final DamageSource SNOWMAN_DAMAGE = new DamageSource(PREFIX + "snowman_damage");
+	public static final CreativeTabs CREATIVE_TAB = new CreativeTabSnowmancy();
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
