@@ -16,8 +16,7 @@
       "item": "minecraft:cobblestone"
     },
     "G": {
-      "item": "minecraft:stained_glass",
-      "data": 0
+      "tag": "snowmancy:stained_glass"
     },
     "I": {
       "item": "minecraft:iron_ingot"

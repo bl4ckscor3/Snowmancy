@@ -9,10 +9,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -22,23 +24,26 @@ public class ItemFrozenSnowman extends Item
 
 	public ItemFrozenSnowman()
 	{
-		super();
+		super(new Item.Properties().group(Snowmancy.ITEM_GROUP));
 
 		setRegistryName(NAME);
-		setTranslationKey(Snowmancy.PREFIX + NAME);
-		setCreativeTab(Snowmancy.CREATIVE_TAB);
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(ItemUseContext context)
 	{
+		World world = context.getWorld();
+		EntityPlayer player = context.getPlayer();
+		EnumHand hand = player.getActiveHand();
+		BlockPos pos = context.getPos();
+
 		if(!world.isRemote)
 		{
 			Entity entity = new EntitySnowmanCompanion(world,
-					player.getHeldItem(hand).getTagCompound().getBoolean("goldenCarrot"),
-					player.getHeldItem(hand).getTagCompound().getString("attackType"),
-					player.getHeldItem(hand).getTagCompound().getFloat("damage"),
-					player.getHeldItem(hand).getTagCompound().getBoolean("evercold"));
+					player.getHeldItem(hand).getTag().getBoolean("goldenCarrot"),
+					player.getHeldItem(hand).getTag().getString("attackType"),
+					player.getHeldItem(hand).getTag().getFloat("damage"),
+					player.getHeldItem(hand).getTag().getBoolean("evercold"));
 
 			entity.setPosition(pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F);
 			world.spawnEntity(entity);
@@ -51,14 +56,14 @@ public class ItemFrozenSnowman extends Item
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag)
+	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
-		if(stack.hasTagCompound())
+		if(stack.hasTag())
 		{
-			tooltip.add(TextFormatting.GOLD + "Golden Carrot: " + TextFormatting.GRAY + stack.getTagCompound().getBoolean("goldenCarrot"));
-			tooltip.add(TextFormatting.BLUE + "Attack Type: " + TextFormatting.GRAY + stack.getTagCompound().getString("attackType"));
-			tooltip.add(TextFormatting.RED + "Damage: " + TextFormatting.GRAY + stack.getTagCompound().getFloat("damage"));
-			tooltip.add(TextFormatting.AQUA + "Evercold: " + TextFormatting.GRAY + stack.getTagCompound().getBoolean("evercold"));
+			tooltip.add(new TextComponentString(TextFormatting.GOLD + "Golden Carrot: " + TextFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
+			tooltip.add(new TextComponentString(TextFormatting.BLUE + "Attack Type: " + TextFormatting.GRAY + stack.getTag().getString("attackType")));
+			tooltip.add(new TextComponentString(TextFormatting.RED + "Damage: " + TextFormatting.GRAY + stack.getTag().getFloat("damage")));
+			tooltip.add(new TextComponentString(TextFormatting.AQUA + "Evercold: " + TextFormatting.GRAY + stack.getTag().getBoolean("evercold")));
 		}
 	}
 }

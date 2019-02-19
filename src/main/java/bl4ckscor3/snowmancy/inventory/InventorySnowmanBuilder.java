@@ -7,7 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class InventorySnowmanBuilder implements IInventory
 {
@@ -25,9 +25,9 @@ public class InventorySnowmanBuilder implements IInventory
 	}
 
 	@Override
-	public String getName()
+	public ITextComponent getName()
 	{
-		return Snowmancy.SNOWMAN_BUILDER.getTranslationKey();
+		return new TextComponentTranslation(Snowmancy.SNOWMAN_BUILDER.getTranslationKey());
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class InventorySnowmanBuilder implements IInventory
 	@Override
 	public ITextComponent getDisplayName()
 	{
-		return new TextComponentString(Snowmancy.SNOWMAN_BUILDER.getTranslationKey());
+		return getName();
 	}
 
 	@Override
@@ -150,5 +150,11 @@ public class InventorySnowmanBuilder implements IInventory
 	public NonNullList<ItemStack> getContents()
 	{
 		return contents;
+	}
+
+	@Override
+	public ITextComponent getCustomName()
+	{
+		return getName();
 	}
 }

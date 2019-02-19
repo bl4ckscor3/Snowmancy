@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.container.components.SlotRestricted;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
-import bl4ckscor3.mod.snowmancy.util.ISnowmanWearable;
 import bl4ckscor3.mod.snowmancy.util.IStackValidator;
 import bl4ckscor3.snowmancy.inventory.InventorySnowmanBuilder;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +19,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class ContainerSnowmanBuilder extends Container
 {
@@ -45,51 +43,50 @@ public class ContainerSnowmanBuilder extends Container
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				addSlotToContainer(new Slot(playerInv, 9 + j + i * 9, 8 + j * 18, 157 + i * 18));
+				addSlot(new Slot(playerInv, 9 + j + i * 9, 8 + j * 18, 157 + i * 18));
 			}
 		}
 
 		//player hotbar
 		for(int i = 0; i < 9; i++)
 		{
-			addSlotToContainer(new Slot(playerInv, i, 8 + i * 18, 215));
+			addSlot(new Slot(playerInv, i, 8 + i * 18, 215));
 		}
 
-		IStackValidator coalValidator = (stack) -> OreDictionary.itemMatches(new ItemStack(Items.COAL), stack, false);
-		IStackValidator snowValidator = (stack) -> OreDictionary.itemMatches(new ItemStack(Item.getItemFromBlock(Blocks.SNOW)), stack, false);
+		IStackValidator coalValidator = (stack) -> stack.getItem() == Items.COAL || stack.getItem() == Items.CHARCOAL;
+		IStackValidator snowValidator = (stack) -> stack.getItem() == Blocks.SNOW_BLOCK.asItem();
 
 		int slot = 0;
 
 		//hat slot (always index 0!!)
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 7, 1, (stack) -> stack.getItem() instanceof ISnowmanWearable ||
-				(stack.getItem() instanceof ItemArmor && ((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.HEAD))); //allow any helmet
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 7, 1, (stack) -> stack.getItem() == Snowmancy.EVERCOLD_ICE.asItem() || (stack.getItem() instanceof ItemArmor && ((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.HEAD))); //allow any helmet
 		//nose slot (always index 1!!)
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 28, 1, (stack) -> OreDictionary.itemMatches(new ItemStack(Items.CARROT), stack, false) || OreDictionary.itemMatches(new ItemStack(Items.GOLDEN_CARROT), stack, false)));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 28, 1, (stack) -> stack.getItem() == Items.CARROT || stack.getItem() == Items.GOLDEN_CARROT));
 		//eye slots (left, right)
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 59, 18, 1, coalValidator));
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 101, 18, 1, coalValidator));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 59, 18, 1, coalValidator));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 101, 18, 1, coalValidator));
 		//mouth slots (left to right)
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 38, 38, 1, coalValidator));
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 59, 49, 1, coalValidator));
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 49, 1, coalValidator));
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 101, 49, 1, coalValidator));
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 122, 38, 1, coalValidator));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 38, 38, 1, coalValidator));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 59, 49, 1, coalValidator));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 49, 1, coalValidator));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 101, 49, 1, coalValidator));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 122, 38, 1, coalValidator));
 		//body slots (top to bottom)
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 74, 1, snowValidator));
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 103, 1, snowValidator));
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 80, 132, 1, snowValidator));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 74, 1, snowValidator));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 103, 1, snowValidator));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 132, 1, snowValidator));
 		//weapon slot (always second last slot!)
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 105, 89, 1, (stack) -> {
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 105, 89, 1, (stack) -> {
 			for(ItemStack weapon : WEAPONS)
 			{
-				if(OreDictionary.itemMatches(weapon, stack, false))
+				if(stack.getItem() == weapon.getItem())
 					return true;
 			}
 
 			return false;
 		}));
 		//output (always last slot!)
-		addSlotToContainer(new SlotRestricted(te.getInventory(), slot++, 152, 132, 1, (stack) -> false));
+		addSlot(new SlotRestricted(te.getInventory(), slot++, 152, 132, 1, (stack) -> false));
 	}
 
 	@Override
@@ -119,7 +116,7 @@ public class ContainerSnowmanBuilder extends Container
 			{
 				te.resetProgress();
 
-				if(player instanceof EntityPlayerMP && te.getInventory().getStackInSlot(te.getInventory().getSizeInventory() - 1).getTagCompound().getBoolean("evercold"))
+				if(player instanceof EntityPlayerMP && te.getInventory().getStackInSlot(te.getInventory().getSizeInventory() - 1).getTag().getBoolean("evercold"))
 					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.trigger((EntityPlayerMP)player);
 
 				return super.slotClick(slotId, dragType, clickType, player);

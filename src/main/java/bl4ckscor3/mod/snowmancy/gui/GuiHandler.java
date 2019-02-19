@@ -1,34 +1,30 @@
 package bl4ckscor3.mod.snowmancy.gui;
 
-import bl4ckscor3.mod.snowmancy.container.ContainerSnowmanBuilder;
+import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.FMLPlayMessages.OpenContainer;
 
-public class GuiHandler implements IGuiHandler
+public class GuiHandler
 {
-	public static final int BUILDER_GUI_ID = 1;
+	public static final ResourceLocation BUILDER_GUI_ID = new ResourceLocation(Snowmancy.MODID, "builder");
 
-	@Override
-	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
+	public static GuiScreen getClientGuiElement(OpenContainer message)
 	{
-		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
+		EntityPlayerSP player = Minecraft.getInstance().player;
 
-		if(id == BUILDER_GUI_ID && te instanceof TileEntitySnowmanBuilder)
-			return new ContainerSnowmanBuilder(player.inventory, (TileEntitySnowmanBuilder)te);
-		return null;
-	}
+		if(message.getId().equals(BUILDER_GUI_ID))
+		{
+			TileEntity te = Minecraft.getInstance().world.getTileEntity(message.getAdditionalData().readBlockPos());
 
-	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
-	{
-		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
+			if(te instanceof TileEntitySnowmanBuilder)
+				return new GuiSnowmanBuilder(player.inventory, (TileEntitySnowmanBuilder)te);
+		}
 
-		if(id == BUILDER_GUI_ID && te instanceof TileEntitySnowmanBuilder)
-			return new GuiSnowmanBuilder(player.inventory, (TileEntitySnowmanBuilder)te);
 		return null;
 	}
 }

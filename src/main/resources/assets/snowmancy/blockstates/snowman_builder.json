@@ -1,7 +1,7 @@
 {
     "variants": {
-        "normal": [
-            { "model": "snowmancy:snowman_builder" }
+        "": [
+            { "model": "snowmancy:block/snowman_builder" }
         ]
     }
 }

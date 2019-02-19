@@ -1,40 +1,65 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
 
-version = "1.12.2-b2"
-group = "bl4ckscor3.mod.snowmancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "snowmancy"
+version = '1.13.2-v1.0.0'
+group = 'bl4ckscor3.mod.snowmancy'
+archivesBaseName = 'snowmancy'
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    version = "1.12.2-14.23.5.2784"
-    runDir = "run"
-    mappings = "stable_39"
+    mappings channel: 'snapshot', version: '20190217-1.13.1'
+	
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.13.2-25.0.30'
+}
+
+jar {
+    manifest {
+        attributes(["Specification-Title": "Snowmancy",
+                    "Specification-Vendor": "bl4ckscor3",
+                    "Specification-Version": "v1.0.0",
+                    "Implementation-Title": "Snowmancy",
+                    "Implementation-Version": "v1.0.0",
+                    "Implementation-Vendor" :"bl4ckscor3",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
 }

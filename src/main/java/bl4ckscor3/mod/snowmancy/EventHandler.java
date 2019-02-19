@@ -11,11 +11,11 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistries;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid=Snowmancy.MODID)
 public class EventHandler
 {
 	private static final SoundEvent EGG_SOUND = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.chicken.egg"));
@@ -23,7 +23,7 @@ public class EventHandler
 	@SubscribeEvent
 	public static void onProjectileImpactThrowable(ProjectileImpactEvent.Throwable event)
 	{
-		if(event.getThrowable() instanceof EntitySnowball && event.getRayTraceResult().typeOfHit == Type.BLOCK)
+		if(event.getThrowable() instanceof EntitySnowball && event.getRayTraceResult().type == Type.BLOCK)
 		{
 			TileEntity te = event.getThrowable().world.getTileEntity(event.getRayTraceResult().getBlockPos());
 

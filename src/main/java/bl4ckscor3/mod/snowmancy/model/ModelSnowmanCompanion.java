@@ -1,8 +1,8 @@
 package bl4ckscor3.mod.snowmancy.model;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.model.ModelBase;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
@@ -66,7 +66,7 @@ public class ModelSnowmanCompanion extends ModelBase
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
-		GlStateManager.translate(0.0F, 0.75F, 0.0F);
+		GlStateManager.translatef(0.0F, 0.75F, 0.0F);
 		scale = scale / 2;
 		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		body.render(scale);

@@ -1,7 +1,7 @@
 {
     "variants": {
-        "normal": [
-            { "model": "snowmancy:evercold_ice" }
+        "": [
+            { "model": "snowmancy:block/evercold_ice" }
         ]
     }
 }

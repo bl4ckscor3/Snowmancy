@@ -44,13 +44,13 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 
 	public EntitySnowmanCompanion(World world)
 	{
-		super(world);
+		super(Snowmancy.eTypeSnowman, world);
 		setSize(0.35F, 0.9F);
 	}
 
 	public EntitySnowmanCompanion(World world, boolean goldenNose, String attackType, float damage, boolean evercold)
 	{
-		super(world);
+		this(world);
 		setSize(0.35F, 0.9F);
 		dataManager.set(GOLDEN_NOSE, goldenNose);
 		dataManager.set(ATTACK_TYPE, attackType);
@@ -59,9 +59,9 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 	}
 
 	@Override
-	protected void entityInit()
+	protected void registerData()
 	{
-		super.entityInit();
+		super.registerData();
 		dataManager.register(GOLDEN_NOSE, false);
 		dataManager.register(ATTACK_TYPE, EnumAttackType.HIT.name());
 		dataManager.register(DAMAGE, 0.0F);
@@ -80,17 +80,17 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 	}
 
 	@Override
-	protected void applyEntityAttributes()
+	protected void registerAttributes()
 	{
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.20000000298023224D);
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.20000000298023224D);
 	}
 
 	@Override
-	public void onLivingUpdate()
+	public void livingTick()
 	{
-		super.onLivingUpdate();
+		super.livingTick();
 
 		if(!isEvercold() && world.getBiome(getPosition()).getTempCategory() != TempCategory.COLD)
 			attackEntityFrom(DamageSource.ON_FIRE, 1.0F);
@@ -102,7 +102,7 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 		if(player.isSneaking() && hand == EnumHand.MAIN_HAND)
 		{
 			Block.spawnAsEntity(world, getPosition(), createItem());
-			setDead();
+			remove();
 		}
 
 		return super.processInteract(player, hand);
@@ -116,8 +116,8 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 		ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
 		NBTTagCompound tag = new NBTTagCompound();
 
-		writeEntityToNBT(tag);
-		stack.setTagCompound(tag);
+		writeAdditional(tag);
+		stack.setTag(tag);
 		return stack;
 	}
 
@@ -142,12 +142,12 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 		float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
 		((IProjectile)throwableEntity).shoot(d1, d2 + f, d3, 1.6F, 12.0F);
-		playSound(SoundEvents.ENTITY_SNOWMAN_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
+		playSound(SoundEvents.ENTITY_SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
 		world.spawnEntity(throwableEntity);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound tag)
+	public void readAdditional(NBTTagCompound tag)
 	{
 		dataManager.set(GOLDEN_NOSE, tag.getBoolean("goldenCarrot"));
 		dataManager.set(ATTACK_TYPE, tag.getString("attackType"));
@@ -156,12 +156,12 @@ public class EntitySnowmanCompanion extends EntityGolem implements IRangedAttack
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound tag)
+	public void writeAdditional(NBTTagCompound tag)
 	{
-		tag.setBoolean("goldenCarrot", isNoseGolden());
-		tag.setString("attackType", getAttackType());
-		tag.setFloat("damage", getDamage());
-		tag.setBoolean("evercold", isEvercold());
+		tag.putBoolean("goldenCarrot", isNoseGolden());
+		tag.putString("attackType", getAttackType());
+		tag.putFloat("damage", getDamage());
+		tag.putBoolean("evercold", isEvercold());
 	}
 
 	/**
