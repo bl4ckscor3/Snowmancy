@@ -3,7 +3,7 @@ loaderVersion="[25,)" #mandatory
 
 [[mods]] #mandatory
 	modId="snowmancy" #mandatory
-	version="v1.0.0" #mandatory
+	version="v1.0.1" #mandatory
 	displayName="Snowmancy" #mandatory
 	description='''Build your own snowman companion!''' #mandatory
 	issueTrackerURL="https://github.com/bl4ckscor3/Snowmancy/issues"
