@@ -12,6 +12,7 @@ import bl4ckscor3.mod.snowmancy.renderer.RenderSnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityType;
 import net.minecraft.init.Items;
@@ -38,7 +39,6 @@ public class Snowmancy
 {
 	public static final String MODID = "snowmancy";
 	public static final String PREFIX = MODID + ":";
-	public static Snowmancy instance;
 
 	@ObjectHolder(PREFIX + BlockSnowmanBuilder.NAME)
 	public static final Block SNOWMAN_BUILDER = null;
@@ -55,7 +55,6 @@ public class Snowmancy
 
 	public Snowmancy()
 	{
-		instance = this;
 		Arrays.asList(Items.BOW,
 				Items.DIAMOND_SWORD,
 				Items.EGG,
@@ -74,7 +73,8 @@ public class Snowmancy
 		event.getRegistry().register(new BlockSnowmanBuilder());
 		event.getRegistry().register(new Block(Block.Properties.create(Material.ICE)
 				.hardnessAndResistance(2.0F)
-				.slipperiness(0.98F))
+				.slipperiness(0.98F)
+				.sound(SoundType.GLASS))
 				.setRegistryName(PREFIX + "evercold_ice"));
 	}
 

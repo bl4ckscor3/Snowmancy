@@ -106,7 +106,7 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 		boolean ocean = getWorld().getBiome(pos).getTempCategory() == TempCategory.OCEAN;
 		boolean warm = getWorld().getBiome(pos).getTempCategory() == TempCategory.WARM;
 
-		for(EnumFacing facing : EnumFacing.BY_INDEX)
+		for(EnumFacing facing : EnumFacing.values())
 		{
 			if(getWorld().getBlockState(pos.offset(facing)).getBlock() == Snowmancy.EVERCOLD_ICE)
 				cooling++;
