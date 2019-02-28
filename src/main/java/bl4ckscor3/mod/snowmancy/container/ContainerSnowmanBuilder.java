@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.container.components.SlotRestricted;
+import bl4ckscor3.mod.snowmancy.inventory.InventorySnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.util.ISnowmanWearable;
 import bl4ckscor3.mod.snowmancy.util.IStackValidator;
-import bl4ckscor3.snowmancy.inventory.InventorySnowmanBuilder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;

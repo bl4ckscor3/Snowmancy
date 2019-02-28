@@ -1,9 +1,9 @@
 package bl4ckscor3.mod.snowmancy.tileentity;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
+import bl4ckscor3.mod.snowmancy.inventory.InventorySnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.item.ItemBlockEvercoldIce;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
-import bl4ckscor3.snowmancy.inventory.InventorySnowmanBuilder;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

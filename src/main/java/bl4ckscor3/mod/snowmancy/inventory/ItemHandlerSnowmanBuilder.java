@@ -1,4 +1,4 @@
-package bl4ckscor3.snowmancy.inventory;
+package bl4ckscor3.mod.snowmancy.inventory;
 
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import net.minecraft.item.ItemStack;
