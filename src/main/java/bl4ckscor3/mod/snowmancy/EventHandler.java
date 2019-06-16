@@ -3,11 +3,12 @@ package bl4ckscor3.mod.snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import net.minecraft.block.Block;
-import net.minecraft.entity.projectile.EntitySnowball;
+import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -23,9 +24,9 @@ public class EventHandler
 	@SubscribeEvent
 	public static void onProjectileImpactThrowable(ProjectileImpactEvent.Throwable event)
 	{
-		if(event.getThrowable() instanceof EntitySnowball && event.getRayTraceResult().type == Type.BLOCK)
+		if(event.getThrowable() instanceof SnowballEntity && event.getRayTraceResult().getType() == Type.BLOCK)
 		{
-			TileEntity te = event.getThrowable().world.getTileEntity(event.getRayTraceResult().getBlockPos());
+			TileEntity te = event.getThrowable().world.getTileEntity(((BlockRayTraceResult)event.getRayTraceResult()).getPos());
 
 			if(te instanceof TileEntitySnowmanBuilder)
 			{

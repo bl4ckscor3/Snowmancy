@@ -6,15 +6,15 @@ import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -30,11 +30,11 @@ public class ItemFrozenSnowman extends Item
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemUseContext context)
+	public ActionResultType onItemUse(ItemUseContext context)
 	{
 		World world = context.getWorld();
-		EntityPlayer player = context.getPlayer();
-		EnumHand hand = player.getActiveHand();
+		PlayerEntity player = context.getPlayer();
+		Hand hand = player.getActiveHand();
 		BlockPos pos = context.getPos();
 
 		if(!world.isRemote)
@@ -46,13 +46,13 @@ public class ItemFrozenSnowman extends Item
 					player.getHeldItem(hand).getTag().getBoolean("evercold"));
 
 			entity.setPosition(pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F);
-			world.spawnEntity(entity);
+			world.addEntity(entity);
 
 			if(!player.isCreative())
 				player.getHeldItem(hand).setCount(player.getHeldItem(hand).getCount() - 1);
 		}
 
-		return EnumActionResult.SUCCESS;
+		return ActionResultType.SUCCESS;
 	}
 
 	@Override
@@ -60,10 +60,10 @@ public class ItemFrozenSnowman extends Item
 	{
 		if(stack.hasTag())
 		{
-			tooltip.add(new TextComponentString(TextFormatting.GOLD + "Golden Carrot: " + TextFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
-			tooltip.add(new TextComponentString(TextFormatting.BLUE + "Attack Type: " + TextFormatting.GRAY + stack.getTag().getString("attackType")));
-			tooltip.add(new TextComponentString(TextFormatting.RED + "Damage: " + TextFormatting.GRAY + stack.getTag().getFloat("damage")));
-			tooltip.add(new TextComponentString(TextFormatting.AQUA + "Evercold: " + TextFormatting.GRAY + stack.getTag().getBoolean("evercold")));
+			tooltip.add(new StringTextComponent(TextFormatting.GOLD + "Golden Carrot: " + TextFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
+			tooltip.add(new StringTextComponent(TextFormatting.BLUE + "Attack Type: " + TextFormatting.GRAY + stack.getTag().getString("attackType")));
+			tooltip.add(new StringTextComponent(TextFormatting.RED + "Damage: " + TextFormatting.GRAY + stack.getTag().getFloat("damage")));
+			tooltip.add(new StringTextComponent(TextFormatting.AQUA + "Evercold: " + TextFormatting.GRAY + stack.getTag().getBoolean("evercold")));
 		}
 	}
 }

@@ -1,29 +1,41 @@
 package bl4ckscor3.mod.snowmancy.container;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.container.components.SlotRestricted;
 import bl4ckscor3.mod.snowmancy.inventory.InventorySnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.util.IStackValidator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.inventory.Slot;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.ClickType;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.thread.EffectiveSide;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 public class ContainerSnowmanBuilder extends Container
 {
 	public static final ArrayList<ItemStack> WEAPONS = new ArrayList<>();
-	private TileEntitySnowmanBuilder te;
+	public TileEntitySnowmanBuilder te;
 
 	/**
 	 * Registers an item to be a wearable weapon for the snowman
@@ -34,9 +46,34 @@ public class ContainerSnowmanBuilder extends Container
 		WEAPONS.add(new ItemStack(item));
 	}
 
-	public ContainerSnowmanBuilder(InventoryPlayer playerInv, TileEntitySnowmanBuilder te)
+	public ContainerSnowmanBuilder(int windowId, PlayerInventory playerInv, PacketBuffer extraData)
 	{
-		this.te = te;
+		this(windowId, playerInv, new Inventory(InventorySnowmanBuilder.SLOTS), DimensionManager.getWorld(ServerLifecycleHooks.getCurrentServer(), DimensionType.getById(extraData.readInt()), false, false), extraData.readBlockPos());
+	}
+
+	public ContainerSnowmanBuilder(int windowId, PlayerInventory playerInv, IInventory inv, World world, BlockPos pos)
+	{
+		super(Snowmancy.cTypeSnowmanBuilder, windowId);
+
+		TileEntity tileEntity = null;
+
+		if(EffectiveSide.get() == LogicalSide.CLIENT) //because world.getTileEntity(pos) returns null for some fucking reason
+		{
+			Iterator<TileEntity> it = world.loadedTileEntityList.iterator();
+
+			while(it.hasNext())
+			{
+				tileEntity = it.next();
+
+				if(tileEntity.getType() == Snowmancy.teTypeBuilder && tileEntity instanceof TileEntitySnowmanBuilder)
+					break;
+			}
+		}
+		else
+			tileEntity = world.getTileEntity(pos);
+
+		if(tileEntity instanceof TileEntitySnowmanBuilder)
+			te = ((TileEntitySnowmanBuilder)tileEntity);
 
 		//player inventory
 		for(int i = 0; i < 3; i++)
@@ -59,24 +96,24 @@ public class ContainerSnowmanBuilder extends Container
 		int slot = 0;
 
 		//hat slot (always index 0!!)
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 7, 1, (stack) -> stack.getItem() == Snowmancy.EVERCOLD_ICE.asItem() || (stack.getItem() instanceof ItemArmor && ((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.HEAD))); //allow any helmet
+		addSlot(new SlotRestricted(inv, slot++, 80, 7, 1, (stack) -> stack.getItem() == Snowmancy.EVERCOLD_ICE.asItem() || (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getEquipmentSlot() == EquipmentSlotType.HEAD))); //allow any helmet
 		//nose slot (always index 1!!)
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 28, 1, (stack) -> stack.getItem() == Items.CARROT || stack.getItem() == Items.GOLDEN_CARROT));
+		addSlot(new SlotRestricted(inv, slot++, 80, 28, 1, (stack) -> stack.getItem() == Items.CARROT || stack.getItem() == Items.GOLDEN_CARROT));
 		//eye slots (left, right)
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 59, 18, 1, coalValidator));
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 101, 18, 1, coalValidator));
+		addSlot(new SlotRestricted(inv, slot++, 59, 18, 1, coalValidator));
+		addSlot(new SlotRestricted(inv, slot++, 101, 18, 1, coalValidator));
 		//mouth slots (left to right)
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 38, 38, 1, coalValidator));
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 59, 49, 1, coalValidator));
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 49, 1, coalValidator));
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 101, 49, 1, coalValidator));
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 122, 38, 1, coalValidator));
+		addSlot(new SlotRestricted(inv, slot++, 38, 38, 1, coalValidator));
+		addSlot(new SlotRestricted(inv, slot++, 59, 49, 1, coalValidator));
+		addSlot(new SlotRestricted(inv, slot++, 80, 49, 1, coalValidator));
+		addSlot(new SlotRestricted(inv, slot++, 101, 49, 1, coalValidator));
+		addSlot(new SlotRestricted(inv, slot++, 122, 38, 1, coalValidator));
 		//body slots (top to bottom)
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 74, 1, snowValidator));
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 103, 1, snowValidator));
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 80, 132, 1, snowValidator));
+		addSlot(new SlotRestricted(inv, slot++, 80, 74, 1, snowValidator));
+		addSlot(new SlotRestricted(inv, slot++, 80, 103, 1, snowValidator));
+		addSlot(new SlotRestricted(inv, slot++, 80, 132, 1, snowValidator));
 		//weapon slot (always second last slot!)
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 105, 89, 1, (stack) -> {
+		addSlot(new SlotRestricted(inv, slot++, 105, 89, 1, (stack) -> {
 			for(ItemStack weapon : WEAPONS)
 			{
 				if(stack.getItem() == weapon.getItem())
@@ -86,11 +123,11 @@ public class ContainerSnowmanBuilder extends Container
 			return false;
 		}));
 		//output (always last slot!)
-		addSlot(new SlotRestricted(te.getInventory(), slot++, 152, 132, 1, (stack) -> false));
+		addSlot(new SlotRestricted(inv, slot++, 152, 132, 1, (stack) -> false));
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player)
+	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, PlayerEntity player)
 	{
 		InventorySnowmanBuilder inv = te.getInventory();
 		boolean clickedOutput = false;
@@ -116,8 +153,8 @@ public class ContainerSnowmanBuilder extends Container
 			{
 				te.resetProgress();
 
-				if(player instanceof EntityPlayerMP && te.getInventory().getStackInSlot(te.getInventory().getSizeInventory() - 1).getTag().getBoolean("evercold"))
-					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.trigger((EntityPlayerMP)player);
+				if(player instanceof ServerPlayerEntity && inv.getStackInSlot(inv.getSizeInventory() - 1).getTag().getBoolean("evercold"))
+					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.trigger((ServerPlayerEntity)player);
 
 				return super.slotClick(slotId, dragType, clickType, player);
 			}
@@ -126,7 +163,7 @@ public class ContainerSnowmanBuilder extends Container
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int index)
+	public ItemStack transferStackInSlot(PlayerEntity player, int index)
 	{
 		ItemStack copy = ItemStack.EMPTY;
 		Slot slot = inventorySlots.get(index);
@@ -158,7 +195,7 @@ public class ContainerSnowmanBuilder extends Container
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer player)
+	public boolean canInteractWith(PlayerEntity player)
 	{
 		return true;
 	}

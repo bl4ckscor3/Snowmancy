@@ -1,30 +1,36 @@
 package bl4ckscor3.mod.snowmancy.tileentity;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
+import bl4ckscor3.mod.snowmancy.container.ContainerSnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.inventory.InventorySnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
+import net.minecraft.item.SwordItem;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
+import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
-public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
+public class TileEntitySnowmanBuilder extends TileEntity implements ITickableTileEntity, INamedContainerProvider
 {
 	private InventorySnowmanBuilder inventory = new InventorySnowmanBuilder(this);
 	private byte progress = 0;
 	private final byte maxProgress = 8;
-	private final LazyOptional<IItemHandler> inventoryHolder = LazyOptional.of(() -> inventory.getItemHandler());
+	private final LazyOptional inventoryHolder = LazyOptional.of(() -> inventory.getItemHandler());
 
 	public TileEntitySnowmanBuilder()
 	{
@@ -50,14 +56,14 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 			{
 				ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
 				Item weapon = inventory.getStackInSlot(inventory.getSizeInventory() - 2).getItem();
-				NBTTagCompound tag = new NBTTagCompound();
+				CompoundNBT tag = new CompoundNBT();
 				EnumAttackType attackType = (weapon == Items.BOW ? EnumAttackType.ARROW :
 					(weapon == Items.EGG ? EnumAttackType.EGG :
 						(weapon == Items.SNOWBALL ? EnumAttackType.SNOWBALL : EnumAttackType.HIT)));
 
 				tag.putBoolean("goldenCarrot", inventory.getStackInSlot(1).getItem() == Items.GOLDEN_CARROT);
 				tag.putString("attackType", attackType.name());
-				tag.putFloat("damage", attackType == EnumAttackType.HIT && weapon instanceof ItemSword ? 4.0F + ((ItemSword)weapon).getAttackDamage() : 0.0F);
+				tag.putFloat("damage", attackType == EnumAttackType.HIT && weapon instanceof SwordItem ? 4.0F + ((SwordItem)weapon).getAttackDamage() : 0.0F);
 				tag.putBoolean("evercold", inventory.getStackInSlot(0).getItem() == Snowmancy.EVERCOLD_ICE.asItem());
 				stack.setTag(tag);
 				inventory.getItemHandler().setStackInSlot(inventory.getSizeInventory() - 1, stack);
@@ -106,7 +112,7 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 		boolean ocean = getWorld().getBiome(pos).getTempCategory() == TempCategory.OCEAN;
 		boolean warm = getWorld().getBiome(pos).getTempCategory() == TempCategory.WARM;
 
-		for(EnumFacing facing : EnumFacing.values())
+		for(Direction facing : Direction.values())
 		{
 			if(getWorld().getBlockState(pos.offset(facing)).getBlock() == Snowmancy.EVERCOLD_ICE)
 				cooling++;
@@ -132,16 +138,16 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 	}
 
 	@Override
-	public void read(NBTTagCompound tag)
+	public void read(CompoundNBT tag)
 	{
-		NBTTagCompound invTag = (NBTTagCompound)tag.get("SnowmanBuilderInventory");
+		CompoundNBT invTag = (CompoundNBT)tag.get("SnowmanBuilderInventory");
 
 		if(invTag != null)
 		{
 			for(int i = 0; i < inventory.getContents().size(); i++)
 			{
 				if(invTag.contains("Slot" + i))
-					inventory.setInventorySlotContents(i, ItemStack.read((NBTTagCompound)invTag.get("Slot" + i)));
+					inventory.setInventorySlotContents(i, ItemStack.read((CompoundNBT)invTag.get("Slot" + i)));
 			}
 
 			progress = tag.getByte("progress");
@@ -151,13 +157,13 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 	}
 
 	@Override
-	public NBTTagCompound write(NBTTagCompound tag)
+	public CompoundNBT write(CompoundNBT tag)
 	{
-		NBTTagCompound invTag = new NBTTagCompound();
+		CompoundNBT invTag = new CompoundNBT();
 
 		for(int i = 0; i < inventory.getContents().size(); i++)
 		{
-			invTag.put("Slot" + i, inventory.getStackInSlot(i).write(new NBTTagCompound()));
+			invTag.put("Slot" + i, inventory.getStackInSlot(i).write(new CompoundNBT()));
 		}
 
 		tag.put("SnowmanBuilderInventory", invTag);
@@ -166,13 +172,13 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
+	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SPacketUpdateTileEntity(pos, 1, write(new NBTTagCompound()));
+		return new SUpdateTileEntityPacket(pos, 1, write(new CompoundNBT()));
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
 		progress = pkt.getNbtCompound().getByte("progress");
 	}
@@ -180,10 +186,7 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> cap)
 	{
-		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-			return inventoryHolder.cast();
-		else
-			return super.getCapability(cap);
+		return cap.orEmpty(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, inventoryHolder);
 	}
 
 	/**
@@ -210,5 +213,17 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickable
 	public byte getMaxProgress()
 	{
 		return maxProgress;
+	}
+
+	@Override
+	public Container createMenu(int windowId, PlayerInventory playerInv, PlayerEntity player)
+	{
+		return new ContainerSnowmanBuilder(windowId, playerInv, inventory, world, pos);
+	}
+
+	@Override
+	public ITextComponent getDisplayName()
+	{
+		return new TranslationTextComponent(Snowmancy.SNOWMAN_BUILDER.getTranslationKey());
 	}
 }

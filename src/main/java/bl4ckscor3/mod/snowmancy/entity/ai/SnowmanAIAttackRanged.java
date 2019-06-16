@@ -2,9 +2,9 @@ package bl4ckscor3.mod.snowmancy.entity.ai;
 
 import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
-import net.minecraft.entity.ai.EntityAIAttackRanged;
+import net.minecraft.entity.ai.goal.RangedAttackGoal;
 
-public class SnowmanAIAttackRanged extends EntityAIAttackRanged
+public class SnowmanAIAttackRanged extends RangedAttackGoal
 {
 	protected EntitySnowmanCompanion snowman;
 

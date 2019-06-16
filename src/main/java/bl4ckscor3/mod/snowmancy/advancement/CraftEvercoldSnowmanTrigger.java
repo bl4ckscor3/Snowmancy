@@ -12,8 +12,8 @@ import com.google.gson.JsonObject;
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.criterion.AbstractCriterionInstance;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.advancements.criterion.CriterionInstance;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class CraftEvercoldSnowmanTrigger implements ICriterionTrigger<CraftEvercoldSnowmanTrigger.Instance> {
@@ -60,7 +60,7 @@ public class CraftEvercoldSnowmanTrigger implements ICriterionTrigger<CraftEverc
 		return new CraftEvercoldSnowmanTrigger.Instance();
 	}
 
-	public void trigger(EntityPlayerMP player)
+	public void trigger(ServerPlayerEntity player)
 	{
 		CraftEvercoldSnowmanTrigger.Listeners listeners = listenerMap.get(player.getAdvancements());
 
@@ -68,7 +68,7 @@ public class CraftEvercoldSnowmanTrigger implements ICriterionTrigger<CraftEverc
 			listeners.trigger();
 	}
 
-	public static class Instance extends AbstractCriterionInstance
+	public static class Instance extends CriterionInstance
 	{
 		public Instance()
 		{

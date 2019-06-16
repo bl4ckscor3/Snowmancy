@@ -6,7 +6,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 public class ItemHandlerSnowmanBuilder implements IItemHandlerModifiable
 {
-	private TileEntitySnowmanBuilder tileEntity;
+	public TileEntitySnowmanBuilder tileEntity;
 
 	public ItemHandlerSnowmanBuilder(TileEntitySnowmanBuilder te)
 	{
@@ -121,5 +121,11 @@ public class ItemHandlerSnowmanBuilder implements IItemHandlerModifiable
 		s1.setCount(1);
 		s2.setCount(1);
 		return ItemStack.areItemStacksEqual(s1, s2);
+	}
+
+	@Override
+	public boolean isItemValid(int slot, ItemStack stack)
+	{
+		return true;
 	}
 }

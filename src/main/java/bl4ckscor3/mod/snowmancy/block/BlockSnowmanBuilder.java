@@ -1,26 +1,25 @@
 package bl4ckscor3.mod.snowmancy.block;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import bl4ckscor3.mod.snowmancy.gui.GuiHandler;
-import bl4ckscor3.mod.snowmancy.gui.SnowmanBuilderInteractionObject;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockSnowmanBuilder extends BlockContainer
+public class BlockSnowmanBuilder extends ContainerBlock
 {
 	public static final String NAME = "snowman_builder";
 
@@ -32,17 +31,34 @@ public class BlockSnowmanBuilder extends BlockContainer
 	}
 
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state)
+	public BlockRenderType getRenderType(BlockState state)
 	{
-		return EnumBlockRenderType.MODEL;
+		return BlockRenderType.MODEL;
 	}
 
 	@Override
-	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!world.isRemote && player instanceof EntityPlayerMP)
-			NetworkHooks.openGui((EntityPlayerMP)player, new SnowmanBuilderInteractionObject(GuiHandler.BUILDER_GUI_ID, world, pos), data -> data.writeBlockPos(pos));
+		if(!world.isRemote)
+		{
+			INamedContainerProvider containerProvider = getContainer(state, world, pos);
+
+			if(containerProvider != null)
+				NetworkHooks.openGui((ServerPlayerEntity)player, containerProvider, extraData -> {
+					extraData.writeInt(world.getDimension().getType().getId());
+					extraData.writeBlockPos(pos);
+				});
+		}
+
 		return true;
+	}
+
+	@Override
+	public INamedContainerProvider getContainer(BlockState state, World world, BlockPos pos)
+	{
+		TileEntity te = world.getTileEntity(pos);
+
+		return te instanceof TileEntitySnowmanBuilder ? (INamedContainerProvider)te : null;
 	}
 
 	@Override

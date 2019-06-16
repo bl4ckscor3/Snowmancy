@@ -3,11 +3,11 @@ package bl4ckscor3.mod.snowmancy.entity.ai;
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.util.EnumHand;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.util.Hand;
 
-public class SnowmanAIAttackMelee extends EntityAIAttackMelee
+public class SnowmanAIAttackMelee extends MeleeAttackGoal
 {
 	public SnowmanAIAttackMelee(EntitySnowmanCompanion snowman)
 	{
@@ -17,17 +17,17 @@ public class SnowmanAIAttackMelee extends EntityAIAttackMelee
 	@Override
 	public boolean shouldExecute()
 	{
-		return ((EntitySnowmanCompanion)attacker).getAttackType().equals(EnumAttackType.HIT.name()) && super.shouldExecute();
+		return ((EntitySnowmanCompanion)field_75441_b).getAttackType().equals(EnumAttackType.HIT.name()) && super.shouldExecute();
 	}
 
 	@Override
-	protected void checkAndPerformAttack(EntityLivingBase enemy, double distToEnemySqr)
+	protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
 	{
 		if(distToEnemySqr <= getAttackReachSqr(enemy) && attackTick <= 0)
 		{
 			attackTick = 20;
-			attacker.swingArm(EnumHand.MAIN_HAND);
-			enemy.attackEntityFrom(Snowmancy.SNOWMAN_DAMAGE, ((EntitySnowmanCompanion)attacker).getDamage());
+			field_75441_b.swingArm(Hand.MAIN_HAND);
+			enemy.attackEntityFrom(Snowmancy.SNOWMAN_DAMAGE, ((EntitySnowmanCompanion)field_75441_b).getDamage());
 		}
 	}
 }
