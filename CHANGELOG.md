@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.1
+- Fix sound of Evercold Ice
+
+# v1.0
+- Updated to 1.13.2
+
 ## Beta 2
 - Added a creative tab
 - Fixed golden carrot texture on snowman model

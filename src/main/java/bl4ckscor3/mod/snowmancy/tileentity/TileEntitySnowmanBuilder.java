@@ -216,9 +216,9 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickableTil
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInv, PlayerEntity player)
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player)
 	{
-		return new ContainerSnowmanBuilder(windowId, playerInv, inventory, world, pos);
+		return new ContainerSnowmanBuilder(windowId, world, pos, inv);
 	}
 
 	@Override

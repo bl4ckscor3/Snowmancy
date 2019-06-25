@@ -7,7 +7,9 @@ import bl4ckscor3.mod.snowmancy.block.BlockSnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.container.ContainerSnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.item.ItemFrozenSnowman;
-import bl4ckscor3.mod.snowmancy.renderer.RenderSnowmanCompanion;
+import bl4ckscor3.mod.snowmancy.network.ClientProxy;
+import bl4ckscor3.mod.snowmancy.network.IProxy;
+import bl4ckscor3.mod.snowmancy.network.ServerProxy;
 import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
@@ -23,12 +25,10 @@ import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -40,6 +40,7 @@ public class Snowmancy
 {
 	public static final String MODID = "snowmancy";
 	public static final String PREFIX = MODID + ":";
+	public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
 	@ObjectHolder(PREFIX + BlockSnowmanBuilder.NAME)
 	public static final Block SNOWMAN_BUILDER = null;
@@ -68,7 +69,6 @@ public class Snowmancy
 				Items.SNOWBALL,
 				Items.STONE_SWORD,
 				Items.WOODEN_SWORD).stream().forEach(ContainerSnowmanBuilder::registerWeapon);
-		MinecraftForge.EVENT_BUS.addListener(this::onModelRegistry);
 	}
 
 	@SubscribeEvent
@@ -111,11 +111,6 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerContainerTypes(RegistryEvent.Register<ContainerType<?>> event)
 	{
-		event.getRegistry().register(IForgeContainerType.create(ContainerSnowmanBuilder::new).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
-	}
-
-	public void onModelRegistry(ModelRegistryEvent event)
-	{
-		RenderingRegistry.registerEntityRenderingHandler(EntitySnowmanCompanion.class, manager -> new RenderSnowmanCompanion(manager));
+		event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> new ContainerSnowmanBuilder(windowId, proxy.getClientWorld(), data.readBlockPos(), inv)).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
 	}
 }

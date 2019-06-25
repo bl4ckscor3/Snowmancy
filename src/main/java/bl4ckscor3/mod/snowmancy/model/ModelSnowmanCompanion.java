@@ -43,12 +43,12 @@ public class ModelSnowmanCompanion extends EntityModel<EntitySnowmanCompanion>
 	}
 
 	@Override
-	public void setRotationAngles(EntitySnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor)
+	public void func_212844_a_(EntitySnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor)
 	{
 		float f;
 		float f1;
 
-		super.setRotationAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		super.func_212844_a_(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 
 		head.rotateAngleY = netHeadYaw * 0.017453292F;
 		head.rotateAngleX = headPitch * 0.017453292F;
@@ -66,11 +66,11 @@ public class ModelSnowmanCompanion extends EntityModel<EntitySnowmanCompanion>
 	}
 
 	@Override
-	public void render(EntitySnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+	public void func_78088_a(EntitySnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
 		GlStateManager.translatef(0.0F, 0.75F, 0.0F);
 		scale = scale / 2;
-		setRotationAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		func_212844_a_(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 		body.render(scale);
 		bottomBody.render(scale);
 		head.render(scale);

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:blue_ice"
+          "name": "snowmancy:evercold_ice"
         }
       ],
       "conditions": [

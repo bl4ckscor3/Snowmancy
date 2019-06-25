@@ -41,24 +41,14 @@ public class BlockSnowmanBuilder extends ContainerBlock
 	{
 		if(!world.isRemote)
 		{
-			INamedContainerProvider containerProvider = getContainer(state, world, pos);
+			TileEntity te = world.getTileEntity(pos);
 
-			if(containerProvider != null)
-				NetworkHooks.openGui((ServerPlayerEntity)player, containerProvider, extraData -> {
-					extraData.writeInt(world.getDimension().getType().getId());
-					extraData.writeBlockPos(pos);
-				});
+			if(te instanceof INamedContainerProvider)
+				NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, pos);
+
 		}
 
 		return true;
-	}
-
-	@Override
-	public INamedContainerProvider getContainer(BlockState state, World world, BlockPos pos)
-	{
-		TileEntity te = world.getTileEntity(pos);
-
-		return te instanceof TileEntitySnowmanBuilder ? (INamedContainerProvider)te : null;
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package bl4ckscor3.mod.snowmancy.container;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.container.components.SlotRestricted;
@@ -14,7 +13,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
@@ -22,15 +20,8 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.thread.EffectiveSide;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 public class ContainerSnowmanBuilder extends Container
 {
@@ -46,48 +37,27 @@ public class ContainerSnowmanBuilder extends Container
 		WEAPONS.add(new ItemStack(item));
 	}
 
-	public ContainerSnowmanBuilder(int windowId, PlayerInventory playerInv, PacketBuffer extraData)
-	{
-		this(windowId, playerInv, new Inventory(InventorySnowmanBuilder.SLOTS), DimensionManager.getWorld(ServerLifecycleHooks.getCurrentServer(), DimensionType.getById(extraData.readInt()), false, false), extraData.readBlockPos());
-	}
-
-	public ContainerSnowmanBuilder(int windowId, PlayerInventory playerInv, IInventory inv, World world, BlockPos pos)
+	public ContainerSnowmanBuilder(int windowId, World world, BlockPos pos, PlayerInventory inv)
 	{
 		super(Snowmancy.cTypeSnowmanBuilder, windowId);
 
-		TileEntity tileEntity = null;
+		te = (TileEntitySnowmanBuilder)world.getTileEntity(pos);
 
-		if(EffectiveSide.get() == LogicalSide.CLIENT) //because world.getTileEntity(pos) returns null for some fucking reason
-		{
-			Iterator<TileEntity> it = world.loadedTileEntityList.iterator();
-
-			while(it.hasNext())
-			{
-				tileEntity = it.next();
-
-				if(tileEntity.getType() == Snowmancy.teTypeBuilder && tileEntity instanceof TileEntitySnowmanBuilder)
-					break;
-			}
-		}
-		else
-			tileEntity = world.getTileEntity(pos);
-
-		if(tileEntity instanceof TileEntitySnowmanBuilder)
-			te = ((TileEntitySnowmanBuilder)tileEntity);
+		IInventory teInv = te.getInventory();
 
 		//player inventory
 		for(int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				addSlot(new Slot(playerInv, 9 + j + i * 9, 8 + j * 18, 157 + i * 18));
+				addSlot(new Slot(inv, 9 + j + i * 9, 8 + j * 18, 157 + i * 18));
 			}
 		}
 
 		//player hotbar
 		for(int i = 0; i < 9; i++)
 		{
-			addSlot(new Slot(playerInv, i, 8 + i * 18, 215));
+			addSlot(new Slot(inv, i, 8 + i * 18, 215));
 		}
 
 		IStackValidator coalValidator = (stack) -> stack.getItem() == Items.COAL || stack.getItem() == Items.CHARCOAL;
@@ -96,24 +66,24 @@ public class ContainerSnowmanBuilder extends Container
 		int slot = 0;
 
 		//hat slot (always index 0!!)
-		addSlot(new SlotRestricted(inv, slot++, 80, 7, 1, (stack) -> stack.getItem() == Snowmancy.EVERCOLD_ICE.asItem() || (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getEquipmentSlot() == EquipmentSlotType.HEAD))); //allow any helmet
+		addSlot(new SlotRestricted(teInv, slot++, 80, 7, 1, (stack) -> stack.getItem() == Snowmancy.EVERCOLD_ICE.asItem() || (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getEquipmentSlot() == EquipmentSlotType.HEAD))); //allow any helmet
 		//nose slot (always index 1!!)
-		addSlot(new SlotRestricted(inv, slot++, 80, 28, 1, (stack) -> stack.getItem() == Items.CARROT || stack.getItem() == Items.GOLDEN_CARROT));
+		addSlot(new SlotRestricted(teInv, slot++, 80, 28, 1, (stack) -> stack.getItem() == Items.CARROT || stack.getItem() == Items.GOLDEN_CARROT));
 		//eye slots (left, right)
-		addSlot(new SlotRestricted(inv, slot++, 59, 18, 1, coalValidator));
-		addSlot(new SlotRestricted(inv, slot++, 101, 18, 1, coalValidator));
+		addSlot(new SlotRestricted(teInv, slot++, 59, 18, 1, coalValidator));
+		addSlot(new SlotRestricted(teInv, slot++, 101, 18, 1, coalValidator));
 		//mouth slots (left to right)
-		addSlot(new SlotRestricted(inv, slot++, 38, 38, 1, coalValidator));
-		addSlot(new SlotRestricted(inv, slot++, 59, 49, 1, coalValidator));
-		addSlot(new SlotRestricted(inv, slot++, 80, 49, 1, coalValidator));
-		addSlot(new SlotRestricted(inv, slot++, 101, 49, 1, coalValidator));
-		addSlot(new SlotRestricted(inv, slot++, 122, 38, 1, coalValidator));
+		addSlot(new SlotRestricted(teInv, slot++, 38, 38, 1, coalValidator));
+		addSlot(new SlotRestricted(teInv, slot++, 59, 49, 1, coalValidator));
+		addSlot(new SlotRestricted(teInv, slot++, 80, 49, 1, coalValidator));
+		addSlot(new SlotRestricted(teInv, slot++, 101, 49, 1, coalValidator));
+		addSlot(new SlotRestricted(teInv, slot++, 122, 38, 1, coalValidator));
 		//body slots (top to bottom)
-		addSlot(new SlotRestricted(inv, slot++, 80, 74, 1, snowValidator));
-		addSlot(new SlotRestricted(inv, slot++, 80, 103, 1, snowValidator));
-		addSlot(new SlotRestricted(inv, slot++, 80, 132, 1, snowValidator));
+		addSlot(new SlotRestricted(teInv, slot++, 80, 74, 1, snowValidator));
+		addSlot(new SlotRestricted(teInv, slot++, 80, 103, 1, snowValidator));
+		addSlot(new SlotRestricted(teInv, slot++, 80, 132, 1, snowValidator));
 		//weapon slot (always second last slot!)
-		addSlot(new SlotRestricted(inv, slot++, 105, 89, 1, (stack) -> {
+		addSlot(new SlotRestricted(teInv, slot++, 105, 89, 1, (stack) -> {
 			for(ItemStack weapon : WEAPONS)
 			{
 				if(stack.getItem() == weapon.getItem())
@@ -123,7 +93,7 @@ public class ContainerSnowmanBuilder extends Container
 			return false;
 		}));
 		//output (always last slot!)
-		addSlot(new SlotRestricted(inv, slot++, 152, 132, 1, (stack) -> false));
+		addSlot(new SlotRestricted(teInv, slot++, 152, 132, 1, (stack) -> false));
 	}
 
 	@Override
