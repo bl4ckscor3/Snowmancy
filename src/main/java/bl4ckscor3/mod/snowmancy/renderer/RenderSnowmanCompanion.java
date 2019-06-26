@@ -18,13 +18,13 @@ public class RenderSnowmanCompanion extends LivingRenderer<EntitySnowmanCompanio
 	}
 
 	@Override
-	protected boolean func_177070_b(EntitySnowmanCompanion entity)
+	protected boolean canRenderName(EntitySnowmanCompanion entity)
 	{
 		return entity.hasCustomName();
 	}
 
 	@Override
-	protected ResourceLocation func_110775_a(EntitySnowmanCompanion entity)
+	protected ResourceLocation getEntityTexture(EntitySnowmanCompanion entity)
 	{
 		return entity.isNoseGolden() ? SNOWMAN_TEXTURE_GOLDEN : SNOWMAN_TEXTURE;
 	}

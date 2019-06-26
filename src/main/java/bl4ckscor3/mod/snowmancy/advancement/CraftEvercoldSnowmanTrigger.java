@@ -55,7 +55,7 @@ public class CraftEvercoldSnowmanTrigger implements ICriterionTrigger<CraftEverc
 	}
 
 	@Override
-	public CraftEvercoldSnowmanTrigger.Instance func_192166_a(JsonObject json, JsonDeserializationContext context)
+	public CraftEvercoldSnowmanTrigger.Instance deserializeInstance(JsonObject json, JsonDeserializationContext context)
 	{
 		return new CraftEvercoldSnowmanTrigger.Instance();
 	}
