@@ -24,13 +24,14 @@ import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public class TileEntitySnowmanBuilder extends TileEntity implements ITickableTileEntity, INamedContainerProvider
 {
 	private InventorySnowmanBuilder inventory = new InventorySnowmanBuilder(this);
 	private byte progress = 0;
 	private final byte maxProgress = 8;
-	private final LazyOptional inventoryHolder = LazyOptional.of(() -> inventory.getItemHandler());
+	private final LazyOptional<IItemHandler> inventoryHolder = LazyOptional.of(() -> inventory.getItemHandler());
 
 	public TileEntitySnowmanBuilder()
 	{
@@ -184,9 +185,11 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickableTil
 	}
 
 	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap)
+	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side)
 	{
-		return cap.orEmpty(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, inventoryHolder);
+		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return inventoryHolder.cast();
+		else return super.getCapability(cap, side);
 	}
 
 	/**
