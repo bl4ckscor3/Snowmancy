@@ -17,7 +17,7 @@ public class SnowmanAIAttackMelee extends MeleeAttackGoal
 	@Override
 	public boolean shouldExecute()
 	{
-		return ((EntitySnowmanCompanion)field_75441_b).getAttackType().equals(EnumAttackType.HIT.name()) && super.shouldExecute();
+		return ((EntitySnowmanCompanion)attacker).getAttackType().equals(EnumAttackType.HIT.name()) && super.shouldExecute();
 	}
 
 	@Override
@@ -26,8 +26,8 @@ public class SnowmanAIAttackMelee extends MeleeAttackGoal
 		if(distToEnemySqr <= getAttackReachSqr(enemy) && attackTick <= 0)
 		{
 			attackTick = 20;
-			field_75441_b.swingArm(Hand.MAIN_HAND);
-			enemy.attackEntityFrom(Snowmancy.SNOWMAN_DAMAGE, ((EntitySnowmanCompanion)field_75441_b).getDamage());
+			attacker.swingArm(Hand.MAIN_HAND);
+			enemy.attackEntityFrom(Snowmancy.SNOWMAN_DAMAGE, ((EntitySnowmanCompanion)attacker).getDamage());
 		}
 	}
 }
