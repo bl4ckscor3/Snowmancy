@@ -1,0 +1,10 @@
+{
+	"screens" : [
+		
+		 {
+			"COMMENT" : "SNOWMANCY SUPPORT", 
+			"class" : "bl4ckscor3.mod.snowmancy.gui.GuiSnowmanBuilder", 
+			"texture" : "snowmancy:textures/gui/container/snowman_builder.png", 
+			"size" : [177, 240]
+		}]
+}
