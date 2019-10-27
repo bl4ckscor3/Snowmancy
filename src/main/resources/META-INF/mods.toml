@@ -1,9 +1,9 @@
 modLoader="javafml" #mandatory
-loaderVersion="[27,)" #mandatory
+loaderVersion="[28,)" #mandatory
 
 [[mods]] #mandatory
 	modId="snowmancy" #mandatory
-	version="v1.0.1" #mandatory
+	version="v1.0.2" #mandatory
 	displayName="Snowmancy" #mandatory
 	description='''Build your own snowman companion!''' #mandatory
 	issueTrackerURL="https://github.com/bl4ckscor3/Snowmancy/issues"
@@ -13,7 +13,7 @@ loaderVersion="[27,)" #mandatory
 [[dependencies.snowmancy]]
     modId="forge"
     mandatory=true
-    versionRange="[27,)"
+    versionRange="[28,)"
     ordering="NONE"
     side="BOTH"
 
