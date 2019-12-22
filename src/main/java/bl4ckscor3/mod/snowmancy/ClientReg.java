@@ -1,6 +1,5 @@
 package bl4ckscor3.mod.snowmancy;
 
-import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.gui.GuiSnowmanBuilder;
 import bl4ckscor3.mod.snowmancy.renderer.RenderSnowmanCompanion;
 import net.minecraft.client.gui.ScreenManager;
@@ -18,6 +17,6 @@ public class ClientReg
 	public static void onFMLClientSetup(FMLClientSetupEvent event)
 	{
 		ScreenManager.registerFactory(Snowmancy.cTypeSnowmanBuilder, GuiSnowmanBuilder::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntitySnowmanCompanion.class, manager -> new RenderSnowmanCompanion(manager));
+		RenderingRegistry.registerEntityRenderingHandler(Snowmancy.eTypeSnowman, RenderSnowmanCompanion::new);
 	}
 }

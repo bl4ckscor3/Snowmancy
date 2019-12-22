@@ -1,54 +1,53 @@
 package bl4ckscor3.mod.snowmancy.model;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
 import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
 
 //vanilla snowman model with added nose
 public class ModelSnowmanCompanion extends EntityModel<EntitySnowmanCompanion>
 {
-	public RendererModel body;
-	public RendererModel bottomBody;
-	public RendererModel head;
-	public RendererModel rightHand;
-	public RendererModel leftHand;
-	public RendererModel nose;
+	public ModelRenderer body;
+	public ModelRenderer bottomBody;
+	public ModelRenderer head;
+	public ModelRenderer rightHand;
+	public ModelRenderer leftHand;
+	public ModelRenderer nose;
 
 	public ModelSnowmanCompanion()
 	{
 		textureHeight = 64;
 		textureWidth = 64;
-		head = new RendererModel(this, 0, 0).setTextureSize(64, 64);
-		head.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, -0.5F);
+		head = new ModelRenderer(this, 0, 0).setTextureSize(64, 64);
+		head.func_228300_a_(-4.0F, -8.0F, -4.0F, 8, 8, 8);
 		head.setRotationPoint(0.0F, 4.0F, 0.0F);
-		nose = new RendererModel(this, 56, 60);
+		nose = new ModelRenderer(this, 56, 60);
 		nose.setRotationPoint(-3.0F, 0.0F, 0.0F);
-		nose.addBox(2.5F, -4.5F, -6.5F, 1, 1, 3, 0.0F);
-		rightHand = new RendererModel(this, 32, 0).setTextureSize(64, 64);
-		rightHand.addBox(-1.0F, 0.0F, -1.0F, 12, 2, 2, -0.5F);
+		nose.func_228300_a_(2.5F, -4.5F, -6.5F, 1, 1, 3);
+		rightHand = new ModelRenderer(this, 32, 0).setTextureSize(64, 64);
+		rightHand.func_228300_a_(-1.0F, 0.0F, -1.0F, 12, 2, 2);
 		rightHand.setRotationPoint(0.0F, 6.0F, 0.0F);
-		leftHand = new RendererModel(this, 32, 0).setTextureSize(64, 64);
-		leftHand.addBox(-1.0F, 0.0F, -1.0F, 12, 2, 2, -0.5F);
+		leftHand = new ModelRenderer(this, 32, 0).setTextureSize(64, 64);
+		leftHand.func_228300_a_(-1.0F, 0.0F, -1.0F, 12, 2, 2);
 		leftHand.setRotationPoint(0.0F, 6.0F, 0.0F);
-		body = new RendererModel(this, 0, 16).setTextureSize(64, 64);
-		body.addBox(-5.0F, -10.0F, -5.0F, 10, 10, 10, -0.5F);
+		body = new ModelRenderer(this, 0, 16).setTextureSize(64, 64);
+		body.func_228300_a_(-5.0F, -10.0F, -5.0F, 10, 10, 10);
 		body.setRotationPoint(0.0F, 13.0F, 0.0F);
-		bottomBody = new RendererModel(this, 0, 36).setTextureSize(64, 64);
-		bottomBody.addBox(-6.0F, -12.0F, -6.0F, 12, 12, 12, -0.5F);
+		bottomBody = new ModelRenderer(this, 0, 36).setTextureSize(64, 64);
+		bottomBody.func_228300_a_(-6.0F, -12.0F, -6.0F, 12, 12, 12);
 		bottomBody.setRotationPoint(0.0F, 24.0F, 0.0F);
 		head.addChild(nose);
 	}
 
 	@Override
-	public void setRotationAngles(EntitySnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor)
+	public void func_225597_a_(EntitySnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
 	{
 		float f;
 		float f1;
-
-		super.setRotationAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 
 		head.rotateAngleY = netHeadYaw * 0.017453292F;
 		head.rotateAngleX = headPitch * 0.017453292F;
@@ -66,15 +65,14 @@ public class ModelSnowmanCompanion extends EntityModel<EntitySnowmanCompanion>
 	}
 
 	@Override
-	public void render(EntitySnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+	public void func_225598_a_(MatrixStack stack, IVertexBuilder builder, int p_225598_3_, int p_225598_4_, float p_225598_5_, float p_225598_6_, float p_225598_7_, float p_225598_8_)
 	{
-		GlStateManager.translatef(0.0F, 0.75F, 0.0F);
-		scale = scale / 2;
-		setRotationAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-		body.render(scale);
-		bottomBody.render(scale);
-		head.render(scale);
-		rightHand.render(scale);
-		leftHand.render(scale);
+		stack.func_227861_a_(0.0D, 0.75D, 0.0D); //translate
+		stack.func_227862_a_(0.5F, 0.5F, 0.5F); //scale
+		body.func_228309_a_(stack, builder, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
+		bottomBody.func_228309_a_(stack, builder, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
+		head.func_228309_a_(stack, builder, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
+		rightHand.func_228309_a_(stack, builder, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
+		leftHand.func_228309_a_(stack, builder, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
 	}
 }

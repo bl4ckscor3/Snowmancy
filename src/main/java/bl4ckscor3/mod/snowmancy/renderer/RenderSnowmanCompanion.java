@@ -24,7 +24,7 @@ public class RenderSnowmanCompanion extends LivingRenderer<EntitySnowmanCompanio
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntitySnowmanCompanion entity)
+	public ResourceLocation getEntityTexture(EntitySnowmanCompanion entity)
 	{
 		return entity.isNoseGolden() ? SNOWMAN_TEXTURE_GOLDEN : SNOWMAN_TEXTURE;
 	}

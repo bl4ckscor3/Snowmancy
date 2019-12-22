@@ -16,8 +16,8 @@ import net.minecraft.advancements.criterion.CriterionInstance;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class CraftEvercoldSnowmanTrigger implements ICriterionTrigger<CraftEvercoldSnowmanTrigger.Instance> {
-
+public class CraftEvercoldSnowmanTrigger implements ICriterionTrigger<CraftEvercoldSnowmanTrigger.Instance>
+{
 	public static final ResourceLocation ID = new ResourceLocation(Snowmancy.MODID, "craft_evercold_snowman");
 	private final Map<PlayerAdvancements, CraftEvercoldSnowmanTrigger.Listeners> listenerMap = Maps.newHashMap();
 

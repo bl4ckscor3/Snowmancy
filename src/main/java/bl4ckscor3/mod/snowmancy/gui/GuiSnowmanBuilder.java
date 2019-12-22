@@ -1,6 +1,6 @@
 package bl4ckscor3.mod.snowmancy.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.block.BlockSnowmanBuilder;
@@ -49,7 +49,7 @@ public class GuiSnowmanBuilder extends ContainerScreen<ContainerSnowmanBuilder>
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
 	{
 		renderBackground();
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
 		blit((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
 	}
