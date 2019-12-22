@@ -1,7 +1,7 @@
 package bl4ckscor3.mod.snowmancy;
 
-import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
-import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
+import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
+import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -28,12 +28,12 @@ public class EventHandler
 		{
 			TileEntity te = event.getThrowable().world.getTileEntity(((BlockRayTraceResult)event.getRayTraceResult()).getPos());
 
-			if(te instanceof TileEntitySnowmanBuilder)
+			if(te instanceof SnowmanBuilderTileEntity)
 			{
-				if(((TileEntitySnowmanBuilder)te).isCraftReady() && ((TileEntitySnowmanBuilder)te).getProgress() < ((TileEntitySnowmanBuilder)te).getMaxProgress())
+				if(((SnowmanBuilderTileEntity)te).isCraftReady() && ((SnowmanBuilderTileEntity)te).getProgress() < ((SnowmanBuilderTileEntity)te).getMaxProgress())
 					te.getWorld().playSound(null, te.getPos(), EGG_SOUND, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
-				((TileEntitySnowmanBuilder)te).increaseProgress();
+				((SnowmanBuilderTileEntity)te).increaseProgress();
 			}
 		}
 	}
@@ -41,7 +41,7 @@ public class EventHandler
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent event)
 	{
-		if(event.getEntityLiving() instanceof EntitySnowmanCompanion)
-			Block.spawnAsEntity(event.getEntityLiving().world, event.getEntityLiving().getPosition(), ((EntitySnowmanCompanion)event.getEntityLiving()).createItem());
+		if(event.getEntityLiving() instanceof SnowmanCompanionEntity)
+			Block.spawnAsEntity(event.getEntityLiving().world, event.getEntityLiving().getPosition(), ((SnowmanCompanionEntity)event.getEntityLiving()).createItem());
 	}
 }

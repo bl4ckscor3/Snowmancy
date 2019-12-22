@@ -1,8 +1,8 @@
 package bl4ckscor3.mod.snowmancy.tileentity;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import bl4ckscor3.mod.snowmancy.container.ContainerSnowmanBuilder;
-import bl4ckscor3.mod.snowmancy.inventory.InventorySnowmanBuilder;
+import bl4ckscor3.mod.snowmancy.container.SnowmanBuilderContainer;
+import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -26,14 +26,14 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class TileEntitySnowmanBuilder extends TileEntity implements ITickableTileEntity, INamedContainerProvider
+public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider
 {
-	private InventorySnowmanBuilder inventory = new InventorySnowmanBuilder(this);
+	private SnowmanBuilderInventory inventory = new SnowmanBuilderInventory(this);
 	private byte progress = 0;
 	private final byte maxProgress = 8;
 	private final LazyOptional<IItemHandler> inventoryHolder = LazyOptional.of(() -> inventory.getItemHandler());
 
-	public TileEntitySnowmanBuilder()
+	public SnowmanBuilderTileEntity()
 	{
 		super(Snowmancy.teTypeBuilder);
 	}
@@ -195,7 +195,7 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickableTil
 	/**
 	 * @return This tile's inventory
 	 */
-	public InventorySnowmanBuilder getInventory()
+	public SnowmanBuilderInventory getInventory()
 	{
 		return inventory;
 	}
@@ -221,7 +221,7 @@ public class TileEntitySnowmanBuilder extends TileEntity implements ITickableTil
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player)
 	{
-		return new ContainerSnowmanBuilder(windowId, world, pos, inv);
+		return new SnowmanBuilderContainer(windowId, world, pos, inv);
 	}
 
 	@Override

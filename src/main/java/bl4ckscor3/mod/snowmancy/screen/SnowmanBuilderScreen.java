@@ -1,22 +1,22 @@
-package bl4ckscor3.mod.snowmancy.gui;
+package bl4ckscor3.mod.snowmancy.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import bl4ckscor3.mod.snowmancy.block.BlockSnowmanBuilder;
-import bl4ckscor3.mod.snowmancy.container.ContainerSnowmanBuilder;
-import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
+import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlock;
+import bl4ckscor3.mod.snowmancy.container.SnowmanBuilderContainer;
+import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
-public class GuiSnowmanBuilder extends ContainerScreen<ContainerSnowmanBuilder>
+public class SnowmanBuilderScreen extends ContainerScreen<SnowmanBuilderContainer>
 {
-	public static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Snowmancy.MODID, "textures/gui/container/" + BlockSnowmanBuilder.NAME + ".png");
-	private TileEntitySnowmanBuilder te;
+	public static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Snowmancy.MODID, "textures/gui/container/" + SnowmanBuilderBlock.NAME + ".png");
+	private SnowmanBuilderTileEntity te;
 
-	public GuiSnowmanBuilder(ContainerSnowmanBuilder container, PlayerInventory playerInv, ITextComponent name)
+	public SnowmanBuilderScreen(SnowmanBuilderContainer container, PlayerInventory playerInv, ITextComponent name)
 	{
 		super(container, playerInv, name);
 

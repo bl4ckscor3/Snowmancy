@@ -1,8 +1,8 @@
 package bl4ckscor3.mod.snowmancy.entity;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import bl4ckscor3.mod.snowmancy.entity.ai.SnowmanAIAttackMelee;
-import bl4ckscor3.mod.snowmancy.entity.ai.SnowmanAIAttackRanged;
+import bl4ckscor3.mod.snowmancy.entity.goal.SnowmanAttackMeleeGoal;
+import bl4ckscor3.mod.snowmancy.entity.goal.SnowmanAttackRangedGoal;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -35,20 +35,20 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome.TempCategory;
 
-public class EntitySnowmanCompanion extends GolemEntity implements IRangedAttackMob
+public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttackMob
 {
 	//TODO: add wearables
-	private static final DataParameter<Boolean> GOLDEN_NOSE = EntityDataManager.<Boolean>createKey(EntitySnowmanCompanion.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<String> ATTACK_TYPE = EntityDataManager.<String>createKey(EntitySnowmanCompanion.class, DataSerializers.STRING);
-	private static final DataParameter<Float> DAMAGE = EntityDataManager.<Float>createKey(EntitySnowmanCompanion.class, DataSerializers.FLOAT);
-	private static final DataParameter<Boolean> EVERCOLD = EntityDataManager.<Boolean>createKey(EntitySnowmanCompanion.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> GOLDEN_NOSE = EntityDataManager.<Boolean>createKey(SnowmanCompanionEntity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<String> ATTACK_TYPE = EntityDataManager.<String>createKey(SnowmanCompanionEntity.class, DataSerializers.STRING);
+	private static final DataParameter<Float> DAMAGE = EntityDataManager.<Float>createKey(SnowmanCompanionEntity.class, DataSerializers.FLOAT);
+	private static final DataParameter<Boolean> EVERCOLD = EntityDataManager.<Boolean>createKey(SnowmanCompanionEntity.class, DataSerializers.BOOLEAN);
 
-	public EntitySnowmanCompanion(EntityType<EntitySnowmanCompanion> type, World world)
+	public SnowmanCompanionEntity(EntityType<SnowmanCompanionEntity> type, World world)
 	{
 		super(type, world);
 	}
 
-	public EntitySnowmanCompanion(World world, boolean goldenNose, String attackType, float damage, boolean evercold)
+	public SnowmanCompanionEntity(World world, boolean goldenNose, String attackType, float damage, boolean evercold)
 	{
 		this(Snowmancy.eTypeSnowman, world);
 		dataManager.set(GOLDEN_NOSE, goldenNose);
@@ -70,8 +70,8 @@ public class EntitySnowmanCompanion extends GolemEntity implements IRangedAttack
 	@Override
 	protected void registerGoals()
 	{
-		goalSelector.addGoal(1, new SnowmanAIAttackMelee(this));
-		goalSelector.addGoal(2, new SnowmanAIAttackRanged(this));
+		goalSelector.addGoal(1, new SnowmanAttackMeleeGoal(this));
+		goalSelector.addGoal(2, new SnowmanAttackRangedGoal(this));
 		goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 1.0000001E-5F));
 		goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 6.0F));
 		goalSelector.addGoal(6, new LookRandomlyGoal(this));

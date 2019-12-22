@@ -1,24 +1,24 @@
 package bl4ckscor3.mod.snowmancy.inventory;
 
-import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
+import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-public class InventorySnowmanBuilder implements IInventory
+public class SnowmanBuilderInventory implements IInventory
 {
 	public static final int SLOTS = 14;
 	private NonNullList<ItemStack> contents = NonNullList.<ItemStack>withSize(SLOTS, ItemStack.EMPTY);
-	public ItemHandlerSnowmanBuilder itemHandler;
+	public SnowmanBuilderItemHandler itemHandler;
 
 	/**
 	 * Sets up this inventory with the container
 	 * @param te The container of this inventory
 	 */
-	public InventorySnowmanBuilder(TileEntitySnowmanBuilder te)
+	public SnowmanBuilderInventory(SnowmanBuilderTileEntity te)
 	{
-		itemHandler = new ItemHandlerSnowmanBuilder(te);
+		itemHandler = new SnowmanBuilderItemHandler(te);
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class InventorySnowmanBuilder implements IInventory
 	/**
 	 * @return This inventory's item handler
 	 */
-	public ItemHandlerSnowmanBuilder getItemHandler()
+	public SnowmanBuilderItemHandler getItemHandler()
 	{
 		return itemHandler;
 	}

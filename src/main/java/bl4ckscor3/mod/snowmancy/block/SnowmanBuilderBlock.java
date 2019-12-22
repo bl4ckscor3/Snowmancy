@@ -1,7 +1,7 @@
 package bl4ckscor3.mod.snowmancy.block;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
+import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -20,11 +20,11 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockSnowmanBuilder extends ContainerBlock
+public class SnowmanBuilderBlock extends ContainerBlock
 {
 	public static final String NAME = "snowman_builder";
 
-	public BlockSnowmanBuilder()
+	public SnowmanBuilderBlock()
 	{
 		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.5F).sound(SoundType.STONE));
 
@@ -55,6 +55,6 @@ public class BlockSnowmanBuilder extends ContainerBlock
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader world)
 	{
-		return new TileEntitySnowmanBuilder();
+		return new SnowmanBuilderTileEntity();
 	}
 }

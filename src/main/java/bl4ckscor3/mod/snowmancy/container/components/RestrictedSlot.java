@@ -5,7 +5,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-public class SlotRestricted extends Slot
+public class RestrictedSlot extends Slot
 {
 	private int slotLimit;
 	private IStackValidator itemValidator;
@@ -14,7 +14,7 @@ public class SlotRestricted extends Slot
 	 * @param slotLimit The max amount of items allowed in this slot
 	 * @param itemValidator The validator to check if a stack is valid for this slot
 	 */
-	public SlotRestricted(IInventory inventory, int index, int xPosition, int yPosition, int slotLimit, IStackValidator itemValidator)
+	public RestrictedSlot(IInventory inventory, int index, int xPosition, int yPosition, int slotLimit, IStackValidator itemValidator)
 	{
 		super(inventory, index, xPosition, yPosition);
 

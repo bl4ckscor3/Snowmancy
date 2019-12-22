@@ -3,7 +3,7 @@ package bl4ckscor3.mod.snowmancy.item;
 import java.util.List;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
+import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,11 +18,11 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public class ItemFrozenSnowman extends Item
+public class FrozenSnowmanItem extends Item
 {
 	public static final String NAME = "frozen_snowman";
 
-	public ItemFrozenSnowman()
+	public FrozenSnowmanItem()
 	{
 		super(new Item.Properties().group(Snowmancy.ITEM_GROUP));
 
@@ -39,7 +39,7 @@ public class ItemFrozenSnowman extends Item
 
 		if(!world.isRemote)
 		{
-			Entity entity = new EntitySnowmanCompanion(world,
+			Entity entity = new SnowmanCompanionEntity(world,
 					player.getHeldItem(hand).getTag().getBoolean("goldenCarrot"),
 					player.getHeldItem(hand).getTag().getString("attackType"),
 					player.getHeldItem(hand).getTag().getFloat("damage"),

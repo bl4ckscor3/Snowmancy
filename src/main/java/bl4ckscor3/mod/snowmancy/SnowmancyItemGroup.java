@@ -5,9 +5,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ItemGroupSnowmancy extends ItemGroup
+public class SnowmancyItemGroup extends ItemGroup
 {
-	public ItemGroupSnowmancy()
+	public SnowmancyItemGroup()
 	{
 		super(GROUPS.length, Snowmancy.PREFIX + "item_group");
 	}

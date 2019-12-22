@@ -1,15 +1,15 @@
-package bl4ckscor3.mod.snowmancy.entity.ai;
+package bl4ckscor3.mod.snowmancy.entity.goal;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
+import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.util.Hand;
 
-public class SnowmanAIAttackMelee extends MeleeAttackGoal
+public class SnowmanAttackMeleeGoal extends MeleeAttackGoal
 {
-	public SnowmanAIAttackMelee(EntitySnowmanCompanion snowman)
+	public SnowmanAttackMeleeGoal(SnowmanCompanionEntity snowman)
 	{
 		super(snowman, 1.0F, true);
 	}
@@ -17,7 +17,7 @@ public class SnowmanAIAttackMelee extends MeleeAttackGoal
 	@Override
 	public boolean shouldExecute()
 	{
-		return ((EntitySnowmanCompanion)attacker).getAttackType().equals(EnumAttackType.HIT.name()) && super.shouldExecute();
+		return ((SnowmanCompanionEntity)attacker).getAttackType().equals(EnumAttackType.HIT.name()) && super.shouldExecute();
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class SnowmanAIAttackMelee extends MeleeAttackGoal
 		{
 			attackTick = 20;
 			attacker.swingArm(Hand.MAIN_HAND);
-			enemy.attackEntityFrom(Snowmancy.SNOWMAN_DAMAGE, ((EntitySnowmanCompanion)attacker).getDamage());
+			enemy.attackEntityFrom(Snowmancy.SNOWMAN_DAMAGE, ((SnowmanCompanionEntity)attacker).getDamage());
 		}
 	}
 }

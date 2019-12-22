@@ -3,13 +3,13 @@ package bl4ckscor3.mod.snowmancy.model;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
+import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
 
 //vanilla snowman model with added nose
-public class ModelSnowmanCompanion extends EntityModel<EntitySnowmanCompanion>
+public class SnowmanCompanionModel extends EntityModel<SnowmanCompanionEntity>
 {
 	public ModelRenderer body;
 	public ModelRenderer bottomBody;
@@ -18,7 +18,7 @@ public class ModelSnowmanCompanion extends EntityModel<EntitySnowmanCompanion>
 	public ModelRenderer leftHand;
 	public ModelRenderer nose;
 
-	public ModelSnowmanCompanion()
+	public SnowmanCompanionModel()
 	{
 		textureHeight = 64;
 		textureWidth = 64;
@@ -44,7 +44,7 @@ public class ModelSnowmanCompanion extends EntityModel<EntitySnowmanCompanion>
 	}
 
 	@Override
-	public void func_225597_a_(EntitySnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
+	public void func_225597_a_(SnowmanCompanionEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
 	{
 		float f;
 		float f1;

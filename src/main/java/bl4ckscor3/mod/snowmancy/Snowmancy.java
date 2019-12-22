@@ -3,11 +3,11 @@ package bl4ckscor3.mod.snowmancy;
 import java.util.Arrays;
 
 import bl4ckscor3.mod.snowmancy.advancement.CraftEvercoldSnowmanTrigger;
-import bl4ckscor3.mod.snowmancy.block.BlockSnowmanBuilder;
-import bl4ckscor3.mod.snowmancy.container.ContainerSnowmanBuilder;
-import bl4ckscor3.mod.snowmancy.entity.EntitySnowmanCompanion;
-import bl4ckscor3.mod.snowmancy.item.ItemFrozenSnowman;
-import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
+import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlock;
+import bl4ckscor3.mod.snowmancy.container.SnowmanBuilderContainer;
+import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
+import bl4ckscor3.mod.snowmancy.item.FrozenSnowmanItem;
+import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -37,22 +37,22 @@ public class Snowmancy
 	public static final String MODID = "snowmancy";
 	public static final String PREFIX = MODID + ":";
 
-	@ObjectHolder(PREFIX + BlockSnowmanBuilder.NAME)
+	@ObjectHolder(PREFIX + SnowmanBuilderBlock.NAME)
 	public static final Block SNOWMAN_BUILDER = null;
 	@ObjectHolder(PREFIX + "evercold_ice")
 	public static final Block EVERCOLD_ICE = null;
-	@ObjectHolder(PREFIX + ItemFrozenSnowman.NAME)
+	@ObjectHolder(PREFIX + FrozenSnowmanItem.NAME)
 	public static final Item FROZEN_SNOWMAN = null;
-	@ObjectHolder(PREFIX + BlockSnowmanBuilder.NAME)
-	public static TileEntityType<TileEntitySnowmanBuilder> teTypeBuilder;
+	@ObjectHolder(PREFIX + SnowmanBuilderBlock.NAME)
+	public static TileEntityType<SnowmanBuilderTileEntity> teTypeBuilder;
 	@ObjectHolder(PREFIX + "snowman")
-	public static EntityType<EntitySnowmanCompanion> eTypeSnowman;
-	@ObjectHolder(PREFIX + BlockSnowmanBuilder.NAME)
-	public static ContainerType<ContainerSnowmanBuilder> cTypeSnowmanBuilder;
+	public static EntityType<SnowmanCompanionEntity> eTypeSnowman;
+	@ObjectHolder(PREFIX + SnowmanBuilderBlock.NAME)
+	public static ContainerType<SnowmanBuilderContainer> cTypeSnowmanBuilder;
 
 	public static final CraftEvercoldSnowmanTrigger CRAFT_EVERCOLD_SNOWMAN = CriteriaTriggers.register(new CraftEvercoldSnowmanTrigger());
 	public static final DamageSource SNOWMAN_DAMAGE = new DamageSource(PREFIX + "snowman_damage");
-	public static final ItemGroup ITEM_GROUP = new ItemGroupSnowmancy();
+	public static final ItemGroup ITEM_GROUP = new SnowmancyItemGroup();
 
 	public Snowmancy()
 	{
@@ -63,13 +63,13 @@ public class Snowmancy
 				Items.IRON_SWORD,
 				Items.SNOWBALL,
 				Items.STONE_SWORD,
-				Items.WOODEN_SWORD).stream().forEach(ContainerSnowmanBuilder::registerWeapon);
+				Items.WOODEN_SWORD).stream().forEach(SnowmanBuilderContainer::registerWeapon);
 	}
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
 	{
-		event.getRegistry().register(new BlockSnowmanBuilder());
+		event.getRegistry().register(new SnowmanBuilderBlock());
 		event.getRegistry().register(new Block(Block.Properties.create(Material.ICE)
 				.hardnessAndResistance(2.0F)
 				.slipperiness(0.98F)
@@ -80,7 +80,7 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event)
 	{
-		event.getRegistry().register(TileEntityType.Builder.create(TileEntitySnowmanBuilder::new, SNOWMAN_BUILDER).build(null).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
+		event.getRegistry().register(TileEntityType.Builder.create(SnowmanBuilderTileEntity::new, SNOWMAN_BUILDER).build(null).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
 	}
 
 	@SubscribeEvent
@@ -88,13 +88,13 @@ public class Snowmancy
 	{
 		event.getRegistry().register(new BlockItem(SNOWMAN_BUILDER, new Item.Properties().group(ITEM_GROUP)).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
 		event.getRegistry().register(new BlockItem(EVERCOLD_ICE, new Item.Properties().group(ITEM_GROUP)).setRegistryName(EVERCOLD_ICE.getRegistryName()));
-		event.getRegistry().register(new ItemFrozenSnowman());
+		event.getRegistry().register(new FrozenSnowmanItem());
 	}
 
 	@SubscribeEvent
 	public static void registerEntities(RegistryEvent.Register<EntityType<?>> event)
 	{
-		event.getRegistry().register(EntityType.Builder.<EntitySnowmanCompanion>create(EntitySnowmanCompanion::new, EntityClassification.CREATURE)
+		event.getRegistry().register(EntityType.Builder.<SnowmanCompanionEntity>create(SnowmanCompanionEntity::new, EntityClassification.CREATURE)
 				.size(0.35F, 0.9F)
 				.setTrackingRange(128)
 				.setUpdateInterval(1)
@@ -106,6 +106,6 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerContainerTypes(RegistryEvent.Register<ContainerType<?>> event)
 	{
-		event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> new ContainerSnowmanBuilder(windowId, inv.player.world, data.readBlockPos(), inv)).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
+		event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> new SnowmanBuilderContainer(windowId, inv.player.world, data.readBlockPos(), inv)).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
 	}
 }

@@ -1,14 +1,14 @@
 package bl4ckscor3.mod.snowmancy.inventory;
 
-import bl4ckscor3.mod.snowmancy.tileentity.TileEntitySnowmanBuilder;
+import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class ItemHandlerSnowmanBuilder implements IItemHandlerModifiable
+public class SnowmanBuilderItemHandler implements IItemHandlerModifiable
 {
-	public TileEntitySnowmanBuilder tileEntity;
+	public SnowmanBuilderTileEntity tileEntity;
 
-	public ItemHandlerSnowmanBuilder(TileEntitySnowmanBuilder te)
+	public SnowmanBuilderItemHandler(SnowmanBuilderTileEntity te)
 	{
 		tileEntity = te;
 	}
@@ -16,7 +16,7 @@ public class ItemHandlerSnowmanBuilder implements IItemHandlerModifiable
 	@Override
 	public int getSlots()
 	{
-		return InventorySnowmanBuilder.SLOTS;
+		return SnowmanBuilderInventory.SLOTS;
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class ItemHandlerSnowmanBuilder implements IItemHandlerModifiable
 	/**
 	 * @return The TileEntity that is bound to the inventory whith this item handler
 	 */
-	public TileEntitySnowmanBuilder getTileEntity()
+	public SnowmanBuilderTileEntity getTileEntity()
 	{
 		return tileEntity;
 	}
