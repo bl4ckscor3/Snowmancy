@@ -1,5 +1,6 @@
 package bl4ckscor3.mod.snowmancy.screen;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
@@ -26,31 +27,31 @@ public class SnowmanBuilderScreen extends ContainerScreen<SnowmanBuilderContaine
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+	protected void func_230451_b_(MatrixStack matrix, int mouseX, int mouseY)
 	{
 		int length = te.getProgress() * 2 + (te.isCraftReady() && te.getProgress() == 0 ? 1 : 0);
 		int color = te.getProgress() < 5 ? 0xFFFF0000 : (te.getProgress() < 8 ? 0xFFFFFF00 : 0xFF00FF00); //red, yellow, green (0xAARRGGBB)
 
 		if(!te.canOperate())
-			drawString(font, "Biome too warm!", 0, -10, 0x00FFFF);
+			drawString(matrix, font, "Biome too warm!", 0, -10, 0x00FFFF);
 
-		fill(152, 130, 152 + length, 131, color);
+		fill(matrix, 152, 130, 152 + length, 131, color);
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrix, int mouseX, int mouseY, float partialTicks)
 	{
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(matrix, mouseX, mouseY, partialTicks);
 
-		renderHoveredToolTip(mouseX, mouseY);
+		func_230459_a_(matrix, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+	protected void func_230450_a_(MatrixStack matrix, float partialTicks, int mouseX, int mouseY)
 	{
-		renderBackground();
+		renderBackground(matrix);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
-		blit((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
+		blit(matrix, (width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
 	}
 }

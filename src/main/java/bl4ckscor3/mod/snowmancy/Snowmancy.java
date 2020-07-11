@@ -14,6 +14,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -94,13 +95,16 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerEntities(RegistryEvent.Register<EntityType<?>> event)
 	{
-		event.getRegistry().register(EntityType.Builder.<SnowmanCompanionEntity>create(SnowmanCompanionEntity::new, EntityClassification.CREATURE)
+		EntityType<SnowmanCompanionEntity> snowmanCompanion = (EntityType<SnowmanCompanionEntity>)EntityType.Builder.<SnowmanCompanionEntity>create(SnowmanCompanionEntity::new, EntityClassification.CREATURE)
 				.size(0.35F, 0.9F)
 				.setTrackingRange(128)
 				.setUpdateInterval(1)
 				.setShouldReceiveVelocityUpdates(true)
 				.build(PREFIX + "snowman")
-				.setRegistryName(new ResourceLocation(MODID, "snowman")));
+				.setRegistryName(new ResourceLocation(MODID, "snowman"));
+
+		event.getRegistry().register(snowmanCompanion);
+		GlobalEntityTypeAttributes.put(snowmanCompanion, SnowmanCompanionEntity.getAttributes().func_233813_a_());
 	}
 
 	@SubscribeEvent

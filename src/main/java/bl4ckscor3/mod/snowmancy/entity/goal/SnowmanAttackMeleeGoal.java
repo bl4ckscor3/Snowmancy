@@ -23,9 +23,9 @@ public class SnowmanAttackMeleeGoal extends MeleeAttackGoal
 	@Override
 	protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
 	{
-		if(distToEnemySqr <= getAttackReachSqr(enemy) && attackTick <= 0)
+		if(distToEnemySqr <= getAttackReachSqr(enemy) && func_234041_j_() <= 0) //getAttackTick
 		{
-			attackTick = 20;
+			func_234039_g_(); //resetAttackTick
 			attacker.swingArm(Hand.MAIN_HAND);
 			enemy.attackEntityFrom(Snowmancy.SNOWMAN_DAMAGE, ((SnowmanCompanionEntity)attacker).getDamage());
 		}

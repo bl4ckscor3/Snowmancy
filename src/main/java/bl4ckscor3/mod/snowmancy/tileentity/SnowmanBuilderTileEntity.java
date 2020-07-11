@@ -4,6 +4,7 @@ import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.container.SnowmanBuilderContainer;
 import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -108,10 +109,10 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 	public boolean canOperate()
 	{
 		int cooling = 0;
-		boolean cold = getWorld().func_226691_t_(pos).getTempCategory() == TempCategory.COLD;
-		boolean medium = getWorld().func_226691_t_(pos).getTempCategory() == TempCategory.MEDIUM;
-		boolean ocean = getWorld().func_226691_t_(pos).getTempCategory() == TempCategory.OCEAN;
-		boolean warm = getWorld().func_226691_t_(pos).getTempCategory() == TempCategory.WARM;
+		boolean cold = getWorld().getBiome(pos).getTempCategory() == TempCategory.COLD;
+		boolean medium = getWorld().getBiome(pos).getTempCategory() == TempCategory.MEDIUM;
+		boolean ocean = getWorld().getBiome(pos).getTempCategory() == TempCategory.OCEAN;
+		boolean warm = getWorld().getBiome(pos).getTempCategory() == TempCategory.WARM;
 
 		for(Direction facing : Direction.values())
 		{
@@ -139,7 +140,7 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 	}
 
 	@Override
-	public void read(CompoundNBT tag)
+	public void read(BlockState state, CompoundNBT tag)
 	{
 		CompoundNBT invTag = (CompoundNBT)tag.get("SnowmanBuilderInventory");
 
@@ -154,7 +155,7 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 			progress = tag.getByte("progress");
 		}
 
-		super.read(tag);
+		super.read(state, tag);
 	}
 
 	@Override

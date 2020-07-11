@@ -5,13 +5,12 @@ import bl4ckscor3.mod.snowmancy.entity.goal.SnowmanAttackMeleeGoal;
 import bl4ckscor3.mod.snowmancy.entity.goal.SnowmanAttackRangedGoal;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap.MutableAttribute;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
@@ -20,6 +19,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EggEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
@@ -28,6 +28,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
@@ -75,15 +76,14 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 		goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 1.0000001E-5F));
 		goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 6.0F));
 		goalSelector.addGoal(6, new LookRandomlyGoal(this));
-		targetSelector.addGoal(1, new NearestAttackableTargetGoal<MobEntity>(this, MobEntity.class, 10, true, false, e -> e instanceof IMob));
+		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MobEntity.class, 10, true, false, e -> e instanceof IMob));
 	}
 
-	@Override
-	protected void registerAttributes()
+	public static MutableAttribute getAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.20000000298023224D);
+		return MobEntity.func_233666_p_()
+				.func_233815_a_(Attributes.MAX_HEALTH, 4.0D)
+				.func_233815_a_(Attributes.MOVEMENT_SPEED, 0.2D);
 	}
 
 	@Override
@@ -91,20 +91,21 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	{
 		super.livingTick();
 
-		if(!isEvercold() && world.func_226691_t_(getPosition()).getTempCategory() != TempCategory.COLD)
+		if(!isEvercold() && world.getBiome(func_233580_cy_()).getTempCategory() != TempCategory.COLD)
 			attackEntityFrom(DamageSource.ON_FIRE, 1.0F);
 	}
 
 	@Override
-	protected boolean processInteract(PlayerEntity player, Hand hand)
+	protected ActionResultType func_230254_b_(PlayerEntity player, Hand hand) //processInteract
 	{
 		if(player.isCrouching() && hand == Hand.MAIN_HAND)
 		{
-			Block.spawnAsEntity(world, getPosition(), createItem());
+			Block.spawnAsEntity(world, func_233580_cy_(), createItem());
 			remove();
+			return ActionResultType.SUCCESS;
 		}
 
-		return super.processInteract(player, hand);
+		return ActionResultType.PASS;
 	}
 
 	/**
@@ -124,7 +125,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor)
 	{
 		EnumAttackType type = EnumAttackType.valueOf(getAttackType());
-		Entity throwableEntity;
+		ProjectileEntity throwableEntity;
 
 		switch(type)
 		{
@@ -134,13 +135,13 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 			default: return;
 		}
 
-		double d0 = target.func_226278_cu_() + target.getEyeHeight() - 1.100000023841858D;
-		double d1 = target.func_226277_ct_() - func_226277_ct_();
-		double d2 = d0 - throwableEntity.func_226278_cu_();
-		double d3 = target.func_226281_cx_() - func_226281_cx_();
+		double d0 = target.getPosY() + target.getEyeHeight() - 1.100000023841858D;
+		double d1 = target.getPosX() - getPosX();
+		double d2 = d0 - throwableEntity.getPosY();
+		double d3 = target.getPosZ() - getPosZ();
 		float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
-		((IProjectile)throwableEntity).shoot(d1, d2 + f, d3, 1.6F, 12.0F);
+		throwableEntity.shoot(d1, d2 + f, d3, 1.6F, 12.0F);
 		playSound(SoundEvents.ENTITY_SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
 		world.addEntity(throwableEntity);
 	}
