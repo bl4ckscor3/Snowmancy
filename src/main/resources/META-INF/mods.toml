@@ -3,11 +3,11 @@ loaderVersion="[32,)" #mandatory
 
 [[mods]] #mandatory
 	modId="snowmancy" #mandatory
-	version="v1.0.2" #mandatory
+	version="v1.0.3" #mandatory
 	displayName="Snowmancy" #mandatory
 	description='''Build your own snowman companion!''' #mandatory
 	issueTrackerURL="https://github.com/bl4ckscor3/Snowmancy/issues"
-	displayURL="https://curseforge.com/minecraft/mc-mods/snowmancy"
+	displayURL="https://www.curseforge.com/minecraft/mc-mods/snowmancy"
 	authors="bl4ckscor3"
 
 [[dependencies.snowmancy]]

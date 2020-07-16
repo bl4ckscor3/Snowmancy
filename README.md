@@ -1,3 +1,3 @@
 # Snowmancy
 
-Download here: https://curseforge.com/minecraft/mc-mods/snowmancy
+Download here: https://www.curseforge.com/minecraft/mc-mods/snowmancy
