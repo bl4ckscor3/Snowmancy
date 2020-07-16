@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.3
+- Fix leash not rendering
+- Fix name tag always rendering when the snowman companion has a name
+- Fix probably some other rendering issues
+
 ## v1.0.2
 - Added support for [Public Gui Announcement](https://curseforge.com/minecraft/mc-mods/public-gui-announcement)
 
