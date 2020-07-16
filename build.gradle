@@ -11,14 +11,14 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-version = '1.15.1-v1.0.2'
+version = '1.15.2-v1.0.2'
 group = 'bl4ckscor3.mod.snowmancy'
 archivesBaseName = 'snowmancy'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191217-1.14.3'
+    mappings channel: 'snapshot', version: '20200515-1.15.1'
 	
     runs {
         client {
@@ -47,7 +47,7 @@ minecraft {
 
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.1-30.0.14'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.2.0'
 }
 
 jar {

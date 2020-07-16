@@ -91,7 +91,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	{
 		super.livingTick();
 
-		if(!isEvercold() && world.func_226691_t_(getPosition()).getTempCategory() != TempCategory.COLD)
+		if(!isEvercold() && world.getBiome(getPosition()).getTempCategory() != TempCategory.COLD)
 			attackEntityFrom(DamageSource.ON_FIRE, 1.0F);
 	}
 
@@ -134,10 +134,10 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 			default: return;
 		}
 
-		double d0 = target.func_226278_cu_() + target.getEyeHeight() - 1.100000023841858D;
-		double d1 = target.func_226277_ct_() - func_226277_ct_();
-		double d2 = d0 - throwableEntity.func_226278_cu_();
-		double d3 = target.func_226281_cx_() - func_226281_cx_();
+		double d0 = target.getPosY() + target.getEyeHeight() - 1.100000023841858D;
+		double d1 = target.getPosX() - getPosX();
+		double d2 = d0 - throwableEntity.getPosY();
+		double d3 = target.getPosZ() - getPosZ();
 		float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
 		((IProjectile)throwableEntity).shoot(d1, d2 + f, d3, 1.6F, 12.0F);

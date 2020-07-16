@@ -108,10 +108,10 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 	public boolean canOperate()
 	{
 		int cooling = 0;
-		boolean cold = getWorld().func_226691_t_(pos).getTempCategory() == TempCategory.COLD;
-		boolean medium = getWorld().func_226691_t_(pos).getTempCategory() == TempCategory.MEDIUM;
-		boolean ocean = getWorld().func_226691_t_(pos).getTempCategory() == TempCategory.OCEAN;
-		boolean warm = getWorld().func_226691_t_(pos).getTempCategory() == TempCategory.WARM;
+		boolean cold = getWorld().getBiome(pos).getTempCategory() == TempCategory.COLD;
+		boolean medium = getWorld().getBiome(pos).getTempCategory() == TempCategory.MEDIUM;
+		boolean ocean = getWorld().getBiome(pos).getTempCategory() == TempCategory.OCEAN;
+		boolean warm = getWorld().getBiome(pos).getTempCategory() == TempCategory.WARM;
 
 		for(Direction facing : Direction.values())
 		{
