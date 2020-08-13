@@ -27,7 +27,7 @@ public class SnowmanBuilderScreen extends ContainerScreen<SnowmanBuilderContaine
 	}
 
 	@Override
-	protected void func_230451_b_(MatrixStack matrix, int mouseX, int mouseY)
+	protected void drawGuiContainerForegroundLayer(MatrixStack matrix, int mouseX, int mouseY)
 	{
 		int length = te.getProgress() * 2 + (te.isCraftReady() && te.getProgress() == 0 ? 1 : 0);
 		int color = te.getProgress() < 5 ? 0xFFFF0000 : (te.getProgress() < 8 ? 0xFFFFFF00 : 0xFF00FF00); //red, yellow, green (0xAARRGGBB)
@@ -47,7 +47,7 @@ public class SnowmanBuilderScreen extends ContainerScreen<SnowmanBuilderContaine
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack matrix, float partialTicks, int mouseX, int mouseY)
+	protected void drawGuiContainerBackgroundLayer(MatrixStack matrix, float partialTicks, int mouseX, int mouseY)
 	{
 		renderBackground(matrix);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);

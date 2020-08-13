@@ -104,7 +104,7 @@ public class Snowmancy
 				.setRegistryName(new ResourceLocation(MODID, "snowman"));
 
 		event.getRegistry().register(snowmanCompanion);
-		GlobalEntityTypeAttributes.put(snowmanCompanion, SnowmanCompanionEntity.getAttributes().func_233813_a_());
+		GlobalEntityTypeAttributes.put(snowmanCompanion, SnowmanCompanionEntity.getAttributes().create());
 	}
 
 	@SubscribeEvent

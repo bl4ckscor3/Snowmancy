@@ -42,6 +42,6 @@ public class EventHandler
 	public static void onLivingDeath(LivingDeathEvent event)
 	{
 		if(event.getEntityLiving() instanceof SnowmanCompanionEntity)
-			Block.spawnAsEntity(event.getEntityLiving().world, event.getEntityLiving().func_233580_cy_(), ((SnowmanCompanionEntity)event.getEntityLiving()).createItem());
+			Block.spawnAsEntity(event.getEntityLiving().world, event.getEntityLiving().getPosition(), ((SnowmanCompanionEntity)event.getEntityLiving()).createItem());
 	}
 }

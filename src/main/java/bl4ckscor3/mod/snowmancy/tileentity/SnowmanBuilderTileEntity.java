@@ -21,7 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -109,10 +108,10 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 	public boolean canOperate()
 	{
 		int cooling = 0;
-		boolean cold = getWorld().getBiome(pos).getTempCategory() == TempCategory.COLD;
-		boolean medium = getWorld().getBiome(pos).getTempCategory() == TempCategory.MEDIUM;
-		boolean ocean = getWorld().getBiome(pos).getTempCategory() == TempCategory.OCEAN;
-		boolean warm = getWorld().getBiome(pos).getTempCategory() == TempCategory.WARM;
+		float temperature = getWorld().getBiome(pos).func_242445_k();
+		boolean cold = temperature < 0.2F;
+		boolean medium = temperature < 1.0F;
+		boolean warm = temperature >= 1.0F;
 
 		for(Direction facing : Direction.values())
 		{
@@ -123,8 +122,8 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 		switch(cooling)
 		{
 			case 0: case 1: return cold;
-			case 2: case 3: return cold || medium || ocean;
-			default: return cold || medium || ocean || warm;
+			case 2: case 3: return cold || medium;
+			default: return cold || medium || warm;
 		}
 	}
 

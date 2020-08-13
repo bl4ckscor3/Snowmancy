@@ -34,7 +34,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome.TempCategory;
 
 public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttackMob
 {
@@ -82,8 +81,8 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	public static MutableAttribute getAttributes()
 	{
 		return MobEntity.func_233666_p_()
-				.func_233815_a_(Attributes.MAX_HEALTH, 4.0D)
-				.func_233815_a_(Attributes.MOVEMENT_SPEED, 0.2D);
+				.createMutableAttribute(Attributes.MAX_HEALTH, 4.0D)
+				.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2D);
 	}
 
 	@Override
@@ -91,7 +90,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	{
 		super.livingTick();
 
-		if(!isEvercold() && world.getBiome(func_233580_cy_()).getTempCategory() != TempCategory.COLD)
+		if(!isEvercold() && world.getBiome(getPosition()).func_242445_k() >= 0.2F)
 			attackEntityFrom(DamageSource.ON_FIRE, 1.0F);
 	}
 
@@ -100,7 +99,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	{
 		if(player.isCrouching() && hand == Hand.MAIN_HAND)
 		{
-			Block.spawnAsEntity(world, func_233580_cy_(), createItem());
+			Block.spawnAsEntity(world, getPosition(), createItem());
 			remove();
 			return ActionResultType.SUCCESS;
 		}
