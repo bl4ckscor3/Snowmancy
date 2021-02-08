@@ -17,6 +17,6 @@ public class SnowmanAttackRangedGoal extends RangedAttackGoal
 	@Override
 	public boolean shouldExecute()
 	{
-		return EnumAttackType.valueOf(snowman.getAttackType()) != EnumAttackType.HIT && super.shouldExecute();
+		return !EnumAttackType.HIT.name().equals(snowman.getAttackType()) && super.shouldExecute();
 	}
 }
