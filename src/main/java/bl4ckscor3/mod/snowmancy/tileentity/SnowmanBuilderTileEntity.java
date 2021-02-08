@@ -108,7 +108,7 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 	public boolean canOperate()
 	{
 		int cooling = 0;
-		float temperature = getWorld().getBiome(pos).func_242445_k();
+		float temperature = getWorld().getBiome(pos).getTemperature();
 		boolean cold = temperature < 0.2F;
 		boolean medium = temperature < 1.0F;
 		boolean warm = temperature >= 1.0F;

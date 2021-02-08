@@ -90,7 +90,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	{
 		super.livingTick();
 
-		if(!isEvercold() && world.getBiome(getPosition()).func_242445_k() >= 0.2F)
+		if(!isEvercold() && world.getBiome(getPosition()).getTemperature() >= 0.2F)
 			attackEntityFrom(DamageSource.ON_FIRE, 1.0F);
 	}
 

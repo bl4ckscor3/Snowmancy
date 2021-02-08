@@ -1,5 +1,8 @@
 # Changelog
 
+##
+- Prevent a crash
+
 ## v1.0.3
 - Fix leash not rendering
 - Fix name tag always rendering when the snowman companion has a name
