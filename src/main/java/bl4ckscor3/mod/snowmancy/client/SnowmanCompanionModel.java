@@ -26,10 +26,10 @@ public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion>
 	public SnowmanCompanionModel(ModelPart modelPart)
 	{
 		body = modelPart.getChild("body");
-		bottomBody = modelPart.getChild("neck");
+		bottomBody = modelPart.getChild("bottom_body");
 		head = modelPart.getChild("head");
-		rightHand = modelPart.getChild("right_eye");
-		leftHand = modelPart.getChild("left_eye");
+		rightHand = modelPart.getChild("right_hand");
+		leftHand = modelPart.getChild("left_hand");
 		nose = head.getChild("nose");
 	}
 
