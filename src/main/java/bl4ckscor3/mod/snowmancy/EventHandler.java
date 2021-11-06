@@ -24,9 +24,9 @@ public class EventHandler
 	@SubscribeEvent
 	public static void onProjectileImpactThrowable(ProjectileImpactEvent event)
 	{
-		if(event.getProjectile() instanceof Snowball && event.getRayTraceResult().getType() == Type.BLOCK)
+		if(event.getProjectile() instanceof Snowball snowball && event.getRayTraceResult().getType() == Type.BLOCK)
 		{
-			BlockEntity te = event.getProjectile().level.getBlockEntity(((BlockHitResult)event.getRayTraceResult()).getBlockPos());
+			BlockEntity te = snowball.level.getBlockEntity(((BlockHitResult)event.getRayTraceResult()).getBlockPos());
 
 			if(te instanceof SnowmanBuilderBlockEntity builder)
 			{

@@ -122,25 +122,25 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob
 	public void performRangedAttack(LivingEntity target, float distanceFactor)
 	{
 		EnumAttackType type = EnumAttackType.valueOf(getAttackType());
-		Projectile throwableEntity;
+		Projectile throwableEntity = switch(type) {
+			case ARROW -> ((ArrowItem)Items.ARROW).createArrow(level, new ItemStack(Items.ARROW, 1), this);
+			case EGG -> new ThrownEgg(level, this);
+			case SNOWBALL -> new Snowball(level, this);
+			default -> null;
+		};
 
-		switch(type)
+		if(throwableEntity != null)
 		{
-			case ARROW: throwableEntity = ((ArrowItem)Items.ARROW).createArrow(level, new ItemStack(Items.ARROW, 1), this); break;
-			case EGG: throwableEntity = new ThrownEgg(level, this); break;
-			case SNOWBALL: throwableEntity = new Snowball(level, this); break;
-			default: return;
+			double d0 = target.getY() + target.getEyeHeight() - 1.100000023841858D;
+			double d1 = target.getX() - getX();
+			double d2 = d0 - throwableEntity.getY();
+			double d3 = target.getZ() - getZ();
+			float f = Mth.sqrt((float)(d1 * d1 + d3 * d3)) * 0.2F;
+
+			throwableEntity.shoot(d1, d2 + f, d3, 1.6F, 12.0F);
+			playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));
+			level.addFreshEntity(throwableEntity);
 		}
-
-		double d0 = target.getY() + target.getEyeHeight() - 1.100000023841858D;
-		double d1 = target.getX() - getX();
-		double d2 = d0 - throwableEntity.getY();
-		double d3 = target.getZ() - getZ();
-		float f = Mth.sqrt((float)(d1 * d1 + d3 * d3)) * 0.2F;
-
-		throwableEntity.shoot(d1, d2 + f, d3, 1.6F, 12.0F);
-		playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));
-		level.addFreshEntity(throwableEntity);
 	}
 
 	@Override

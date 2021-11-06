@@ -122,8 +122,8 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu
 			{
 				te.resetProgress();
 
-				if(player instanceof ServerPlayer && inv.getItem(inv.getContainerSize() - 1).getTag().getBoolean("evercold"))
-					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.trigger((ServerPlayer)player);
+				if(player instanceof ServerPlayer sp && inv.getItem(inv.getContainerSize() - 1).getTag().getBoolean("evercold"))
+					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.trigger(sp);
 
 				super.clicked(slotId, dragType, clickType, player);
 			}
