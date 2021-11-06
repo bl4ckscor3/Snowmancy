@@ -4,41 +4,46 @@ import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.container.SnowmanBuilderContainer;
 import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class SnowmanBuilderTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider
+public class SnowmanBuilderTileEntity extends BlockEntity implements MenuProvider
 {
 	private SnowmanBuilderInventory inventory = new SnowmanBuilderInventory(this);
 	private byte progress = 0;
 	private final byte maxProgress = 8;
 	private final LazyOptional<IItemHandler> inventoryHolder = LazyOptional.of(() -> inventory.getItemHandler());
 
-	public SnowmanBuilderTileEntity()
+	public SnowmanBuilderTileEntity(BlockPos pos, BlockState state)
 	{
-		super(Snowmancy.teTypeBuilder);
+		super(Snowmancy.teTypeBuilder, pos, state);
 	}
 
-	@Override
+	public static void tick(Level level, BlockPos pos, BlockState state, SnowmanBuilderTileEntity be)
+	{
+		be.tick();
+	}
+
 	public void tick()
 	{
 		if(canOperate())
@@ -139,7 +144,7 @@ public class SnowmanBuilderTileEntity extends BlockEntity implements TickableBlo
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag tag)
+	public void load(CompoundTag tag)
 	{
 		CompoundTag invTag = (CompoundTag)tag.get("SnowmanBuilderInventory");
 
@@ -154,7 +159,7 @@ public class SnowmanBuilderTileEntity extends BlockEntity implements TickableBlo
 			progress = tag.getByte("progress");
 		}
 
-		super.load(state, tag);
+		super.load(tag);
 	}
 
 	@Override

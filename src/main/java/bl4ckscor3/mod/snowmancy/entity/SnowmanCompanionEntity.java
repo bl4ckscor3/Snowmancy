@@ -4,36 +4,36 @@ import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.goal.SnowmanAttackMeleeGoal;
 import bl4ckscor3.mod.snowmancy.entity.goal.SnowmanAttackRangedGoal;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier.Builder;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.AbstractGolem;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownEgg;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.ThrownEgg;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 
 public class SnowmanCompanionEntity extends AbstractGolem implements RangedAttackMob
 {
@@ -50,7 +50,7 @@ public class SnowmanCompanionEntity extends AbstractGolem implements RangedAttac
 
 	public SnowmanCompanionEntity(Level world, boolean goldenNose, String attackType, float damage, boolean evercold)
 	{
-		this(Snowmancy.eTypeSnowman, world);
+		this(Snowmancy.SNOWMAN_ENTITY.get(), world);
 		entityData.set(GOLDEN_NOSE, goldenNose);
 		entityData.set(ATTACK_TYPE, attackType);
 		entityData.set(DAMAGE, damage);
@@ -78,7 +78,7 @@ public class SnowmanCompanionEntity extends AbstractGolem implements RangedAttac
 		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false, e -> e instanceof Enemy));
 	}
 
-	public static Builder getAttributes()
+	public static Builder createAttributes()
 	{
 		return Mob.createMobAttributes()
 				.add(Attributes.MAX_HEALTH, 4.0D)
@@ -95,12 +95,12 @@ public class SnowmanCompanionEntity extends AbstractGolem implements RangedAttac
 	}
 
 	@Override
-	protected InteractionResult getEntityInteractionResult(Player player, InteractionHand hand)
+	protected InteractionResult mobInteract(Player player, InteractionHand hand)
 	{
 		if(player.isCrouching() && hand == InteractionHand.MAIN_HAND)
 		{
 			Block.popResource(level, blockPosition(), createItem());
-			remove();
+			discard();
 			return InteractionResult.SUCCESS;
 		}
 
@@ -138,7 +138,7 @@ public class SnowmanCompanionEntity extends AbstractGolem implements RangedAttac
 		double d1 = target.getX() - getX();
 		double d2 = d0 - throwableEntity.getY();
 		double d3 = target.getZ() - getZ();
-		float f = Mth.sqrt(d1 * d1 + d3 * d3) * 0.2F;
+		float f = Mth.sqrt((float)(d1 * d1 + d3 * d3)) * 0.2F;
 
 		throwableEntity.shoot(d1, d2 + f, d3, 1.6F, 12.0F);
 		playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));

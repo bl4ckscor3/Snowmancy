@@ -7,21 +7,21 @@ import bl4ckscor3.mod.snowmancy.container.components.RestrictedSlot;
 import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
 import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import bl4ckscor3.mod.snowmancy.util.IStackValidator;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.Container;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 
 public class SnowmanBuilderContainer extends AbstractContainerMenu
 {
@@ -97,7 +97,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType, ClickType clickType, Player player)
+	public void clicked(int slotId, int dragType, ClickType clickType, Player player)
 	{
 		SnowmanBuilderInventory inv = te.getInventory();
 		boolean clickedOutput = false;
@@ -116,7 +116,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu
 		}
 
 		if(!clickedOutput)
-			return super.clicked(slotId, dragType, clickType, player);
+			super.clicked(slotId, dragType, clickType, player);
 		else
 		{
 			if(te.getProgress() == te.getMaxProgress())
@@ -126,9 +126,9 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu
 				if(player instanceof ServerPlayer && inv.getItem(inv.getContainerSize() - 1).getTag().getBoolean("evercold"))
 					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.trigger((ServerPlayer)player);
 
-				return super.clicked(slotId, dragType, clickType, player);
+				super.clicked(slotId, dragType, clickType, player);
 			}
-			else return ItemStack.EMPTY;
+			else return;
 		}
 	}
 

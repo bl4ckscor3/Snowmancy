@@ -9,29 +9,31 @@ import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
 import bl4ckscor3.mod.snowmancy.item.FrozenSnowmanItem;
 import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
-
-import net.minecraft.world.level.block.state.BlockBehaviour;
 
 @Mod(Snowmancy.MODID)
 @EventBusSubscriber(bus=Bus.MOD)
@@ -39,6 +41,7 @@ public class Snowmancy
 {
 	public static final String MODID = "snowmancy";
 	public static final String PREFIX = MODID + ":";
+	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
 
 	@ObjectHolder(PREFIX + SnowmanBuilderBlock.NAME)
 	public static final Block SNOWMAN_BUILDER = null;
@@ -48,8 +51,12 @@ public class Snowmancy
 	public static final Item FROZEN_SNOWMAN = null;
 	@ObjectHolder(PREFIX + SnowmanBuilderBlock.NAME)
 	public static BlockEntityType<SnowmanBuilderTileEntity> teTypeBuilder;
-	@ObjectHolder(PREFIX + "snowman")
-	public static EntityType<SnowmanCompanionEntity> eTypeSnowman;
+	public static final RegistryObject<EntityType<SnowmanCompanionEntity>> SNOWMAN_ENTITY = ENTITY_TYPES.register("zombified_chicken", () -> EntityType.Builder.<SnowmanCompanionEntity>of(SnowmanCompanionEntity::new, MobCategory.CREATURE)
+			.sized(0.35F, 0.9F)
+			.setTrackingRange(128)
+			.setUpdateInterval(1)
+			.setShouldReceiveVelocityUpdates(true)
+			.build(PREFIX + "snowman"));
 	@ObjectHolder(PREFIX + SnowmanBuilderBlock.NAME)
 	public static MenuType<SnowmanBuilderContainer> cTypeSnowmanBuilder;
 
@@ -59,6 +66,7 @@ public class Snowmancy
 
 	public Snowmancy()
 	{
+		ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		Arrays.asList(Items.BOW,
 				Items.DIAMOND_SWORD,
 				Items.EGG,
@@ -95,18 +103,9 @@ public class Snowmancy
 	}
 
 	@SubscribeEvent
-	public static void registerEntities(RegistryEvent.Register<EntityType<?>> event)
+	public static void onEntityAttributeCreation(EntityAttributeCreationEvent event)
 	{
-		EntityType<SnowmanCompanionEntity> snowmanCompanion = (EntityType<SnowmanCompanionEntity>)EntityType.Builder.<SnowmanCompanionEntity>of(SnowmanCompanionEntity::new, MobCategory.CREATURE)
-				.sized(0.35F, 0.9F)
-				.setTrackingRange(128)
-				.setUpdateInterval(1)
-				.setShouldReceiveVelocityUpdates(true)
-				.build(PREFIX + "snowman")
-				.setRegistryName(new ResourceLocation(MODID, "snowman"));
-
-		event.getRegistry().register(snowmanCompanion);
-		DefaultAttributes.put(snowmanCompanion, SnowmanCompanionEntity.getAttributes().build());
+		event.put(SNOWMAN_ENTITY.get(), SnowmanCompanionEntity.createAttributes().build());
 	}
 
 	@SubscribeEvent

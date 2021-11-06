@@ -1,26 +1,26 @@
-modLoader="javafml" #mandatory
-loaderVersion="[33,)" #mandatory
-license="GNU GPL v3.0 https://github.com/bl4ckscor3/Snowmancy/blob/1.16/LICENSE"
+modLoader="javafml"
+loaderVersion="[33,)"
+license="GNU GPL v3.0 https://github.com/bl4ckscor3/Snowmancy/blob/1.17/LICENSE"
+issueTrackerURL="https://github.com/bl4ckscor3/Snowmancy/issues"
 
-[[mods]] #mandatory
-	modId="snowmancy" #mandatory
-	version="v1.0.4" #mandatory
-	displayName="Snowmancy" #mandatory
-	description='''Build your own snowman companion!''' #mandatory
-	issueTrackerURL="https://github.com/bl4ckscor3/Snowmancy/issues"
+[[mods]]
+	modId="snowmancy"
+	version="${file.jarVersion}"
+	displayName="Snowmancy"
+	description='''Build your own snowman companion!'''
 	displayURL="https://www.curseforge.com/minecraft/mc-mods/snowmancy"
 	authors="bl4ckscor3"
 
 [[dependencies.snowmancy]]
     modId="forge"
     mandatory=true
-    versionRange="[33,)"
+    versionRange="[37,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.snowmancy]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16,1.17)"
+    versionRange="[1.17,1.18)"
     ordering="NONE"
     side="BOTH"
