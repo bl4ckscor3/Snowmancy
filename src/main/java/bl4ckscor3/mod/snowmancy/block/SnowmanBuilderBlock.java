@@ -20,29 +20,31 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import net.minecraft.block.AbstractBlock;
+
 public class SnowmanBuilderBlock extends ContainerBlock
 {
 	public static final String NAME = "snowman_builder";
 
 	public SnowmanBuilderBlock()
 	{
-		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.5F).sound(SoundType.STONE));
+		super(AbstractBlock.Properties.of(Material.STONE).strength(3.5F).sound(SoundType.STONE));
 
 		setRegistryName(Snowmancy.PREFIX + NAME);
 	}
 
 	@Override
-	public BlockRenderType getRenderType(BlockState state)
+	public BlockRenderType getRenderShape(BlockState state)
 	{
 		return BlockRenderType.MODEL;
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!world.isRemote)
+		if(!world.isClientSide)
 		{
-			TileEntity te = world.getTileEntity(pos);
+			TileEntity te = world.getBlockEntity(pos);
 
 			if(te instanceof INamedContainerProvider)
 				NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, pos);
@@ -53,7 +55,7 @@ public class SnowmanBuilderBlock extends ContainerBlock
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader world)
+	public TileEntity newBlockEntity(IBlockReader world)
 	{
 		return new SnowmanBuilderTileEntity();
 	}

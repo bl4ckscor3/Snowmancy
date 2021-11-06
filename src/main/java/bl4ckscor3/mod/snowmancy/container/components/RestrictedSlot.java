@@ -23,13 +23,13 @@ public class RestrictedSlot extends Slot
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack stack)
+	public boolean mayPlace(ItemStack stack)
 	{
 		return itemValidator.isValid(stack);
 	}
 
 	@Override
-	public int getItemStackLimit(ItemStack stack)
+	public int getMaxStackSize(ItemStack stack)
 	{
 		return slotLimit;
 	}

@@ -41,7 +41,7 @@ public class SnowmanBuilderContainer extends Container
 	{
 		super(Snowmancy.cTypeSnowmanBuilder, windowId);
 
-		te = (SnowmanBuilderTileEntity)world.getTileEntity(pos);
+		te = (SnowmanBuilderTileEntity)world.getBlockEntity(pos);
 
 		IInventory teInv = te.getInventory();
 
@@ -66,7 +66,7 @@ public class SnowmanBuilderContainer extends Container
 		int slot = 0;
 
 		//hat slot (always index 0!!)
-		addSlot(new RestrictedSlot(teInv, slot++, 80, 7, 1, (stack) -> stack.getItem() == Snowmancy.EVERCOLD_ICE.asItem() || (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getEquipmentSlot() == EquipmentSlotType.HEAD))); //allow any helmet
+		addSlot(new RestrictedSlot(teInv, slot++, 80, 7, 1, (stack) -> stack.getItem() == Snowmancy.EVERCOLD_ICE.asItem() || (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getSlot() == EquipmentSlotType.HEAD))); //allow any helmet
 		//nose slot (always index 1!!)
 		addSlot(new RestrictedSlot(teInv, slot++, 80, 28, 1, (stack) -> stack.getItem() == Items.CARROT || stack.getItem() == Items.GOLDEN_CARROT));
 		//eye slots (left, right)
@@ -97,18 +97,18 @@ public class SnowmanBuilderContainer extends Container
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, PlayerEntity player)
+	public ItemStack clicked(int slotId, int dragType, ClickType clickType, PlayerEntity player)
 	{
 		SnowmanBuilderInventory inv = te.getInventory();
 		boolean clickedOutput = false;
 
-		if(slotId == 36 + inv.getSizeInventory() - 1 && !inv.getStackInSlot(inv.getSizeInventory() - 1).isEmpty()) //last slot
+		if(slotId == 36 + inv.getContainerSize() - 1 && !inv.getItem(inv.getContainerSize() - 1).isEmpty()) //last slot
 		{
 			clickedOutput = true;
 
 			if(te.getProgress() == te.getMaxProgress())
 			{
-				for(int i = 0; i < inv.getSizeInventory() - 1; i++) //remove all input items
+				for(int i = 0; i < inv.getContainerSize() - 1; i++) //remove all input items
 				{
 					inv.getItemHandler().extractItem(i, 1, false);
 				}
@@ -116,56 +116,56 @@ public class SnowmanBuilderContainer extends Container
 		}
 
 		if(!clickedOutput)
-			return super.slotClick(slotId, dragType, clickType, player);
+			return super.clicked(slotId, dragType, clickType, player);
 		else
 		{
 			if(te.getProgress() == te.getMaxProgress())
 			{
 				te.resetProgress();
 
-				if(player instanceof ServerPlayerEntity && inv.getStackInSlot(inv.getSizeInventory() - 1).getTag().getBoolean("evercold"))
+				if(player instanceof ServerPlayerEntity && inv.getItem(inv.getContainerSize() - 1).getTag().getBoolean("evercold"))
 					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.trigger((ServerPlayerEntity)player);
 
-				return super.slotClick(slotId, dragType, clickType, player);
+				return super.clicked(slotId, dragType, clickType, player);
 			}
 			else return ItemStack.EMPTY;
 		}
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int index)
+	public ItemStack quickMoveStack(PlayerEntity player, int index)
 	{
 		ItemStack copy = ItemStack.EMPTY;
-		Slot slot = inventorySlots.get(index);
+		Slot slot = slots.get(index);
 
-		if(slot != null && slot.getHasStack())
+		if(slot != null && slot.hasItem())
 		{
-			ItemStack slotStack = slot.getStack();
+			ItemStack slotStack = slot.getItem();
 
 			copy = slotStack.copy();
 
 			if(index <= 35)
 			{
-				if(!mergeItemStack(slotStack, 36, 36 + te.getInventory().getSizeInventory(), false))
+				if(!moveItemStackTo(slotStack, 36, 36 + te.getInventory().getContainerSize(), false))
 					return ItemStack.EMPTY;
 			}
 			else if(index >= 36)
 			{
-				if(!mergeItemStack(slotStack, 0, 36, false))
+				if(!moveItemStackTo(slotStack, 0, 36, false))
 					return ItemStack.EMPTY;
 			}
 
 			if(slotStack.isEmpty())
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			else
-				slot.onSlotChanged();
+				slot.setChanged();
 		}
 
 		return copy;
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity player)
+	public boolean stillValid(PlayerEntity player)
 	{
 		return true;
 	}

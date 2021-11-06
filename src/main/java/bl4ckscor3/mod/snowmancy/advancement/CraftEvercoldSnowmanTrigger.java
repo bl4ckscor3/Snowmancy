@@ -21,14 +21,14 @@ public class CraftEvercoldSnowmanTrigger extends AbstractCriterionTrigger<CraftE
 	}
 
 	@Override
-	public CraftEvercoldSnowmanTrigger.Instance deserializeTrigger(JsonObject json, EntityPredicate.AndPredicate andPredicate, ConditionArrayParser conditionArrayParser)
+	public CraftEvercoldSnowmanTrigger.Instance createInstance(JsonObject json, EntityPredicate.AndPredicate andPredicate, ConditionArrayParser conditionArrayParser)
 	{
 		return new CraftEvercoldSnowmanTrigger.Instance(andPredicate);
 	}
 
 	public void trigger(ServerPlayerEntity player)
 	{
-		triggerListeners(player, instance -> true);
+		trigger(player, instance -> true);
 	}
 
 	public static class Instance extends CriterionInstance

@@ -31,6 +31,8 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.ObjectHolder;
 
+import net.minecraft.block.AbstractBlock;
+
 @Mod(Snowmancy.MODID)
 @EventBusSubscriber(bus=Bus.MOD)
 public class Snowmancy
@@ -71,9 +73,9 @@ public class Snowmancy
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
 	{
 		event.getRegistry().register(new SnowmanBuilderBlock());
-		event.getRegistry().register(new Block(Block.Properties.create(Material.ICE)
-				.hardnessAndResistance(2.0F)
-				.slipperiness(0.98F)
+		event.getRegistry().register(new Block(AbstractBlock.Properties.of(Material.ICE)
+				.strength(2.0F)
+				.friction(0.98F)
 				.sound(SoundType.GLASS))
 				.setRegistryName(PREFIX + "evercold_ice"));
 	}
@@ -81,22 +83,22 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event)
 	{
-		event.getRegistry().register(TileEntityType.Builder.create(SnowmanBuilderTileEntity::new, SNOWMAN_BUILDER).build(null).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
+		event.getRegistry().register(TileEntityType.Builder.of(SnowmanBuilderTileEntity::new, SNOWMAN_BUILDER).build(null).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
 	}
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
-		event.getRegistry().register(new BlockItem(SNOWMAN_BUILDER, new Item.Properties().group(ITEM_GROUP)).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
-		event.getRegistry().register(new BlockItem(EVERCOLD_ICE, new Item.Properties().group(ITEM_GROUP)).setRegistryName(EVERCOLD_ICE.getRegistryName()));
+		event.getRegistry().register(new BlockItem(SNOWMAN_BUILDER, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
+		event.getRegistry().register(new BlockItem(EVERCOLD_ICE, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(EVERCOLD_ICE.getRegistryName()));
 		event.getRegistry().register(new FrozenSnowmanItem());
 	}
 
 	@SubscribeEvent
 	public static void registerEntities(RegistryEvent.Register<EntityType<?>> event)
 	{
-		EntityType<SnowmanCompanionEntity> snowmanCompanion = (EntityType<SnowmanCompanionEntity>)EntityType.Builder.<SnowmanCompanionEntity>create(SnowmanCompanionEntity::new, EntityClassification.CREATURE)
-				.size(0.35F, 0.9F)
+		EntityType<SnowmanCompanionEntity> snowmanCompanion = (EntityType<SnowmanCompanionEntity>)EntityType.Builder.<SnowmanCompanionEntity>of(SnowmanCompanionEntity::new, EntityClassification.CREATURE)
+				.sized(0.35F, 0.9F)
 				.setTrackingRange(128)
 				.setUpdateInterval(1)
 				.setShouldReceiveVelocityUpdates(true)
@@ -104,12 +106,12 @@ public class Snowmancy
 				.setRegistryName(new ResourceLocation(MODID, "snowman"));
 
 		event.getRegistry().register(snowmanCompanion);
-		GlobalEntityTypeAttributes.put(snowmanCompanion, SnowmanCompanionEntity.getAttributes().create());
+		GlobalEntityTypeAttributes.put(snowmanCompanion, SnowmanCompanionEntity.getAttributes().build());
 	}
 
 	@SubscribeEvent
 	public static void registerContainerTypes(RegistryEvent.Register<ContainerType<?>> event)
 	{
-		event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> new SnowmanBuilderContainer(windowId, inv.player.world, data.readBlockPos(), inv)).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
+		event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> new SnowmanBuilderContainer(windowId, inv.player.level, data.readBlockPos(), inv)).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
 	}
 }

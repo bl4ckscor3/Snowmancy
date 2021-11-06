@@ -16,7 +16,7 @@ public class ClientReg
 	@SubscribeEvent
 	public static void onFMLClientSetup(FMLClientSetupEvent event)
 	{
-		ScreenManager.registerFactory(Snowmancy.cTypeSnowmanBuilder, SnowmanBuilderScreen::new);
+		ScreenManager.register(Snowmancy.cTypeSnowmanBuilder, SnowmanBuilderScreen::new);
 		RenderingRegistry.registerEntityRenderingHandler(Snowmancy.eTypeSnowman, SnowmanCompanionRenderer::new);
 	}
 }

@@ -38,10 +38,10 @@ import net.minecraft.world.World;
 public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttackMob
 {
 	//TODO: add wearables
-	private static final DataParameter<Boolean> GOLDEN_NOSE = EntityDataManager.<Boolean>createKey(SnowmanCompanionEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<String> ATTACK_TYPE = EntityDataManager.<String>createKey(SnowmanCompanionEntity.class, DataSerializers.STRING);
-	private static final DataParameter<Float> DAMAGE = EntityDataManager.<Float>createKey(SnowmanCompanionEntity.class, DataSerializers.FLOAT);
-	private static final DataParameter<Boolean> EVERCOLD = EntityDataManager.<Boolean>createKey(SnowmanCompanionEntity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> GOLDEN_NOSE = EntityDataManager.<Boolean>defineId(SnowmanCompanionEntity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<String> ATTACK_TYPE = EntityDataManager.<String>defineId(SnowmanCompanionEntity.class, DataSerializers.STRING);
+	private static final DataParameter<Float> DAMAGE = EntityDataManager.<Float>defineId(SnowmanCompanionEntity.class, DataSerializers.FLOAT);
+	private static final DataParameter<Boolean> EVERCOLD = EntityDataManager.<Boolean>defineId(SnowmanCompanionEntity.class, DataSerializers.BOOLEAN);
 
 	public SnowmanCompanionEntity(EntityType<SnowmanCompanionEntity> type, World world)
 	{
@@ -51,20 +51,20 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	public SnowmanCompanionEntity(World world, boolean goldenNose, String attackType, float damage, boolean evercold)
 	{
 		this(Snowmancy.eTypeSnowman, world);
-		dataManager.set(GOLDEN_NOSE, goldenNose);
-		dataManager.set(ATTACK_TYPE, attackType);
-		dataManager.set(DAMAGE, damage);
-		dataManager.set(EVERCOLD, evercold);
+		entityData.set(GOLDEN_NOSE, goldenNose);
+		entityData.set(ATTACK_TYPE, attackType);
+		entityData.set(DAMAGE, damage);
+		entityData.set(EVERCOLD, evercold);
 	}
 
 	@Override
-	protected void registerData()
+	protected void defineSynchedData()
 	{
-		super.registerData();
-		dataManager.register(GOLDEN_NOSE, false);
-		dataManager.register(ATTACK_TYPE, EnumAttackType.HIT.name());
-		dataManager.register(DAMAGE, 0.0F);
-		dataManager.register(EVERCOLD, false);
+		super.defineSynchedData();
+		entityData.define(GOLDEN_NOSE, false);
+		entityData.define(ATTACK_TYPE, EnumAttackType.HIT.name());
+		entityData.define(DAMAGE, 0.0F);
+		entityData.define(EVERCOLD, false);
 	}
 
 	@Override
@@ -80,26 +80,26 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 
 	public static MutableAttribute getAttributes()
 	{
-		return MobEntity.func_233666_p_()
-				.createMutableAttribute(Attributes.MAX_HEALTH, 4.0D)
-				.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2D);
+		return MobEntity.createMobAttributes()
+				.add(Attributes.MAX_HEALTH, 4.0D)
+				.add(Attributes.MOVEMENT_SPEED, 0.2D);
 	}
 
 	@Override
-	public void livingTick()
+	public void aiStep()
 	{
-		super.livingTick();
+		super.aiStep();
 
-		if(!isEvercold() && world.getBiome(getPosition()).getTemperature() >= 0.2F)
-			attackEntityFrom(DamageSource.ON_FIRE, 1.0F);
+		if(!isEvercold() && level.getBiome(blockPosition()).getBaseTemperature() >= 0.2F)
+			hurt(DamageSource.ON_FIRE, 1.0F);
 	}
 
 	@Override
-	protected ActionResultType func_230254_b_(PlayerEntity player, Hand hand) //processInteract
+	protected ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand)
 	{
 		if(player.isCrouching() && hand == Hand.MAIN_HAND)
 		{
-			Block.spawnAsEntity(world, getPosition(), createItem());
+			Block.popResource(level, blockPosition(), createItem());
 			remove();
 			return ActionResultType.SUCCESS;
 		}
@@ -115,47 +115,47 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 		ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
 		CompoundNBT tag = new CompoundNBT();
 
-		writeAdditional(tag);
+		addAdditionalSaveData(tag);
 		stack.setTag(tag);
 		return stack;
 	}
 
 	@Override
-	public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor)
+	public void performRangedAttack(LivingEntity target, float distanceFactor)
 	{
 		EnumAttackType type = EnumAttackType.valueOf(getAttackType());
 		ProjectileEntity throwableEntity;
 
 		switch(type)
 		{
-			case ARROW: throwableEntity = ((ArrowItem)Items.ARROW).createArrow(world, new ItemStack(Items.ARROW, 1), this); break;
-			case EGG: throwableEntity = new EggEntity(world, this); break;
-			case SNOWBALL: throwableEntity = new SnowballEntity(world, this); break;
+			case ARROW: throwableEntity = ((ArrowItem)Items.ARROW).createArrow(level, new ItemStack(Items.ARROW, 1), this); break;
+			case EGG: throwableEntity = new EggEntity(level, this); break;
+			case SNOWBALL: throwableEntity = new SnowballEntity(level, this); break;
 			default: return;
 		}
 
-		double d0 = target.getPosY() + target.getEyeHeight() - 1.100000023841858D;
-		double d1 = target.getPosX() - getPosX();
-		double d2 = d0 - throwableEntity.getPosY();
-		double d3 = target.getPosZ() - getPosZ();
+		double d0 = target.getY() + target.getEyeHeight() - 1.100000023841858D;
+		double d1 = target.getX() - getX();
+		double d2 = d0 - throwableEntity.getY();
+		double d3 = target.getZ() - getZ();
 		float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
 		throwableEntity.shoot(d1, d2 + f, d3, 1.6F, 12.0F);
-		playSound(SoundEvents.ENTITY_SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
-		world.addEntity(throwableEntity);
+		playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));
+		level.addFreshEntity(throwableEntity);
 	}
 
 	@Override
-	public void readAdditional(CompoundNBT tag)
+	public void readAdditionalSaveData(CompoundNBT tag)
 	{
-		dataManager.set(GOLDEN_NOSE, tag.getBoolean("goldenCarrot"));
-		dataManager.set(ATTACK_TYPE, tag.getString("attackType"));
-		dataManager.set(DAMAGE, tag.getFloat("damage"));
-		dataManager.set(EVERCOLD, tag.getBoolean("evercold"));
+		entityData.set(GOLDEN_NOSE, tag.getBoolean("goldenCarrot"));
+		entityData.set(ATTACK_TYPE, tag.getString("attackType"));
+		entityData.set(DAMAGE, tag.getFloat("damage"));
+		entityData.set(EVERCOLD, tag.getBoolean("evercold"));
 	}
 
 	@Override
-	public void writeAdditional(CompoundNBT tag)
+	public void addAdditionalSaveData(CompoundNBT tag)
 	{
 		tag.putBoolean("goldenCarrot", isNoseGolden());
 		tag.putString("attackType", getAttackType());
@@ -168,7 +168,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	 */
 	public boolean isNoseGolden()
 	{
-		return dataManager.get(GOLDEN_NOSE);
+		return entityData.get(GOLDEN_NOSE);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	 */
 	public String getAttackType()
 	{
-		return dataManager.get(ATTACK_TYPE);
+		return entityData.get(ATTACK_TYPE);
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	 */
 	public float getDamage()
 	{
-		return dataManager.get(DAMAGE);
+		return entityData.get(DAMAGE);
 	}
 
 	/**
@@ -192,6 +192,6 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	 */
 	public boolean isEvercold()
 	{
-		return dataManager.get(EVERCOLD);
+		return entityData.get(EVERCOLD);
 	}
 }

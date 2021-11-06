@@ -22,7 +22,7 @@ public class SnowmanBuilderInventory implements IInventory
 	}
 
 	@Override
-	public int getSizeInventory()
+	public int getContainerSize()
 	{
 		return SLOTS;
 	}
@@ -34,65 +34,65 @@ public class SnowmanBuilderInventory implements IInventory
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index)
+	public ItemStack getItem(int index)
 	{
 		return contents.get(index);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count)
+	public ItemStack removeItem(int index, int count)
 	{
 		return itemHandler.extractItem(index, count, false);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index)
+	public ItemStack removeItemNoUpdate(int index)
 	{
-		ItemStack stack = getStackInSlot(index);
+		ItemStack stack = getItem(index);
 
 		if(!stack.isEmpty())
-			setInventorySlotContents(index, ItemStack.EMPTY);
+			setItem(index, ItemStack.EMPTY);
 		return stack;
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack)
+	public void setItem(int index, ItemStack stack)
 	{
 		contents.set(index, stack);
 	}
 
 	@Override
-	public int getInventoryStackLimit()
+	public int getMaxStackSize()
 	{
 		return 1;
 	}
 
 	@Override
-	public void markDirty()
+	public void setChanged()
 	{
-		itemHandler.getTileEntity().markDirty();
+		itemHandler.getTileEntity().setChanged();
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player)
-	{
-		return true;
-	}
-
-	@Override
-	public void openInventory(PlayerEntity player) {}
-
-	@Override
-	public void closeInventory(PlayerEntity player) {}
-
-	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack)
+	public boolean stillValid(PlayerEntity player)
 	{
 		return true;
 	}
 
 	@Override
-	public void clear()
+	public void startOpen(PlayerEntity player) {}
+
+	@Override
+	public void stopOpen(PlayerEntity player) {}
+
+	@Override
+	public boolean canPlaceItem(int index, ItemStack stack)
+	{
+		return true;
+	}
+
+	@Override
+	public void clearContent()
 	{
 		for(int i = 0; i < contents.size(); i++)
 		{

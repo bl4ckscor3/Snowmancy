@@ -9,12 +9,12 @@ public class SnowmancyItemGroup extends ItemGroup
 {
 	public SnowmancyItemGroup()
 	{
-		super(GROUPS.length, Snowmancy.PREFIX + "item_group");
+		super(TABS.length, Snowmancy.PREFIX + "item_group");
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public ItemStack createIcon()
+	public ItemStack makeIcon()
 	{
 		return new ItemStack(Snowmancy.SNOWMAN_BUILDER.asItem());
 	}

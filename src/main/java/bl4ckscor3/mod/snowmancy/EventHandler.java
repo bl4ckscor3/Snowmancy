@@ -26,12 +26,12 @@ public class EventHandler
 	{
 		if(event.getThrowable() instanceof SnowballEntity && event.getRayTraceResult().getType() == Type.BLOCK)
 		{
-			TileEntity te = event.getThrowable().world.getTileEntity(((BlockRayTraceResult)event.getRayTraceResult()).getPos());
+			TileEntity te = event.getThrowable().level.getBlockEntity(((BlockRayTraceResult)event.getRayTraceResult()).getBlockPos());
 
 			if(te instanceof SnowmanBuilderTileEntity)
 			{
 				if(((SnowmanBuilderTileEntity)te).isCraftReady() && ((SnowmanBuilderTileEntity)te).getProgress() < ((SnowmanBuilderTileEntity)te).getMaxProgress())
-					te.getWorld().playSound(null, te.getPos(), EGG_SOUND, SoundCategory.BLOCKS, 1.0F, 1.0F);
+					te.getLevel().playSound(null, te.getBlockPos(), EGG_SOUND, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 				((SnowmanBuilderTileEntity)te).increaseProgress();
 			}
@@ -42,6 +42,6 @@ public class EventHandler
 	public static void onLivingDeath(LivingDeathEvent event)
 	{
 		if(event.getEntityLiving() instanceof SnowmanCompanionEntity)
-			Block.spawnAsEntity(event.getEntityLiving().world, event.getEntityLiving().getPosition(), ((SnowmanCompanionEntity)event.getEntityLiving()).createItem());
+			Block.popResource(event.getEntityLiving().level, event.getEntityLiving().blockPosition(), ((SnowmanCompanionEntity)event.getEntityLiving()).createItem());
 	}
 }

@@ -24,39 +24,39 @@ public class FrozenSnowmanItem extends Item
 
 	public FrozenSnowmanItem()
 	{
-		super(new Item.Properties().group(Snowmancy.ITEM_GROUP));
+		super(new Item.Properties().tab(Snowmancy.ITEM_GROUP));
 
 		setRegistryName(NAME);
 	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context)
+	public ActionResultType useOn(ItemUseContext context)
 	{
-		World world = context.getWorld();
+		World world = context.getLevel();
 		PlayerEntity player = context.getPlayer();
-		Hand hand = player.getActiveHand();
-		BlockPos pos = context.getPos();
+		Hand hand = player.getUsedItemHand();
+		BlockPos pos = context.getClickedPos();
 
-		if(!world.isRemote)
+		if(!world.isClientSide)
 		{
 			Entity entity = new SnowmanCompanionEntity(world,
-					player.getHeldItem(hand).getTag().getBoolean("goldenCarrot"),
-					player.getHeldItem(hand).getTag().getString("attackType"),
-					player.getHeldItem(hand).getTag().getFloat("damage"),
-					player.getHeldItem(hand).getTag().getBoolean("evercold"));
+					player.getItemInHand(hand).getTag().getBoolean("goldenCarrot"),
+					player.getItemInHand(hand).getTag().getString("attackType"),
+					player.getItemInHand(hand).getTag().getFloat("damage"),
+					player.getItemInHand(hand).getTag().getBoolean("evercold"));
 
-			entity.setPosition(pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F);
-			world.addEntity(entity);
+			entity.setPos(pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F);
+			world.addFreshEntity(entity);
 
 			if(!player.isCreative())
-				player.getHeldItem(hand).setCount(player.getHeldItem(hand).getCount() - 1);
+				player.getItemInHand(hand).setCount(player.getItemInHand(hand).getCount() - 1);
 		}
 
 		return ActionResultType.SUCCESS;
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+	public void appendHoverText(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		if(stack.hasTag())
 		{

@@ -22,12 +22,12 @@ public class SnowmanBuilderScreen extends ContainerScreen<SnowmanBuilderContaine
 		super(container, playerInv, name);
 
 		te = container.te;
-		xSize = 176;
-		ySize = 239;
+		imageWidth = 176;
+		imageHeight = 239;
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrix, int mouseX, int mouseY)
+	protected void renderLabels(MatrixStack matrix, int mouseX, int mouseY)
 	{
 		int length = te.getProgress() * 2 + (te.isCraftReady() && te.getProgress() == 0 ? 1 : 0);
 		int color = te.getProgress() < 5 ? 0xFFFF0000 : (te.getProgress() < 8 ? 0xFFFFFF00 : 0xFF00FF00); //red, yellow, green (0xAARRGGBB)
@@ -43,15 +43,15 @@ public class SnowmanBuilderScreen extends ContainerScreen<SnowmanBuilderContaine
 	{
 		super.render(matrix, mouseX, mouseY, partialTicks);
 
-		renderHoveredTooltip(matrix, mouseX, mouseY);
+		renderTooltip(matrix, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrix, float partialTicks, int mouseX, int mouseY)
+	protected void renderBg(MatrixStack matrix, float partialTicks, int mouseX, int mouseY)
 	{
 		renderBackground(matrix);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
-		blit(matrix, (width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
+		minecraft.getTextureManager().bind(GUI_TEXTURE);
+		blit(matrix, (width - imageWidth) / 2, (height - imageHeight) / 2, 0, 0, imageWidth, imageHeight);
 	}
 }

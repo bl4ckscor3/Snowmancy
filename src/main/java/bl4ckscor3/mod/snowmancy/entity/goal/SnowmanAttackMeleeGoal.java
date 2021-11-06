@@ -15,19 +15,19 @@ public class SnowmanAttackMeleeGoal extends MeleeAttackGoal
 	}
 
 	@Override
-	public boolean shouldExecute()
+	public boolean canUse()
 	{
-		return ((SnowmanCompanionEntity)attacker).getAttackType().equals(EnumAttackType.HIT.name()) && super.shouldExecute();
+		return ((SnowmanCompanionEntity)mob).getAttackType().equals(EnumAttackType.HIT.name()) && super.canUse();
 	}
 
 	@Override
 	protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
 	{
-		if(distToEnemySqr <= getAttackReachSqr(enemy) && func_234041_j_() <= 0) //getAttackTick
+		if(distToEnemySqr <= getAttackReachSqr(enemy) && getSwingCooldown() <= 0)
 		{
-			func_234039_g_(); //resetAttackTick
-			attacker.swingArm(Hand.MAIN_HAND);
-			enemy.attackEntityFrom(Snowmancy.SNOWMAN_DAMAGE, ((SnowmanCompanionEntity)attacker).getDamage());
+			resetSwingCooldown();
+			mob.swing(Hand.MAIN_HAND);
+			enemy.hurt(Snowmancy.SNOWMAN_DAMAGE, ((SnowmanCompanionEntity)mob).getDamage());
 		}
 	}
 }

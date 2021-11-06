@@ -18,7 +18,7 @@ public class SnowmanCompanionRenderer extends MobRenderer<SnowmanCompanionEntity
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(SnowmanCompanionEntity entity)
+	public ResourceLocation getTextureLocation(SnowmanCompanionEntity entity)
 	{
 		return entity.isNoseGolden() ? SNOWMAN_TEXTURE_GOLDEN : SNOWMAN_TEXTURE;
 	}

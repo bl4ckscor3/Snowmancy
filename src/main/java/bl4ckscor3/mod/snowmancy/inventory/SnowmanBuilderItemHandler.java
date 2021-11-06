@@ -22,7 +22,7 @@ public class SnowmanBuilderItemHandler implements IItemHandlerModifiable
 	@Override
 	public ItemStack getStackInSlot(int slot)
 	{
-		return tileEntity.getInventory().getStackInSlot(slot);
+		return tileEntity.getInventory().getItem(slot);
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class SnowmanBuilderItemHandler implements IItemHandlerModifiable
 
 		s1.setCount(1);
 		s2.setCount(1);
-		return ItemStack.areItemStacksEqual(s1, s2);
+		return ItemStack.matches(s1, s2);
 	}
 
 	@Override
