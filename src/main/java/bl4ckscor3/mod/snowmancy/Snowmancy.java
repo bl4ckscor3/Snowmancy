@@ -4,10 +4,10 @@ import java.util.Arrays;
 
 import bl4ckscor3.mod.snowmancy.advancement.CraftEvercoldSnowmanTrigger;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlock;
-import bl4ckscor3.mod.snowmancy.container.SnowmanBuilderContainer;
-import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
+import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
+import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderContainer;
+import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.item.FrozenSnowmanItem;
-import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -50,8 +50,8 @@ public class Snowmancy
 	@ObjectHolder(PREFIX + FrozenSnowmanItem.NAME)
 	public static final Item FROZEN_SNOWMAN = null;
 	@ObjectHolder(PREFIX + SnowmanBuilderBlock.NAME)
-	public static BlockEntityType<SnowmanBuilderTileEntity> teTypeBuilder;
-	public static final RegistryObject<EntityType<SnowmanCompanionEntity>> SNOWMAN_ENTITY = ENTITY_TYPES.register("zombified_chicken", () -> EntityType.Builder.<SnowmanCompanionEntity>of(SnowmanCompanionEntity::new, MobCategory.CREATURE)
+	public static BlockEntityType<SnowmanBuilderBlockEntity> teTypeBuilder;
+	public static final RegistryObject<EntityType<SnowmanCompanion>> SNOWMAN_ENTITY = ENTITY_TYPES.register("zombified_chicken", () -> EntityType.Builder.<SnowmanCompanion>of(SnowmanCompanion::new, MobCategory.CREATURE)
 			.sized(0.35F, 0.9F)
 			.setTrackingRange(128)
 			.setUpdateInterval(1)
@@ -91,7 +91,7 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerTileEntities(RegistryEvent.Register<BlockEntityType<?>> event)
 	{
-		event.getRegistry().register(BlockEntityType.Builder.of(SnowmanBuilderTileEntity::new, SNOWMAN_BUILDER).build(null).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
+		event.getRegistry().register(BlockEntityType.Builder.of(SnowmanBuilderBlockEntity::new, SNOWMAN_BUILDER).build(null).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
 	}
 
 	@SubscribeEvent
@@ -105,7 +105,7 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void onEntityAttributeCreation(EntityAttributeCreationEvent event)
 	{
-		event.put(SNOWMAN_ENTITY.get(), SnowmanCompanionEntity.createAttributes().build());
+		event.put(SNOWMAN_ENTITY.get(), SnowmanCompanion.createAttributes().build());
 	}
 
 	@SubscribeEvent

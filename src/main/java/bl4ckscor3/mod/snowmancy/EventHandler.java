@@ -1,7 +1,7 @@
 package bl4ckscor3.mod.snowmancy;
 
-import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
-import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
+import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
+import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -28,7 +28,7 @@ public class EventHandler
 		{
 			BlockEntity te = event.getProjectile().level.getBlockEntity(((BlockHitResult)event.getRayTraceResult()).getBlockPos());
 
-			if(te instanceof SnowmanBuilderTileEntity builder)
+			if(te instanceof SnowmanBuilderBlockEntity builder)
 			{
 				if(builder.isCraftReady() && builder.getProgress() < builder.getMaxProgress())
 					te.getLevel().playSound(null, te.getBlockPos(), EGG_SOUND, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -41,7 +41,7 @@ public class EventHandler
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent event)
 	{
-		if(event.getEntityLiving() instanceof SnowmanCompanionEntity snowman)
+		if(event.getEntityLiving() instanceof SnowmanCompanion snowman)
 			Block.popResource(snowman.level, snowman.blockPosition(), snowman.createItem());
 	}
 }

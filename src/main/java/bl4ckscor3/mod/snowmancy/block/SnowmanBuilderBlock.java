@@ -1,7 +1,6 @@
 package bl4ckscor3.mod.snowmancy.block;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -56,12 +55,12 @@ public class SnowmanBuilderBlock extends BaseEntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new SnowmanBuilderTileEntity(pos, state);
+		return new SnowmanBuilderBlockEntity(pos, state);
 	}
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
 	{
-		return level.isClientSide ? null : createTickerHelper(type, Snowmancy.teTypeBuilder, SnowmanBuilderTileEntity::tick);
+		return level.isClientSide ? null : createTickerHelper(type, Snowmancy.teTypeBuilder, SnowmanBuilderBlockEntity::tick);
 	}
 }

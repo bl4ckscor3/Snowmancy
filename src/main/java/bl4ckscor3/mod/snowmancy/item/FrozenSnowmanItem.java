@@ -3,7 +3,7 @@ package bl4ckscor3.mod.snowmancy.item;
 import java.util.List;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
+import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -39,7 +39,7 @@ public class FrozenSnowmanItem extends Item
 
 		if(!world.isClientSide)
 		{
-			Entity entity = new SnowmanCompanionEntity(world,
+			Entity entity = new SnowmanCompanion(world,
 					player.getItemInHand(hand).getTag().getBoolean("goldenCarrot"),
 					player.getItemInHand(hand).getTag().getString("attackType"),
 					player.getItemInHand(hand).getTag().getFloat("damage"),

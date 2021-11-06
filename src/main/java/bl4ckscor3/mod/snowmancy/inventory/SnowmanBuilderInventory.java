@@ -1,9 +1,9 @@
 package bl4ckscor3.mod.snowmancy.inventory;
 
-import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
 import net.minecraft.core.NonNullList;
 
 public class SnowmanBuilderInventory implements Container
@@ -16,7 +16,7 @@ public class SnowmanBuilderInventory implements Container
 	 * Sets up this inventory with the container
 	 * @param te The container of this inventory
 	 */
-	public SnowmanBuilderInventory(SnowmanBuilderTileEntity te)
+	public SnowmanBuilderInventory(SnowmanBuilderBlockEntity te)
 	{
 		itemHandler = new SnowmanBuilderItemHandler(te);
 	}

@@ -1,14 +1,14 @@
 package bl4ckscor3.mod.snowmancy.inventory;
 
-import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
+import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 public class SnowmanBuilderItemHandler implements IItemHandlerModifiable
 {
-	public SnowmanBuilderTileEntity tileEntity;
+	public SnowmanBuilderBlockEntity tileEntity;
 
-	public SnowmanBuilderItemHandler(SnowmanBuilderTileEntity te)
+	public SnowmanBuilderItemHandler(SnowmanBuilderBlockEntity te)
 	{
 		tileEntity = te;
 	}
@@ -105,7 +105,7 @@ public class SnowmanBuilderItemHandler implements IItemHandlerModifiable
 	/**
 	 * @return The TileEntity that is bound to the inventory whith this item handler
 	 */
-	public SnowmanBuilderTileEntity getTileEntity()
+	public SnowmanBuilderBlockEntity getTileEntity()
 	{
 		return tileEntity;
 	}
