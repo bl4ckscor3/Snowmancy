@@ -2,14 +2,14 @@ package bl4ckscor3.mod.snowmancy;
 
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
 import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult.Type;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,14 +24,14 @@ public class EventHandler
 	@SubscribeEvent
 	public static void onProjectileImpactThrowable(ProjectileImpactEvent.Throwable event)
 	{
-		if(event.getThrowable() instanceof SnowballEntity && event.getRayTraceResult().getType() == Type.BLOCK)
+		if(event.getThrowable() instanceof Snowball && event.getRayTraceResult().getType() == Type.BLOCK)
 		{
-			TileEntity te = event.getThrowable().level.getBlockEntity(((BlockRayTraceResult)event.getRayTraceResult()).getBlockPos());
+			BlockEntity te = event.getThrowable().level.getBlockEntity(((BlockHitResult)event.getRayTraceResult()).getBlockPos());
 
 			if(te instanceof SnowmanBuilderTileEntity)
 			{
 				if(((SnowmanBuilderTileEntity)te).isCraftReady() && ((SnowmanBuilderTileEntity)te).getProgress() < ((SnowmanBuilderTileEntity)te).getMaxProgress())
-					te.getLevel().playSound(null, te.getBlockPos(), EGG_SOUND, SoundCategory.BLOCKS, 1.0F, 1.0F);
+					te.getLevel().playSound(null, te.getBlockPos(), EGG_SOUND, SoundSource.BLOCKS, 1.0F, 1.0F);
 
 				((SnowmanBuilderTileEntity)te).increaseProgress();
 			}

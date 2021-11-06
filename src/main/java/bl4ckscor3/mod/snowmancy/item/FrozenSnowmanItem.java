@@ -4,19 +4,19 @@ import java.util.List;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 
 public class FrozenSnowmanItem extends Item
 {
@@ -30,11 +30,11 @@ public class FrozenSnowmanItem extends Item
 	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext context)
+	public InteractionResult useOn(UseOnContext context)
 	{
-		World world = context.getLevel();
-		PlayerEntity player = context.getPlayer();
-		Hand hand = player.getUsedItemHand();
+		Level world = context.getLevel();
+		Player player = context.getPlayer();
+		InteractionHand hand = player.getUsedItemHand();
 		BlockPos pos = context.getClickedPos();
 
 		if(!world.isClientSide)
@@ -52,18 +52,18 @@ public class FrozenSnowmanItem extends Item
 				player.getItemInHand(hand).setCount(player.getItemInHand(hand).getCount() - 1);
 		}
 
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag)
 	{
 		if(stack.hasTag())
 		{
-			tooltip.add(new StringTextComponent(TextFormatting.GOLD + "Golden Carrot: " + TextFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
-			tooltip.add(new StringTextComponent(TextFormatting.BLUE + "Attack Type: " + TextFormatting.GRAY + stack.getTag().getString("attackType")));
-			tooltip.add(new StringTextComponent(TextFormatting.RED + "Damage: " + TextFormatting.GRAY + stack.getTag().getFloat("damage")));
-			tooltip.add(new StringTextComponent(TextFormatting.AQUA + "Evercold: " + TextFormatting.GRAY + stack.getTag().getBoolean("evercold")));
+			tooltip.add(new TextComponent(ChatFormatting.GOLD + "Golden Carrot: " + ChatFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
+			tooltip.add(new TextComponent(ChatFormatting.BLUE + "Attack Type: " + ChatFormatting.GRAY + stack.getTag().getString("attackType")));
+			tooltip.add(new TextComponent(ChatFormatting.RED + "Damage: " + ChatFormatting.GRAY + stack.getTag().getFloat("damage")));
+			tooltip.add(new TextComponent(ChatFormatting.AQUA + "Evercold: " + ChatFormatting.GRAY + stack.getTag().getBoolean("evercold")));
 		}
 	}
 }

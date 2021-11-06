@@ -3,8 +3,8 @@ package bl4ckscor3.mod.snowmancy.entity.goal;
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanionEntity;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.util.Hand;
 
 public class SnowmanAttackMeleeGoal extends MeleeAttackGoal

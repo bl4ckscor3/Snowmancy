@@ -1,12 +1,12 @@
 package bl4ckscor3.mod.snowmancy.inventory;
 
 import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
-public class SnowmanBuilderInventory implements IInventory
+public class SnowmanBuilderInventory implements Container
 {
 	public static final int SLOTS = 14;
 	private NonNullList<ItemStack> contents = NonNullList.<ItemStack>withSize(SLOTS, ItemStack.EMPTY);
@@ -74,16 +74,16 @@ public class SnowmanBuilderInventory implements IInventory
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player)
+	public boolean stillValid(Player player)
 	{
 		return true;
 	}
 
 	@Override
-	public void startOpen(PlayerEntity player) {}
+	public void startOpen(Player player) {}
 
 	@Override
-	public void stopOpen(PlayerEntity player) {}
+	public void stopOpen(Player player) {}
 
 	@Override
 	public boolean canPlaceItem(int index, ItemStack stack)

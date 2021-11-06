@@ -1,11 +1,11 @@
 package bl4ckscor3.mod.snowmancy;
 
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class SnowmancyItemGroup extends ItemGroup
+public class SnowmancyItemGroup extends CreativeModeTab
 {
 	public SnowmancyItemGroup()
 	{

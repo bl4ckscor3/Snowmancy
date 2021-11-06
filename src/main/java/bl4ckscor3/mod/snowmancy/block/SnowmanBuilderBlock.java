@@ -3,59 +3,59 @@ package bl4ckscor3.mod.snowmancy.block;
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import net.minecraft.block.AbstractBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
-public class SnowmanBuilderBlock extends ContainerBlock
+public class SnowmanBuilderBlock extends BaseEntityBlock
 {
 	public static final String NAME = "snowman_builder";
 
 	public SnowmanBuilderBlock()
 	{
-		super(AbstractBlock.Properties.of(Material.STONE).strength(3.5F).sound(SoundType.STONE));
+		super(BlockBehaviour.Properties.of(Material.STONE).strength(3.5F).sound(SoundType.STONE));
 
 		setRegistryName(Snowmancy.PREFIX + NAME);
 	}
 
 	@Override
-	public BlockRenderType getRenderShape(BlockState state)
+	public RenderShape getRenderShape(BlockState state)
 	{
-		return BlockRenderType.MODEL;
+		return RenderShape.MODEL;
 	}
 
 	@Override
-	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
 		if(!world.isClientSide)
 		{
-			TileEntity te = world.getBlockEntity(pos);
+			BlockEntity te = world.getBlockEntity(pos);
 
-			if(te instanceof INamedContainerProvider)
-				NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, pos);
+			if(te instanceof MenuProvider)
+				NetworkHooks.openGui((ServerPlayer)player, (MenuProvider)te, pos);
 
 		}
 
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override
-	public TileEntity newBlockEntity(IBlockReader world)
+	public BlockEntity newBlockEntity(BlockGetter world)
 	{
 		return new SnowmanBuilderTileEntity();
 	}

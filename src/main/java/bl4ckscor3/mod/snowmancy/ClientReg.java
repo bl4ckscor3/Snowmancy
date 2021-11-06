@@ -2,7 +2,7 @@ package bl4ckscor3.mod.snowmancy;
 
 import bl4ckscor3.mod.snowmancy.renderer.SnowmanCompanionRenderer;
 import bl4ckscor3.mod.snowmancy.screen.SnowmanBuilderScreen;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -16,7 +16,7 @@ public class ClientReg
 	@SubscribeEvent
 	public static void onFMLClientSetup(FMLClientSetupEvent event)
 	{
-		ScreenManager.register(Snowmancy.cTypeSnowmanBuilder, SnowmanBuilderScreen::new);
+		MenuScreens.register(Snowmancy.cTypeSnowmanBuilder, SnowmanBuilderScreen::new);
 		RenderingRegistry.registerEntityRenderingHandler(Snowmancy.eTypeSnowman, SnowmanCompanionRenderer::new);
 	}
 }

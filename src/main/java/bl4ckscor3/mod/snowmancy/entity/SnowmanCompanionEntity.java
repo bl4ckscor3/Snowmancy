@@ -4,51 +4,51 @@ import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.goal.SnowmanAttackMeleeGoal;
 import bl4ckscor3.mod.snowmancy.entity.goal.SnowmanAttackRangedGoal;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap.MutableAttribute;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.GolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.EggEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier.Builder;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.animal.AbstractGolem;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownEgg;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
-public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttackMob
+public class SnowmanCompanionEntity extends AbstractGolem implements RangedAttackMob
 {
 	//TODO: add wearables
-	private static final DataParameter<Boolean> GOLDEN_NOSE = EntityDataManager.<Boolean>defineId(SnowmanCompanionEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<String> ATTACK_TYPE = EntityDataManager.<String>defineId(SnowmanCompanionEntity.class, DataSerializers.STRING);
-	private static final DataParameter<Float> DAMAGE = EntityDataManager.<Float>defineId(SnowmanCompanionEntity.class, DataSerializers.FLOAT);
-	private static final DataParameter<Boolean> EVERCOLD = EntityDataManager.<Boolean>defineId(SnowmanCompanionEntity.class, DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> GOLDEN_NOSE = SynchedEntityData.<Boolean>defineId(SnowmanCompanionEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<String> ATTACK_TYPE = SynchedEntityData.<String>defineId(SnowmanCompanionEntity.class, EntityDataSerializers.STRING);
+	private static final EntityDataAccessor<Float> DAMAGE = SynchedEntityData.<Float>defineId(SnowmanCompanionEntity.class, EntityDataSerializers.FLOAT);
+	private static final EntityDataAccessor<Boolean> EVERCOLD = SynchedEntityData.<Boolean>defineId(SnowmanCompanionEntity.class, EntityDataSerializers.BOOLEAN);
 
-	public SnowmanCompanionEntity(EntityType<SnowmanCompanionEntity> type, World world)
+	public SnowmanCompanionEntity(EntityType<SnowmanCompanionEntity> type, Level world)
 	{
 		super(type, world);
 	}
 
-	public SnowmanCompanionEntity(World world, boolean goldenNose, String attackType, float damage, boolean evercold)
+	public SnowmanCompanionEntity(Level world, boolean goldenNose, String attackType, float damage, boolean evercold)
 	{
 		this(Snowmancy.eTypeSnowman, world);
 		entityData.set(GOLDEN_NOSE, goldenNose);
@@ -72,15 +72,15 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	{
 		goalSelector.addGoal(1, new SnowmanAttackMeleeGoal(this));
 		goalSelector.addGoal(2, new SnowmanAttackRangedGoal(this));
-		goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 1.0000001E-5F));
-		goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 6.0F));
-		goalSelector.addGoal(6, new LookRandomlyGoal(this));
-		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MobEntity.class, 10, true, false, e -> e instanceof IMob));
+		goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0D, 1.0000001E-5F));
+		goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
+		goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false, e -> e instanceof Enemy));
 	}
 
-	public static MutableAttribute getAttributes()
+	public static Builder getAttributes()
 	{
-		return MobEntity.createMobAttributes()
+		return Mob.createMobAttributes()
 				.add(Attributes.MAX_HEALTH, 4.0D)
 				.add(Attributes.MOVEMENT_SPEED, 0.2D);
 	}
@@ -95,16 +95,16 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	}
 
 	@Override
-	protected ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand)
+	protected InteractionResult getEntityInteractionResult(Player player, InteractionHand hand)
 	{
-		if(player.isCrouching() && hand == Hand.MAIN_HAND)
+		if(player.isCrouching() && hand == InteractionHand.MAIN_HAND)
 		{
 			Block.popResource(level, blockPosition(), createItem());
 			remove();
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	public ItemStack createItem()
 	{
 		ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
-		CompoundNBT tag = new CompoundNBT();
+		CompoundTag tag = new CompoundTag();
 
 		addAdditionalSaveData(tag);
 		stack.setTag(tag);
@@ -124,13 +124,13 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	public void performRangedAttack(LivingEntity target, float distanceFactor)
 	{
 		EnumAttackType type = EnumAttackType.valueOf(getAttackType());
-		ProjectileEntity throwableEntity;
+		Projectile throwableEntity;
 
 		switch(type)
 		{
 			case ARROW: throwableEntity = ((ArrowItem)Items.ARROW).createArrow(level, new ItemStack(Items.ARROW, 1), this); break;
-			case EGG: throwableEntity = new EggEntity(level, this); break;
-			case SNOWBALL: throwableEntity = new SnowballEntity(level, this); break;
+			case EGG: throwableEntity = new ThrownEgg(level, this); break;
+			case SNOWBALL: throwableEntity = new Snowball(level, this); break;
 			default: return;
 		}
 
@@ -138,7 +138,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 		double d1 = target.getX() - getX();
 		double d2 = d0 - throwableEntity.getY();
 		double d3 = target.getZ() - getZ();
-		float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
+		float f = Mth.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
 		throwableEntity.shoot(d1, d2 + f, d3, 1.6F, 12.0F);
 		playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));
@@ -146,7 +146,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT tag)
+	public void readAdditionalSaveData(CompoundTag tag)
 	{
 		entityData.set(GOLDEN_NOSE, tag.getBoolean("goldenCarrot"));
 		entityData.set(ATTACK_TYPE, tag.getString("attackType"));
@@ -155,7 +155,7 @@ public class SnowmanCompanionEntity extends GolemEntity implements IRangedAttack
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT tag)
+	public void addAdditionalSaveData(CompoundTag tag)
 	{
 		tag.putBoolean("goldenCarrot", isNoseGolden());
 		tag.putString("attackType", getAttackType());

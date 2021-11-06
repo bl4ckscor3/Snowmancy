@@ -7,23 +7,23 @@ import bl4ckscor3.mod.snowmancy.container.components.RestrictedSlot;
 import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
 import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
 import bl4ckscor3.mod.snowmancy.util.IStackValidator;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
-public class SnowmanBuilderContainer extends Container
+public class SnowmanBuilderContainer extends AbstractContainerMenu
 {
 	public static final ArrayList<ItemStack> WEAPONS = new ArrayList<>();
 	public SnowmanBuilderTileEntity te;
@@ -37,13 +37,13 @@ public class SnowmanBuilderContainer extends Container
 		WEAPONS.add(new ItemStack(item));
 	}
 
-	public SnowmanBuilderContainer(int windowId, World world, BlockPos pos, PlayerInventory inv)
+	public SnowmanBuilderContainer(int windowId, Level world, BlockPos pos, Inventory inv)
 	{
 		super(Snowmancy.cTypeSnowmanBuilder, windowId);
 
 		te = (SnowmanBuilderTileEntity)world.getBlockEntity(pos);
 
-		IInventory teInv = te.getInventory();
+		Container teInv = te.getInventory();
 
 		//player inventory
 		for(int i = 0; i < 3; i++)
@@ -66,7 +66,7 @@ public class SnowmanBuilderContainer extends Container
 		int slot = 0;
 
 		//hat slot (always index 0!!)
-		addSlot(new RestrictedSlot(teInv, slot++, 80, 7, 1, (stack) -> stack.getItem() == Snowmancy.EVERCOLD_ICE.asItem() || (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getSlot() == EquipmentSlotType.HEAD))); //allow any helmet
+		addSlot(new RestrictedSlot(teInv, slot++, 80, 7, 1, (stack) -> stack.getItem() == Snowmancy.EVERCOLD_ICE.asItem() || (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getSlot() == EquipmentSlot.HEAD))); //allow any helmet
 		//nose slot (always index 1!!)
 		addSlot(new RestrictedSlot(teInv, slot++, 80, 28, 1, (stack) -> stack.getItem() == Items.CARROT || stack.getItem() == Items.GOLDEN_CARROT));
 		//eye slots (left, right)
@@ -97,7 +97,7 @@ public class SnowmanBuilderContainer extends Container
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType, ClickType clickType, PlayerEntity player)
+	public ItemStack clicked(int slotId, int dragType, ClickType clickType, Player player)
 	{
 		SnowmanBuilderInventory inv = te.getInventory();
 		boolean clickedOutput = false;
@@ -123,8 +123,8 @@ public class SnowmanBuilderContainer extends Container
 			{
 				te.resetProgress();
 
-				if(player instanceof ServerPlayerEntity && inv.getItem(inv.getContainerSize() - 1).getTag().getBoolean("evercold"))
-					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.trigger((ServerPlayerEntity)player);
+				if(player instanceof ServerPlayer && inv.getItem(inv.getContainerSize() - 1).getTag().getBoolean("evercold"))
+					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.trigger((ServerPlayer)player);
 
 				return super.clicked(slotId, dragType, clickType, player);
 			}
@@ -133,7 +133,7 @@ public class SnowmanBuilderContainer extends Container
 	}
 
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity player, int index)
+	public ItemStack quickMoveStack(Player player, int index)
 	{
 		ItemStack copy = ItemStack.EMPTY;
 		Slot slot = slots.get(index);
@@ -165,7 +165,7 @@ public class SnowmanBuilderContainer extends Container
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player)
+	public boolean stillValid(Player player)
 	{
 		return true;
 	}

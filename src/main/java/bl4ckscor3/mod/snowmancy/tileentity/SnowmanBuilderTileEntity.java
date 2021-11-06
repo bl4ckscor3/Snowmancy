@@ -4,29 +4,29 @@ import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.container.SnowmanBuilderContainer;
 import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
 import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.SwordItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider
+public class SnowmanBuilderTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider
 {
 	private SnowmanBuilderInventory inventory = new SnowmanBuilderInventory(this);
 	private byte progress = 0;
@@ -57,7 +57,7 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 			{
 				ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
 				Item weapon = inventory.getItem(inventory.getContainerSize() - 2).getItem();
-				CompoundNBT tag = new CompoundNBT();
+				CompoundTag tag = new CompoundTag();
 				EnumAttackType attackType = (weapon == Items.BOW ? EnumAttackType.ARROW :
 					(weapon == Items.EGG ? EnumAttackType.EGG :
 						(weapon == Items.SNOWBALL ? EnumAttackType.SNOWBALL : EnumAttackType.HIT)));
@@ -139,16 +139,16 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT tag)
+	public void load(BlockState state, CompoundTag tag)
 	{
-		CompoundNBT invTag = (CompoundNBT)tag.get("SnowmanBuilderInventory");
+		CompoundTag invTag = (CompoundTag)tag.get("SnowmanBuilderInventory");
 
 		if(invTag != null)
 		{
 			for(int i = 0; i < inventory.getContents().size(); i++)
 			{
 				if(invTag.contains("Slot" + i))
-					inventory.setItem(i, ItemStack.of((CompoundNBT)invTag.get("Slot" + i)));
+					inventory.setItem(i, ItemStack.of((CompoundTag)invTag.get("Slot" + i)));
 			}
 
 			progress = tag.getByte("progress");
@@ -158,13 +158,13 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT tag)
+	public CompoundTag save(CompoundTag tag)
 	{
-		CompoundNBT invTag = new CompoundNBT();
+		CompoundTag invTag = new CompoundTag();
 
 		for(int i = 0; i < inventory.getContents().size(); i++)
 		{
-			invTag.put("Slot" + i, inventory.getItem(i).save(new CompoundNBT()));
+			invTag.put("Slot" + i, inventory.getItem(i).save(new CompoundTag()));
 		}
 
 		tag.put("SnowmanBuilderInventory", invTag);
@@ -173,13 +173,13 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 	}
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public ClientboundBlockEntityDataPacket getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(worldPosition, 1, save(new CompoundNBT()));
+		return new ClientboundBlockEntityDataPacket(worldPosition, 1, save(new CompoundTag()));
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
 	{
 		progress = pkt.getTag().getByte("progress");
 	}
@@ -219,14 +219,14 @@ public class SnowmanBuilderTileEntity extends TileEntity implements ITickableTil
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player)
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player)
 	{
 		return new SnowmanBuilderContainer(windowId, level, worldPosition, inv);
 	}
 
 	@Override
-	public ITextComponent getDisplayName()
+	public Component getDisplayName()
 	{
-		return new TranslationTextComponent(Snowmancy.SNOWMAN_BUILDER.getDescriptionId());
+		return new TranslatableComponent(Snowmancy.SNOWMAN_BUILDER.getDescriptionId());
 	}
 }

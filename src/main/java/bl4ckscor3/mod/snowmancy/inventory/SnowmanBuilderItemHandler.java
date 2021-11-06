@@ -1,7 +1,7 @@
 package bl4ckscor3.mod.snowmancy.inventory;
 
 import bl4ckscor3.mod.snowmancy.tileentity.SnowmanBuilderTileEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 public class SnowmanBuilderItemHandler implements IItemHandlerModifiable

@@ -1,6 +1,6 @@
 package bl4ckscor3.mod.snowmancy.util;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Functional interface to check if an item stack is valid (e.g. for putting in a slot)
