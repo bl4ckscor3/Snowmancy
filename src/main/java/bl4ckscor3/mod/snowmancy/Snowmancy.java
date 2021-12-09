@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,10 +30,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.RegistryObject;
 
 @Mod(Snowmancy.MODID)
 @EventBusSubscriber(bus=Bus.MOD)
@@ -111,6 +111,6 @@ public class Snowmancy
 	@SubscribeEvent
 	public static void registerContainerTypes(RegistryEvent.Register<MenuType<?>> event)
 	{
-		event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> new SnowmanBuilderContainer(windowId, inv.player.level, data.readBlockPos(), inv)).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
+		event.getRegistry().register(IForgeMenuType.create((windowId, inv, data) -> new SnowmanBuilderContainer(windowId, inv.player.level, data.readBlockPos(), inv)).setRegistryName(SNOWMAN_BUILDER.getRegistryName()));
 	}
 }

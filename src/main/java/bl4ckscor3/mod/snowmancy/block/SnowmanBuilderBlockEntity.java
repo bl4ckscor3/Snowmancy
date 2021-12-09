@@ -179,7 +179,13 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket()
 	{
-		return new ClientboundBlockEntityDataPacket(worldPosition, 1, save(new CompoundTag()));
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
+
+	@Override
+	public CompoundTag getUpdateTag()
+	{
+		return save(new CompoundTag());
 	}
 
 	@Override
