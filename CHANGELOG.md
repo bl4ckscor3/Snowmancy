@@ -1,6 +1,9 @@
 # Changelog
 
-##
+## v1.0.5
+- Fix inventory not being retained on world reload
+
+## v1.0.4
 - Prevent a crash
 
 ## v1.0.3

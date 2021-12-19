@@ -162,7 +162,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag tag)
+	public void saveAdditional(CompoundTag tag)
 	{
 		CompoundTag invTag = new CompoundTag();
 
@@ -173,7 +173,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 
 		tag.put("SnowmanBuilderInventory", invTag);
 		tag.putByte("progress", progress);
-		return super.save(tag);
+		super.saveAdditional(tag);
 	}
 
 	@Override
@@ -185,13 +185,20 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	@Override
 	public CompoundTag getUpdateTag()
 	{
-		return save(new CompoundTag());
+		return saveWithoutMetadata();
 	}
 
 	@Override
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
 	{
-		progress = pkt.getTag().getByte("progress");
+		super.onDataPacket(net, pkt);
+		handleUpdateTag(pkt.getTag());
+	}
+
+	@Override
+	public void handleUpdateTag(CompoundTag tag)
+	{
+		load(tag);
 	}
 
 	@Override
