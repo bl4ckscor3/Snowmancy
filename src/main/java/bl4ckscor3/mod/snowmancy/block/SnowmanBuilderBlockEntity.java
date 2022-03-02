@@ -112,7 +112,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	public boolean canOperate()
 	{
 		int cooling = 0;
-		float temperature = getLevel().getBiome(worldPosition).getBaseTemperature();
+		float temperature = getLevel().getBiome(worldPosition).value().getBaseTemperature();
 		boolean cold = temperature < 0.2F;
 		boolean medium = temperature < 1.0F;
 		boolean warm = temperature >= 1.0F;

@@ -88,7 +88,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob
 	{
 		super.aiStep();
 
-		if(!isEvercold() && level.getBiome(blockPosition()).getBaseTemperature() >= 0.2F)
+		if(!isEvercold() && level.getBiome(blockPosition()).value().getBaseTemperature() >= 0.2F)
 			hurt(DamageSource.ON_FIRE, 1.0F);
 	}
 
