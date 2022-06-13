@@ -1,6 +1,6 @@
 modLoader="javafml"
-loaderVersion="[40,)"
-license="GNU GPL v3.0 https://github.com/bl4ckscor3/Snowmancy/blob/1.18/LICENSE"
+loaderVersion="[41,)"
+license="GNU GPL v3.0 https://github.com/bl4ckscor3/Snowmancy/blob/1.19/LICENSE"
 issueTrackerURL="https://github.com/bl4ckscor3/Snowmancy/issues"
 
 [[mods]]
@@ -14,13 +14,13 @@ issueTrackerURL="https://github.com/bl4ckscor3/Snowmancy/issues"
 [[dependencies.snowmancy]]
     modId="forge"
     mandatory=true
-    versionRange="[40,)"
+    versionRange="[41,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.snowmancy]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.2,1.19)"
+    versionRange="[1.19,1.20)"
     ordering="NONE"
     side="BOTH"

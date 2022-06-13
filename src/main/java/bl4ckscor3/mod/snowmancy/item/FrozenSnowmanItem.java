@@ -2,12 +2,10 @@ package bl4ckscor3.mod.snowmancy.item;
 
 import java.util.List;
 
-import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -20,13 +18,9 @@ import net.minecraft.world.level.Level;
 
 public class FrozenSnowmanItem extends Item
 {
-	public static final String NAME = "frozen_snowman";
-
-	public FrozenSnowmanItem()
+	public FrozenSnowmanItem(Properties properties)
 	{
-		super(new Item.Properties().tab(Snowmancy.ITEM_GROUP));
-
-		setRegistryName(NAME);
+		super(properties);
 	}
 
 	@Override
@@ -60,10 +54,10 @@ public class FrozenSnowmanItem extends Item
 	{
 		if(stack.hasTag())
 		{
-			tooltip.add(new TextComponent(ChatFormatting.GOLD + "Golden Carrot: " + ChatFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
-			tooltip.add(new TextComponent(ChatFormatting.BLUE + "Attack Type: " + ChatFormatting.GRAY + stack.getTag().getString("attackType")));
-			tooltip.add(new TextComponent(ChatFormatting.RED + "Damage: " + ChatFormatting.GRAY + stack.getTag().getFloat("damage")));
-			tooltip.add(new TextComponent(ChatFormatting.AQUA + "Evercold: " + ChatFormatting.GRAY + stack.getTag().getBoolean("evercold")));
+			tooltip.add(Component.literal(ChatFormatting.GOLD + "Golden Carrot: " + ChatFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
+			tooltip.add(Component.literal(ChatFormatting.BLUE + "Attack Type: " + ChatFormatting.GRAY + stack.getTag().getString("attackType")));
+			tooltip.add(Component.literal(ChatFormatting.RED + "Damage: " + ChatFormatting.GRAY + stack.getTag().getFloat("damage")));
+			tooltip.add(Component.literal(ChatFormatting.AQUA + "Evercold: " + ChatFormatting.GRAY + stack.getTag().getBoolean("evercold")));
 		}
 	}
 }

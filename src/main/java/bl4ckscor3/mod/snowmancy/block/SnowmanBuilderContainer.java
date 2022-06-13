@@ -38,7 +38,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu
 
 	public SnowmanBuilderContainer(int windowId, Level world, BlockPos pos, Inventory inv)
 	{
-		super(Snowmancy.cTypeSnowmanBuilder, windowId);
+		super(Snowmancy.SNOWMAN_BUILDER_MENU.get(), windowId);
 
 		te = (SnowmanBuilderBlockEntity)world.getBlockEntity(pos);
 
@@ -59,15 +59,15 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu
 			addSlot(new Slot(inv, i, 8 + i * 18, 215));
 		}
 
-		IStackValidator coalValidator = (stack) -> stack.getItem() == Items.COAL || stack.getItem() == Items.CHARCOAL;
-		IStackValidator snowValidator = (stack) -> stack.getItem() == Blocks.SNOW_BLOCK.asItem();
+		IStackValidator coalValidator = stack -> stack.is(Items.COAL) || stack.is(Items.CHARCOAL);
+		IStackValidator snowValidator = stack -> stack.is(Blocks.SNOW_BLOCK.asItem());
 
 		int slot = 0;
 
 		//hat slot (always index 0!!)
-		addSlot(new RestrictedSlot(teInv, slot++, 80, 7, 1, (stack) -> stack.getItem() == Snowmancy.EVERCOLD_ICE.asItem() || (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getSlot() == EquipmentSlot.HEAD))); //allow any helmet
+		addSlot(new RestrictedSlot(teInv, slot++, 80, 7, 1, stack -> stack.is(Snowmancy.EVERCOLD_ICE.get().asItem()) || (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getSlot() == EquipmentSlot.HEAD))); //allow any helmet
 		//nose slot (always index 1!!)
-		addSlot(new RestrictedSlot(teInv, slot++, 80, 28, 1, (stack) -> stack.getItem() == Items.CARROT || stack.getItem() == Items.GOLDEN_CARROT));
+		addSlot(new RestrictedSlot(teInv, slot++, 80, 28, 1, stack -> stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT)));
 		//eye slots (left, right)
 		addSlot(new RestrictedSlot(teInv, slot++, 59, 18, 1, coalValidator));
 		addSlot(new RestrictedSlot(teInv, slot++, 101, 18, 1, coalValidator));
@@ -82,7 +82,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu
 		addSlot(new RestrictedSlot(teInv, slot++, 80, 103, 1, snowValidator));
 		addSlot(new RestrictedSlot(teInv, slot++, 80, 132, 1, snowValidator));
 		//weapon slot (always second last slot!)
-		addSlot(new RestrictedSlot(teInv, slot++, 105, 89, 1, (stack) -> {
+		addSlot(new RestrictedSlot(teInv, slot++, 105, 89, 1, stack -> {
 			for(ItemStack weapon : WEAPONS)
 			{
 				if(stack.getItem() == weapon.getItem())
@@ -92,7 +92,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu
 			return false;
 		}));
 		//output (always last slot!)
-		addSlot(new RestrictedSlot(teInv, slot++, 152, 132, 1, (stack) -> false));
+		addSlot(new RestrictedSlot(teInv, slot++, 152, 132, 1, stack -> false));
 	}
 
 	@Override
