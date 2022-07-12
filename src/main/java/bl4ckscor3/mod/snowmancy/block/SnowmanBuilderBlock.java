@@ -34,7 +34,7 @@ public class SnowmanBuilderBlock extends BaseEntityBlock
 	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
 		if(!world.isClientSide && world.getBlockEntity(pos) instanceof MenuProvider te)
-			NetworkHooks.openGui((ServerPlayer)player, te, pos);
+			NetworkHooks.openScreen((ServerPlayer)player, te, pos);
 
 		return InteractionResult.SUCCESS;
 	}

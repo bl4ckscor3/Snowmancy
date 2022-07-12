@@ -43,9 +43,9 @@ public class Snowmancy
 	public static final CreativeModeTab ITEM_GROUP = new SnowmancyItemGroup();
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MODID);
-	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
-	public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
+	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
+	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
+	public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
 
 	public static final RegistryObject<SnowmanBuilderBlock> SNOWMAN_BUILDER = BLOCKS.register("snowman_builder", () -> new SnowmanBuilderBlock(Properties.of(Material.STONE).strength(3.5F).sound(SoundType.STONE)));
 	public static final RegistryObject<Block> EVERCOLD_ICE = BLOCKS.register("evercold_ice", () -> new Block(Properties.of(Material.ICE)

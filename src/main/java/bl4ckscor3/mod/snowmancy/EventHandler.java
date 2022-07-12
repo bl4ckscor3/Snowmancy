@@ -41,7 +41,7 @@ public class EventHandler
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent event)
 	{
-		if(event.getEntityLiving() instanceof SnowmanCompanion snowman)
+		if(event.getEntity() instanceof SnowmanCompanion snowman)
 			Block.popResource(snowman.level, snowman.blockPosition(), snowman.createItem());
 	}
 }

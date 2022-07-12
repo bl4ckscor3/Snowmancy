@@ -93,7 +93,7 @@ public class SnowmanBuilderItemHandler implements IItemHandlerModifiable
 	{
 		ItemStack stack = getStackInSlot(slot);
 
-		return stack.isEmpty() ? 64 : stack.getItem().getItemStackLimit(stack);
+		return stack.isEmpty() ? 64 : stack.getItem().getMaxStackSize(stack);
 	}
 
 	@Override
