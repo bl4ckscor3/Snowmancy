@@ -3,8 +3,12 @@
         "icon": {
             "item": "snowmancy:snowman_builder"
         },
-        "title": "Snowmancy",
-        "description": "Craft the Snowman Builder",
+        "title": {
+            "translate": "itemGroup.snowmancy:item_group"
+        },
+        "description": {
+            "translate": "snowmancy.advancement.root.description"
+        },
         "background": "snowmancy:textures/blocks/evercold_ice.png",
         "show_toast": true,
         "announce_to_chat": true

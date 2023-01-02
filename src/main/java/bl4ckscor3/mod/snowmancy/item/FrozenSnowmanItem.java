@@ -63,10 +63,16 @@ public class FrozenSnowmanItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag) {
 		if (stack.hasTag()) {
-			tooltip.add(Component.literal(ChatFormatting.GOLD + "Golden Carrot: " + ChatFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
-			tooltip.add(Component.literal(ChatFormatting.BLUE + "Attack Type: " + ChatFormatting.GRAY + AttackType.fromTag(stack.getTag())));
-			tooltip.add(Component.literal(ChatFormatting.RED + "Damage: " + ChatFormatting.GRAY + stack.getTag().getFloat("damage")));
-			tooltip.add(Component.literal(ChatFormatting.AQUA + "Evercold: " + ChatFormatting.GRAY + stack.getTag().getBoolean("evercold")));
+			CompoundTag tag = stack.getTag();
+			boolean goldenCarrot = tag.getBoolean("goldenCarrot");
+			AttackType attackType = AttackType.fromTag(tag);
+			float damage = tag.getFloat("damage");
+			boolean evercold = tag.getBoolean("evercold");
+
+			tooltip.add(Component.translatable("snowmancy.tooltip.goldenCarrot", Component.translatable("snowmancy.tooltip." + goldenCarrot).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.GOLD));
+			tooltip.add(Component.translatable("snowmancy.tooltip.attackType", Component.translatable(attackType.getDescriptionId()).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.BLUE));
+			tooltip.add(Component.translatable("snowmancy.tooltip.damage", Component.literal("" + damage).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.RED));
+			tooltip.add(Component.translatable("snowmancy.tooltip.evercold", Component.translatable("snowmancy.tooltip." + evercold).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.AQUA));
 		}
 	}
 
