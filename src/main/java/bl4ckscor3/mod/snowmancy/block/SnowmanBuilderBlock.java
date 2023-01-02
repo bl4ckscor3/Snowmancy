@@ -17,37 +17,31 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
-public class SnowmanBuilderBlock extends BaseEntityBlock
-{
-	public SnowmanBuilderBlock(Properties properties)
-	{
+public class SnowmanBuilderBlock extends BaseEntityBlock {
+	public SnowmanBuilderBlock(Properties properties) {
 		super(properties);
 	}
 
 	@Override
-	public RenderShape getRenderShape(BlockState state)
-	{
+	public RenderShape getRenderShape(BlockState state) {
 		return RenderShape.MODEL;
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
-	{
-		if(!world.isClientSide && world.getBlockEntity(pos) instanceof MenuProvider te)
-			NetworkHooks.openScreen((ServerPlayer)player, te, pos);
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		if (!level.isClientSide && level.getBlockEntity(pos) instanceof MenuProvider be)
+			NetworkHooks.openScreen((ServerPlayer) player, be, pos);
 
 		return InteractionResult.SUCCESS;
 	}
 
 	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-	{
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new SnowmanBuilderBlockEntity(pos, state);
 	}
 
 	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
-	{
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
 		return level.isClientSide ? null : createTickerHelper(type, Snowmancy.SNOWMAN_BUILDER_BLOCK_ENTITY.get(), SnowmanBuilderBlockEntity::tick);
 	}
 }

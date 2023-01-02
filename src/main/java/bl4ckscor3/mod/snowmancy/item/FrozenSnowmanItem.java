@@ -5,8 +5,8 @@ import java.util.List;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -16,44 +16,42 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
-public class FrozenSnowmanItem extends Item
-{
-	public FrozenSnowmanItem(Properties properties)
-	{
+public class FrozenSnowmanItem extends Item {
+	public FrozenSnowmanItem(Properties properties) {
 		super(properties);
 	}
 
 	@Override
-	public InteractionResult useOn(UseOnContext context)
-	{
-		Level world = context.getLevel();
+	public InteractionResult useOn(UseOnContext context) {
+		Level level = context.getLevel();
 		Player player = context.getPlayer();
-		InteractionHand hand = player.getUsedItemHand();
+		ItemStack stack = player.getItemInHand(player.getUsedItemHand());
 		BlockPos pos = context.getClickedPos();
 
-		if(!world.isClientSide)
-		{
-			Entity entity = new SnowmanCompanion(world,
-					player.getItemInHand(hand).getTag().getBoolean("goldenCarrot"),
-					player.getItemInHand(hand).getTag().getString("attackType"),
-					player.getItemInHand(hand).getTag().getFloat("damage"),
-					player.getItemInHand(hand).getTag().getBoolean("evercold"));
+		if (!level.isClientSide) {
+			CompoundTag tag = stack.getTag();
+
+			//@formatter:off
+			Entity entity = new SnowmanCompanion(level,
+					tag.getBoolean("goldenCarrot"),
+					tag.getString("attackType"),
+					tag.getFloat("damage"),
+					tag.getBoolean("evercold"));
+			//@formatter:on
 
 			entity.setPos(pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F);
-			world.addFreshEntity(entity);
+			level.addFreshEntity(entity);
 
-			if(!player.isCreative())
-				player.getItemInHand(hand).setCount(player.getItemInHand(hand).getCount() - 1);
+			if (!player.isCreative())
+				stack.shrink(1);
 		}
 
 		return InteractionResult.SUCCESS;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag)
-	{
-		if(stack.hasTag())
-		{
+	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag) {
+		if (stack.hasTag()) {
 			tooltip.add(Component.literal(ChatFormatting.GOLD + "Golden Carrot: " + ChatFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
 			tooltip.add(Component.literal(ChatFormatting.BLUE + "Attack Type: " + ChatFormatting.GRAY + stack.getTag().getString("attackType")));
 			tooltip.add(Component.literal(ChatFormatting.RED + "Damage: " + ChatFormatting.GRAY + stack.getTag().getFloat("damage")));

@@ -2,8 +2,7 @@ package bl4ckscor3.mod.snowmancy;
 
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.level.block.Block;
@@ -14,24 +13,17 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.registries.ForgeRegistries;
 
-@EventBusSubscriber(modid=Snowmancy.MODID)
-public class EventHandler
-{
-	private static final SoundEvent EGG_SOUND = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.chicken.egg"));
-
+@EventBusSubscriber(modid = Snowmancy.MODID)
+public class EventHandler {
 	@SubscribeEvent
-	public static void onProjectileImpactThrowable(ProjectileImpactEvent event)
-	{
-		if(event.getProjectile() instanceof Snowball snowball && event.getRayTraceResult().getType() == Type.BLOCK)
-		{
-			BlockEntity te = snowball.level.getBlockEntity(((BlockHitResult)event.getRayTraceResult()).getBlockPos());
+	public static void onProjectileImpactThrowable(ProjectileImpactEvent event) {
+		if (event.getProjectile() instanceof Snowball snowball && event.getRayTraceResult().getType() == Type.BLOCK) {
+			BlockEntity te = snowball.level.getBlockEntity(((BlockHitResult) event.getRayTraceResult()).getBlockPos());
 
-			if(te instanceof SnowmanBuilderBlockEntity builder)
-			{
-				if(builder.isCraftReady() && builder.getProgress() < builder.getMaxProgress())
-					te.getLevel().playSound(null, te.getBlockPos(), EGG_SOUND, SoundSource.BLOCKS, 1.0F, 1.0F);
+			if (te instanceof SnowmanBuilderBlockEntity builder) {
+				if (builder.isCraftReady() && builder.getProgress() < builder.getMaxProgress())
+					te.getLevel().playSound(null, te.getBlockPos(), SoundEvents.CHICKEN_EGG, SoundSource.BLOCKS, 1.0F, 1.0F);
 
 				builder.increaseProgress();
 			}
@@ -39,9 +31,8 @@ public class EventHandler
 	}
 
 	@SubscribeEvent
-	public static void onLivingDeath(LivingDeathEvent event)
-	{
-		if(event.getEntity() instanceof SnowmanCompanion snowman)
+	public static void onLivingDeath(LivingDeathEvent event) {
+		if (event.getEntity() instanceof SnowmanCompanion snowman)
 			Block.popResource(snowman.level, snowman.blockPosition(), snowman.createItem());
 	}
 }
