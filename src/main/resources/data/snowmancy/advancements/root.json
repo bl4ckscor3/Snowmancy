@@ -9,16 +9,23 @@
         "show_toast": true,
         "announce_to_chat": true
     },
+    "requirements": [
+        [
+            "snowman_builder"
+        ]
+    ],
     "criteria": {
-        "builder": {
-            "trigger": "minecraft:inventory_changed",
+        "snowman_builder": {
             "conditions": {
                 "items": [
                     {
-                        "item": "snowmancy:snowman_builder"
+                        "items": [
+                            "snowmancy:snowman_builder"
+                        ]
                     }
                 ]
-            }
+            },
+            "trigger": "minecraft:inventory_changed"
         }
     }
 }
