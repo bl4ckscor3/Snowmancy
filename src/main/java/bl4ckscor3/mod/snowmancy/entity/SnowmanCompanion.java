@@ -1,5 +1,7 @@
 package bl4ckscor3.mod.snowmancy.entity;
 
+import java.util.Random;
+
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -8,12 +10,15 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier.Builder;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -31,6 +36,7 @@ import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 
 public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
@@ -46,10 +52,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 
 	public SnowmanCompanion(Level world, boolean goldenNose, AttackType attackType, float damage, boolean evercold) {
 		this(Snowmancy.SNOWMAN_ENTITY.get(), world);
-		entityData.set(GOLDEN_NOSE, goldenNose);
-		entityData.set(ATTACK_TYPE, attackType);
-		entityData.set(DAMAGE, damage);
-		entityData.set(EVERCOLD, evercold);
+		setData(goldenNose, attackType, damage, evercold);
 	}
 
 	@Override
@@ -73,6 +76,21 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 
 	public static Builder createAttributes() {
 		return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.MOVEMENT_SPEED, 0.2D);
+	}
+
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, SpawnGroupData spawnData, CompoundTag dataTag) {
+		if (reason == MobSpawnType.COMMAND) {
+			Random random = level.getRandom();
+			boolean goldenNose = random.nextBoolean();
+			AttackType attackType = AttackType.values()[random.nextInt(AttackType.values().length)];
+			float damage = attackType.isMelee() ? random.nextInt(21) + random.nextFloat() : 0.0F;
+			boolean evercold = random.nextBoolean();
+
+			setData(goldenNose, attackType, damage, evercold);
+		}
+
+		return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
 	}
 
 	@Override
@@ -104,6 +122,13 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 		addAdditionalSaveData(tag);
 		stack.setTag(tag);
 		return stack;
+	}
+
+	public void setData(boolean goldenNose, AttackType attackType, float damage, boolean evercold) {
+		entityData.set(GOLDEN_NOSE, goldenNose);
+		entityData.set(ATTACK_TYPE, attackType);
+		entityData.set(DAMAGE, damage);
+		entityData.set(EVERCOLD, evercold);
 	}
 
 	@Override
