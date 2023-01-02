@@ -6,9 +6,11 @@ import bl4ckscor3.mod.snowmancy.advancement.CraftEvercoldSnowmanTrigger;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlock;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderContainer;
+import bl4ckscor3.mod.snowmancy.entity.AttackType;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.item.FrozenSnowmanItem;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -32,6 +34,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistries.Keys;
 import net.minecraftforge.registries.RegistryObject;
 
 @Mod(Snowmancy.MODID)
@@ -44,6 +47,7 @@ public class Snowmancy {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
+	public static final DeferredRegister<EntityDataSerializer<?>> ENTITY_DATA_SERIALIZERS = DeferredRegister.create(Keys.ENTITY_DATA_SERIALIZERS, MODID);
 	public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
 	public static final RegistryObject<SnowmanBuilderBlock> SNOWMAN_BUILDER = BLOCKS.register("snowman_builder", () -> new SnowmanBuilderBlock(Properties.of(Material.STONE).strength(3.5F).sound(SoundType.STONE)));
 	//@formatter:off
@@ -65,6 +69,7 @@ public class Snowmancy {
 			.setShouldReceiveVelocityUpdates(true)
 			.build(PREFIX + "snowman"));
 	//@formatter:on
+	public static final RegistryObject<EntityDataSerializer<AttackType>> ATTACK_TYPE_SERIALIZER = ENTITY_DATA_SERIALIZERS.register("attack_type", () -> EntityDataSerializer.simpleEnum(AttackType.class));
 	public static final CraftEvercoldSnowmanTrigger CRAFT_EVERCOLD_SNOWMAN = CriteriaTriggers.register(new CraftEvercoldSnowmanTrigger());
 	public static final DamageSource SNOWMAN_DAMAGE = new DamageSource(PREFIX + "snowman_damage");
 
@@ -75,6 +80,7 @@ public class Snowmancy {
 		ITEMS.register(modEventBus);
 		BLOCK_ENTITY_TYPES.register(modEventBus);
 		ENTITY_TYPES.register(modEventBus);
+		ENTITY_DATA_SERIALIZERS.register(modEventBus);
 		MENU_TYPES.register(modEventBus);
 		//@formatter:off
 		Arrays.asList(Items.BOW,

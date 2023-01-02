@@ -2,6 +2,7 @@ package bl4ckscor3.mod.snowmancy.item;
 
 import java.util.List;
 
+import bl4ckscor3.mod.snowmancy.entity.AttackType;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -34,7 +35,7 @@ public class FrozenSnowmanItem extends Item {
 			//@formatter:off
 			Entity entity = new SnowmanCompanion(level,
 					tag.getBoolean("goldenCarrot"),
-					tag.getString("attackType"),
+					AttackType.fromTag(tag),
 					tag.getFloat("damage"),
 					tag.getBoolean("evercold"));
 			//@formatter:on
@@ -53,7 +54,7 @@ public class FrozenSnowmanItem extends Item {
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag) {
 		if (stack.hasTag()) {
 			tooltip.add(Component.literal(ChatFormatting.GOLD + "Golden Carrot: " + ChatFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
-			tooltip.add(Component.literal(ChatFormatting.BLUE + "Attack Type: " + ChatFormatting.GRAY + stack.getTag().getString("attackType")));
+			tooltip.add(Component.literal(ChatFormatting.BLUE + "Attack Type: " + ChatFormatting.GRAY + AttackType.fromTag(stack.getTag())));
 			tooltip.add(Component.literal(ChatFormatting.RED + "Damage: " + ChatFormatting.GRAY + stack.getTag().getFloat("damage")));
 			tooltip.add(Component.literal(ChatFormatting.AQUA + "Evercold: " + ChatFormatting.GRAY + stack.getTag().getBoolean("evercold")));
 		}
