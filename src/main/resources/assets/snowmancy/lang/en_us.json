@@ -1,7 +1,7 @@
 {
     "block.snowmancy.snowman_builder": "Snowman Builder",
     "block.snowmancy.evercold_ice": "Evercold Ice",
-    "item.snowmancy.frozen_snowman": "Frozen Snowman",
+    "item.snowmancy.frozen_snowman": "Snowman Companion",
     "entity.snowmancy.snowman": "Snowman Companion",
     "itemGroup.snowmancy:item_group": "Snowmancy",
     
