@@ -16,6 +16,6 @@ public class SnowmancyItemGroup extends CreativeModeTab
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack makeIcon()
 	{
-		return new ItemStack(Snowmancy.SNOWMAN_BUILDER.asItem());
+		return new ItemStack(Snowmancy.SNOWMAN_BUILDER.get().asItem());
 	}
 }

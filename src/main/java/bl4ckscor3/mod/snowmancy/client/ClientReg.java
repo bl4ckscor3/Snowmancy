@@ -19,7 +19,7 @@ public class ClientReg
 	@SubscribeEvent
 	public static void onFMLClientSetup(FMLClientSetupEvent event)
 	{
-		event.enqueueWork(() -> MenuScreens.register(Snowmancy.cTypeSnowmanBuilder, SnowmanBuilderScreen::new));
+		event.enqueueWork(() -> MenuScreens.register(Snowmancy.SNOWMAN_BUILDER_MENU.get(), SnowmanBuilderScreen::new));
 	}
 
 	@SubscribeEvent

@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlock;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderContainer;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -14,7 +13,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class SnowmanBuilderScreen extends AbstractContainerScreen<SnowmanBuilderContainer>
 {
-	public static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Snowmancy.MODID, "textures/gui/container/" + SnowmanBuilderBlock.NAME + ".png");
+	public static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Snowmancy.MODID, "textures/gui/container/snowman_builder.png");
 	private SnowmanBuilderBlockEntity te;
 
 	public SnowmanBuilderScreen(SnowmanBuilderContainer container, Inventory playerInv, Component name)

@@ -2,7 +2,6 @@ package bl4ckscor3.mod.snowmancy.item;
 
 import java.util.List;
 
-import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -20,13 +19,9 @@ import net.minecraft.world.level.Level;
 
 public class FrozenSnowmanItem extends Item
 {
-	public static final String NAME = "frozen_snowman";
-
-	public FrozenSnowmanItem()
+	public FrozenSnowmanItem(Properties properties)
 	{
-		super(new Item.Properties().tab(Snowmancy.ITEM_GROUP));
-
-		setRegistryName(NAME);
+		super(properties);
 	}
 
 	@Override

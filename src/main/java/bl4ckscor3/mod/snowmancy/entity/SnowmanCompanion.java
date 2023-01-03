@@ -110,7 +110,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob
 	 */
 	public ItemStack createItem()
 	{
-		ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
+		ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN.get());
 		CompoundTag tag = new CompoundTag();
 
 		addAdditionalSaveData(tag);

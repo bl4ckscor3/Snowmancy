@@ -35,7 +35,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 
 	public SnowmanBuilderBlockEntity(BlockPos pos, BlockState state)
 	{
-		super(Snowmancy.teTypeBuilder, pos, state);
+		super(Snowmancy.SNOWMAN_BUILDER_BLOCK_ENTITY.get(), pos, state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, SnowmanBuilderBlockEntity be)
@@ -59,7 +59,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 
 			if(!isCraftReady())
 			{
-				ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN);
+				ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN.get());
 				Item weapon = inventory.getItem(inventory.getContainerSize() - 2).getItem();
 				CompoundTag tag = new CompoundTag();
 				EnumAttackType attackType = (weapon == Items.BOW ? EnumAttackType.ARROW :
@@ -69,7 +69,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 				tag.putBoolean("goldenCarrot", inventory.getItem(1).getItem() == Items.GOLDEN_CARROT);
 				tag.putString("attackType", attackType.name());
 				tag.putFloat("damage", attackType == EnumAttackType.HIT && weapon instanceof SwordItem ? 4.0F + ((SwordItem)weapon).getDamage() : 0.0F);
-				tag.putBoolean("evercold", inventory.getItem(0).getItem() == Snowmancy.EVERCOLD_ICE.asItem());
+				tag.putBoolean("evercold", inventory.getItem(0).getItem() == Snowmancy.EVERCOLD_ICE.get().asItem());
 				stack.setTag(tag);
 				inventory.getItemHandler().setStackInSlot(inventory.getContainerSize() - 1, stack);
 			}
@@ -119,7 +119,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 
 		for(Direction facing : Direction.values())
 		{
-			if(getLevel().getBlockState(worldPosition.relative(facing)).getBlock() == Snowmancy.EVERCOLD_ICE)
+			if(getLevel().getBlockState(worldPosition.relative(facing)).getBlock() == Snowmancy.EVERCOLD_ICE.get())
 				cooling++;
 		}
 
@@ -244,6 +244,6 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	@Override
 	public Component getDisplayName()
 	{
-		return new TranslatableComponent(Snowmancy.SNOWMAN_BUILDER.getDescriptionId());
+		return new TranslatableComponent(Snowmancy.SNOWMAN_BUILDER.get().getDescriptionId());
 	}
 }
