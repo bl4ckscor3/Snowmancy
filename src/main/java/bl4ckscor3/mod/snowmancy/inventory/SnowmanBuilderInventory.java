@@ -6,76 +6,67 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public class SnowmanBuilderInventory implements Container
-{
+public class SnowmanBuilderInventory implements Container {
 	public static final int SLOTS = 14;
 	private NonNullList<ItemStack> contents = NonNullList.<ItemStack>withSize(SLOTS, ItemStack.EMPTY);
 	public SnowmanBuilderItemHandler itemHandler;
 
 	/**
 	 * Sets up this inventory with the container
+	 *
 	 * @param te The container of this inventory
 	 */
-	public SnowmanBuilderInventory(SnowmanBuilderBlockEntity te)
-	{
+	public SnowmanBuilderInventory(SnowmanBuilderBlockEntity te) {
 		itemHandler = new SnowmanBuilderItemHandler(te);
 	}
 
 	@Override
-	public int getContainerSize()
-	{
+	public int getContainerSize() {
 		return SLOTS;
 	}
 
 	@Override
-	public boolean isEmpty()
-	{
+	public boolean isEmpty() {
 		return contents.isEmpty();
 	}
 
 	@Override
-	public ItemStack getItem(int index)
-	{
+	public ItemStack getItem(int index) {
 		return contents.get(index);
 	}
 
 	@Override
-	public ItemStack removeItem(int index, int count)
-	{
+	public ItemStack removeItem(int index, int count) {
 		return itemHandler.extractItem(index, count, false);
 	}
 
 	@Override
-	public ItemStack removeItemNoUpdate(int index)
-	{
+	public ItemStack removeItemNoUpdate(int index) {
 		ItemStack stack = getItem(index);
 
-		if(!stack.isEmpty())
+		if (!stack.isEmpty())
 			setItem(index, ItemStack.EMPTY);
+
 		return stack;
 	}
 
 	@Override
-	public void setItem(int index, ItemStack stack)
-	{
+	public void setItem(int index, ItemStack stack) {
 		contents.set(index, stack);
 	}
 
 	@Override
-	public int getMaxStackSize()
-	{
+	public int getMaxStackSize() {
 		return 1;
 	}
 
 	@Override
-	public void setChanged()
-	{
-		itemHandler.getTileEntity().setChanged();
+	public void setChanged() {
+		itemHandler.getBlockEntity().setChanged();
 	}
 
 	@Override
-	public boolean stillValid(Player player)
-	{
+	public boolean stillValid(Player player) {
 		return true;
 	}
 
@@ -86,16 +77,13 @@ public class SnowmanBuilderInventory implements Container
 	public void stopOpen(Player player) {}
 
 	@Override
-	public boolean canPlaceItem(int index, ItemStack stack)
-	{
+	public boolean canPlaceItem(int index, ItemStack stack) {
 		return true;
 	}
 
 	@Override
-	public void clearContent()
-	{
-		for(int i = 0; i < contents.size(); i++)
-		{
+	public void clearContent() {
+		for (int i = 0; i < contents.size(); i++) {
 			contents.set(i, ItemStack.EMPTY);
 		}
 	}
@@ -103,16 +91,14 @@ public class SnowmanBuilderInventory implements Container
 	/**
 	 * @return This inventory's item handler
 	 */
-	public SnowmanBuilderItemHandler getItemHandler()
-	{
+	public SnowmanBuilderItemHandler getItemHandler() {
 		return itemHandler;
 	}
 
 	/*
 	 * @return This inventory's contents (index 0 is slot 0, etc)
 	 */
-	public NonNullList<ItemStack> getContents()
-	{
+	public NonNullList<ItemStack> getContents() {
 		return contents;
 	}
 }

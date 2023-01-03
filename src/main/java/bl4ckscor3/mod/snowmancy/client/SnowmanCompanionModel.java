@@ -13,9 +13,8 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
-//vanilla snowman model with added nose
-public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion>
-{
+// vanilla snowman model with added nose
+public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion> {
 	public ModelPart body;
 	public ModelPart bottomBody;
 	public ModelPart head;
@@ -23,8 +22,7 @@ public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion>
 	public ModelPart leftHand;
 	public ModelPart nose;
 
-	public SnowmanCompanionModel(ModelPart modelPart)
-	{
+	public SnowmanCompanionModel(ModelPart modelPart) {
 		body = modelPart.getChild("body");
 		bottomBody = modelPart.getChild("bottom_body");
 		head = modelPart.getChild("head");
@@ -33,8 +31,7 @@ public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion>
 		nose = head.getChild("nose");
 	}
 
-	public static LayerDefinition createLayer()
-	{
+	public static LayerDefinition createLayer() {
 		MeshDefinition meshDefinition = new MeshDefinition();
 		PartDefinition partDefinition = meshDefinition.getRoot();
 		PartDefinition headDefinition = partDefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8), PartPose.offset(0.0F, 4.0F, 0.0F));
@@ -48,8 +45,7 @@ public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion>
 	}
 
 	@Override
-	public void setupAnim(SnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
-	{
+	public void setupAnim(SnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		float f;
 		float f1;
 
@@ -61,7 +57,7 @@ public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion>
 		rightHand.zRot = 1.0F;
 		leftHand.zRot = -1.0F;
 		rightHand.yRot = 0.0F + body.yRot;
-		leftHand.yRot = (float)Math.PI + body.yRot;
+		leftHand.yRot = (float) Math.PI + body.yRot;
 		rightHand.x = f1 * 5.0F;
 		rightHand.z = -f * 5.0F;
 		leftHand.x = -f1 * 5.0F;
@@ -69,14 +65,13 @@ public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion>
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer builder, int p_225598_3_, int p_225598_4_, float p_225598_5_, float p_225598_6_, float p_225598_7_, float p_225598_8_)
-	{
-		stack.translate(0.0D, 0.75D, 0.0D);
-		stack.scale(0.5F, 0.5F, 0.5F);
-		body.render(stack, builder, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
-		bottomBody.render(stack, builder, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
-		head.render(stack, builder, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
-		rightHand.render(stack, builder, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
-		leftHand.render(stack, builder, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
+	public void renderToBuffer(PoseStack pose, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		pose.translate(0.0D, 0.75D, 0.0D);
+		pose.scale(0.5F, 0.5F, 0.5F);
+		body.render(pose, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		bottomBody.render(pose, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		head.render(pose, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		rightHand.render(pose, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		leftHand.render(pose, buffer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 }

@@ -1,8 +1,8 @@
 package bl4ckscor3.mod.snowmancy.block;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
+import bl4ckscor3.mod.snowmancy.entity.AttackType;
 import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
-import bl4ckscor3.mod.snowmancy.util.EnumAttackType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -26,49 +26,43 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvider
-{
+public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvider {
 	private SnowmanBuilderInventory inventory = new SnowmanBuilderInventory(this);
 	private byte progress = 0;
 	private final byte maxProgress = 8;
 	private final LazyOptional<IItemHandler> inventoryHolder = LazyOptional.of(() -> inventory.getItemHandler());
 
-	public SnowmanBuilderBlockEntity(BlockPos pos, BlockState state)
-	{
+	public SnowmanBuilderBlockEntity(BlockPos pos, BlockState state) {
 		super(Snowmancy.SNOWMAN_BUILDER_BLOCK_ENTITY.get(), pos, state);
 	}
 
-	public static void tick(Level level, BlockPos pos, BlockState state, SnowmanBuilderBlockEntity be)
-	{
+	public static void tick(Level level, BlockPos pos, BlockState state, SnowmanBuilderBlockEntity be) {
 		be.tick();
 	}
 
-	public void tick()
-	{
-		if(canOperate())
-		{
-			for(int i = 0; i < inventory.getContainerSize() - 1; i++) //last slot is output
-			{
-				if(inventory.getItem(i).isEmpty())
-				{
+	public void tick() {
+		if (canOperate()) {
+			for (int i = 0; i < inventory.getContainerSize() - 1; i++) { //last slot is output
+				if (inventory.getItem(i).isEmpty()) {
 					inventory.getItemHandler().setStackInSlot(inventory.getContainerSize() - 1, ItemStack.EMPTY);
 					resetProgress();
 					return;
 				}
 			}
 
-			if(!isCraftReady())
-			{
+			if (!isCraftReady()) {
 				ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN.get());
 				Item weapon = inventory.getItem(inventory.getContainerSize() - 2).getItem();
 				CompoundTag tag = new CompoundTag();
-				EnumAttackType attackType = (weapon == Items.BOW ? EnumAttackType.ARROW :
-					(weapon == Items.EGG ? EnumAttackType.EGG :
-						(weapon == Items.SNOWBALL ? EnumAttackType.SNOWBALL : EnumAttackType.HIT)));
+				//@formatter:off
+				AttackType attackType = (weapon == Items.BOW ? AttackType.ARROW :
+					(weapon == Items.EGG ? AttackType.EGG :
+						(weapon == Items.SNOWBALL ? AttackType.SNOWBALL : AttackType.HIT)));
+				//@formatter:on
 
 				tag.putBoolean("goldenCarrot", inventory.getItem(1).getItem() == Items.GOLDEN_CARROT);
 				tag.putString("attackType", attackType.name());
-				tag.putFloat("damage", attackType == EnumAttackType.HIT && weapon instanceof SwordItem ? 4.0F + ((SwordItem)weapon).getDamage() : 0.0F);
+				tag.putFloat("damage", attackType == AttackType.HIT && weapon instanceof SwordItem ? 4.0F + ((SwordItem) weapon).getDamage() : 0.0F);
 				tag.putBoolean("evercold", inventory.getItem(0).getItem() == Snowmancy.EVERCOLD_ICE.get().asItem());
 				stack.setTag(tag);
 				inventory.getItemHandler().setStackInSlot(inventory.getContainerSize() - 1, stack);
@@ -79,10 +73,8 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	/**
 	 * Increases the progress of the current craft (if applicable) by one
 	 */
-	public void increaseProgress()
-	{
-		if(isCraftReady() && progress < maxProgress)
-		{
+	public void increaseProgress() {
+		if (isCraftReady() && progress < maxProgress) {
 			progress++;
 			markDirtyClient();
 		}
@@ -91,68 +83,61 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	/**
 	 * Resets the progress of the ongoing craft, probably because it got aborted or was finished
 	 */
-	public void resetProgress()
-	{
+	public void resetProgress() {
 		progress = 0;
 		markDirtyClient();
 	}
 
 	/**
-	 * Checks if the crafting status is ready by checking if the last slot (output slot) of this tile's inventory is not empty
+	 * Checks if the crafting status is ready by checking if the last slot (output slot) of this block entity's inventory is not
+	 * empty
+	 *
 	 * @return true if the crafting status is ready, false otherwhise
 	 */
-	public boolean isCraftReady()
-	{
+	public boolean isCraftReady() {
 		return !inventory.getItem(inventory.getContainerSize() - 1).isEmpty();
 	}
 
 	/**
 	 * @return true if the machine can work in the current climate, false otherwhise
 	 */
-	public boolean canOperate()
-	{
+	public boolean canOperate() {
 		int cooling = 0;
 		float temperature = getLevel().getBiome(worldPosition).value().getBaseTemperature();
 		boolean cold = temperature < 0.2F;
 		boolean medium = temperature < 1.0F;
 		boolean warm = temperature >= 1.0F;
 
-		for(Direction facing : Direction.values())
-		{
-			if(getLevel().getBlockState(worldPosition.relative(facing)).getBlock() == Snowmancy.EVERCOLD_ICE.get())
+		for (Direction facing : Direction.values()) {
+			if (getLevel().getBlockState(worldPosition.relative(facing)).getBlock() == Snowmancy.EVERCOLD_ICE.get())
 				cooling++;
 		}
 
-		switch(cooling)
-		{
-			case 0: case 1: return cold;
-			case 2: case 3: return cold || medium;
-			default: return cold || medium || warm;
-		}
+		return switch (cooling) {
+			case 0, 1 -> cold;
+			case 2, 3 -> cold || medium;
+			default -> cold || medium || warm;
+		};
 	}
 
 	/**
-	 * Used server-side whenever the tile entity changes in a way that requires the client to know
+	 * Used server-side whenever the block entity changes in a way that requires the client to know
 	 */
-	public void markDirtyClient()
-	{
+	public void markDirtyClient() {
 		setChanged();
 
-		if(level != null)
+		if (level != null)
 			level.sendBlockUpdated(worldPosition, level.getBlockState(worldPosition), level.getBlockState(worldPosition), 3);
 	}
 
 	@Override
-	public void load(CompoundTag tag)
-	{
-		CompoundTag invTag = (CompoundTag)tag.get("SnowmanBuilderInventory");
+	public void load(CompoundTag tag) {
+		CompoundTag invTag = (CompoundTag) tag.get("SnowmanBuilderInventory");
 
-		if(invTag != null)
-		{
-			for(int i = 0; i < inventory.getContents().size(); i++)
-			{
-				if(invTag.contains("Slot" + i))
-					inventory.setItem(i, ItemStack.of((CompoundTag)invTag.get("Slot" + i)));
+		if (invTag != null) {
+			for (int i = 0; i < inventory.getContents().size(); i++) {
+				if (invTag.contains("Slot" + i))
+					inventory.setItem(i, ItemStack.of((CompoundTag) invTag.get("Slot" + i)));
 			}
 
 			progress = tag.getByte("progress");
@@ -162,12 +147,10 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	}
 
 	@Override
-	public void saveAdditional(CompoundTag tag)
-	{
+	public void saveAdditional(CompoundTag tag) {
 		CompoundTag invTag = new CompoundTag();
 
-		for(int i = 0; i < inventory.getContents().size(); i++)
-		{
+		for (int i = 0; i < inventory.getContents().size(); i++) {
 			invTag.put("Slot" + i, inventory.getItem(i).save(new CompoundTag()));
 		}
 
@@ -177,73 +160,66 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	}
 
 	@Override
-	public ClientboundBlockEntityDataPacket getUpdatePacket()
-	{
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
-	public CompoundTag getUpdateTag()
-	{
+	public CompoundTag getUpdateTag() {
 		return saveWithoutMetadata();
 	}
 
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
-	{
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		super.onDataPacket(net, pkt);
 		handleUpdateTag(pkt.getTag());
 	}
 
 	@Override
-	public void handleUpdateTag(CompoundTag tag)
-	{
+	public void handleUpdateTag(CompoundTag tag) {
 		load(tag);
 	}
 
 	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side)
-	{
-		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+		if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return inventoryHolder.cast();
-		else return super.getCapability(cap, side);
+		else
+			return super.getCapability(cap, side);
 	}
 
 	/**
-	 * @return This tile's inventory
+	 * @return This block entity's inventory
 	 */
-	public SnowmanBuilderInventory getInventory()
-	{
+	public SnowmanBuilderInventory getInventory() {
 		return inventory;
 	}
 
 	/**
 	 * Gets the crafting progress
+	 *
 	 * @return The crafting progress
 	 */
-	public byte getProgress()
-	{
+	public byte getProgress() {
 		return progress;
 	}
 
 	/**
 	 * Gets the crafting progress' maximum progress (upon which the craft will be completed)
+	 *
 	 * @return The crafting progress' maximum progress
 	 */
-	public byte getMaxProgress()
-	{
+	public byte getMaxProgress() {
 		return maxProgress;
 	}
 
 	@Override
-	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player)
-	{
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new SnowmanBuilderContainer(windowId, level, worldPosition, inv);
 	}
 
 	@Override
-	public Component getDisplayName()
-	{
+	public Component getDisplayName() {
 		return new TranslatableComponent(Snowmancy.SNOWMAN_BUILDER.get().getDescriptionId());
 	}
 }

@@ -35,9 +35,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 @Mod(Snowmancy.MODID)
-@EventBusSubscriber(bus=Bus.MOD)
-public class Snowmancy
-{
+@EventBusSubscriber(bus = Bus.MOD)
+public class Snowmancy {
 	public static final String MODID = "snowmancy";
 	public static final String PREFIX = MODID + ":";
 	public static final CreativeModeTab ITEM_GROUP = new SnowmancyItemGroup();
@@ -46,29 +45,30 @@ public class Snowmancy
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MODID);
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
 	public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
-
 	public static final RegistryObject<SnowmanBuilderBlock> SNOWMAN_BUILDER = BLOCKS.register("snowman_builder", () -> new SnowmanBuilderBlock(Properties.of(Material.STONE).strength(3.5F).sound(SoundType.STONE)));
+	//@formatter:off
 	public static final RegistryObject<Block> EVERCOLD_ICE = BLOCKS.register("evercold_ice", () -> new Block(Properties.of(Material.ICE)
 			.strength(2.0F)
 			.friction(0.98F)
 			.sound(SoundType.GLASS)));
+	//@formatter:on
 	public static final RegistryObject<BlockItem> SNOWMAN_BUILDER_ITEM = ITEMS.register("snowman_builder", () -> new BlockItem(SNOWMAN_BUILDER.get(), new Item.Properties().tab(ITEM_GROUP)));
 	public static final RegistryObject<BlockItem> EVERCOLD_ITEM = ITEMS.register("evercold_ice", () -> new BlockItem(EVERCOLD_ICE.get(), new Item.Properties().tab(ITEM_GROUP)));
 	public static final RegistryObject<FrozenSnowmanItem> FROZEN_SNOWMAN = ITEMS.register("frozen_snowman", () -> new FrozenSnowmanItem(new Item.Properties().tab(ITEM_GROUP)));
 	public static final RegistryObject<BlockEntityType<SnowmanBuilderBlockEntity>> SNOWMAN_BUILDER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("snowman_builder", () -> BlockEntityType.Builder.of(SnowmanBuilderBlockEntity::new, SNOWMAN_BUILDER.get()).build(null));
 	public static final RegistryObject<MenuType<SnowmanBuilderContainer>> SNOWMAN_BUILDER_MENU = MENU_TYPES.register("snowman_builder", () -> IForgeMenuType.create((windowId, inv, data) -> new SnowmanBuilderContainer(windowId, inv.player.level, data.readBlockPos(), inv)));
+	//@formatter:off
 	public static final RegistryObject<EntityType<SnowmanCompanion>> SNOWMAN_ENTITY = ENTITY_TYPES.register("snowman", () -> EntityType.Builder.<SnowmanCompanion>of(SnowmanCompanion::new, MobCategory.CREATURE)
 			.sized(0.35F, 0.9F)
 			.setTrackingRange(128)
 			.setUpdateInterval(1)
 			.setShouldReceiveVelocityUpdates(true)
 			.build(PREFIX + "snowman"));
-
+	//@formatter:on
 	public static final CraftEvercoldSnowmanTrigger CRAFT_EVERCOLD_SNOWMAN = CriteriaTriggers.register(new CraftEvercoldSnowmanTrigger());
 	public static final DamageSource SNOWMAN_DAMAGE = new DamageSource(PREFIX + "snowman_damage");
 
-	public Snowmancy()
-	{
+	public Snowmancy() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		BLOCKS.register(modEventBus);
@@ -76,6 +76,7 @@ public class Snowmancy
 		BLOCK_ENTITY_TYPES.register(modEventBus);
 		ENTITY_TYPES.register(modEventBus);
 		MENU_TYPES.register(modEventBus);
+		//@formatter:off
 		Arrays.asList(Items.BOW,
 				Items.DIAMOND_SWORD,
 				Items.EGG,
@@ -85,11 +86,11 @@ public class Snowmancy
 				Items.SNOWBALL,
 				Items.STONE_SWORD,
 				Items.WOODEN_SWORD).stream().forEach(SnowmanBuilderContainer::registerWeapon);
+		//@formatter:on
 	}
 
 	@SubscribeEvent
-	public static void onEntityAttributeCreation(EntityAttributeCreationEvent event)
-	{
+	public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
 		event.put(SNOWMAN_ENTITY.get(), SnowmanCompanion.createAttributes().build());
 	}
 }
