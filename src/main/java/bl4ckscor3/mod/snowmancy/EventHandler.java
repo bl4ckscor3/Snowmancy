@@ -19,11 +19,11 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onProjectileImpactThrowable(ProjectileImpactEvent event) {
 		if (event.getProjectile() instanceof Snowball snowball && event.getRayTraceResult().getType() == Type.BLOCK) {
-			BlockEntity te = snowball.level.getBlockEntity(((BlockHitResult) event.getRayTraceResult()).getBlockPos());
+			BlockEntity be = snowball.level.getBlockEntity(((BlockHitResult) event.getRayTraceResult()).getBlockPos());
 
-			if (te instanceof SnowmanBuilderBlockEntity builder) {
+			if (be instanceof SnowmanBuilderBlockEntity builder) {
 				if (builder.isCraftReady() && builder.getProgress() < builder.getMaxProgress())
-					te.getLevel().playSound(null, te.getBlockPos(), SoundEvents.CHICKEN_EGG, SoundSource.BLOCKS, 1.0F, 1.0F);
+					be.getLevel().playSound(null, be.getBlockPos(), SoundEvents.CHICKEN_EGG, SoundSource.BLOCKS, 1.0F, 1.0F);
 
 				builder.increaseProgress();
 			}
