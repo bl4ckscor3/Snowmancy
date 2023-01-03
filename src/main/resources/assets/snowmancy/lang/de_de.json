@@ -1,7 +1,7 @@
 {
     "block.snowmancy.snowman_builder": "Schneemann-Erbauer",
     "block.snowmancy.evercold_ice": "Ewig kaltes Eis",
-    "item.snowmancy.frozen_snowman": "Gefrorener Schneemann",
+    "item.snowmancy.frozen_snowman": "Schneemann-Gefährte",
     "entity.snowmancy.snowman": "Schneemann-Gefährte",
     "itemGroup.snowmancy": "Snowmancy",
     
