@@ -18,6 +18,10 @@ public enum AttackType {
 		return this == HIT;
 	}
 
+	public String getDescriptionId() {
+		return "snowmancy.attackType." + name().toLowerCase();
+	}
+
 	public static AttackType fromTag(CompoundTag tag) {
 		AttackType attackType = NONE;
 

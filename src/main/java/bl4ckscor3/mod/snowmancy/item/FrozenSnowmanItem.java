@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -64,10 +65,16 @@ public class FrozenSnowmanItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag) {
 		if (stack.hasTag()) {
-			tooltip.add(new TextComponent(ChatFormatting.GOLD + "Golden Carrot: " + ChatFormatting.GRAY + stack.getTag().getBoolean("goldenCarrot")));
-			tooltip.add(new TextComponent(ChatFormatting.BLUE + "Attack Type: " + ChatFormatting.GRAY + AttackType.fromTag(stack.getTag())));
-			tooltip.add(new TextComponent(ChatFormatting.RED + "Damage: " + ChatFormatting.GRAY + stack.getTag().getFloat("damage")));
-			tooltip.add(new TextComponent(ChatFormatting.AQUA + "Evercold: " + ChatFormatting.GRAY + stack.getTag().getBoolean("evercold")));
+			CompoundTag tag = stack.getTag();
+			boolean goldenCarrot = tag.getBoolean("goldenCarrot");
+			AttackType attackType = AttackType.fromTag(tag);
+			float damage = tag.getFloat("damage");
+			boolean evercold = tag.getBoolean("evercold");
+
+			tooltip.add(new TranslatableComponent("snowmancy.tooltip.goldenCarrot", new TranslatableComponent("snowmancy.tooltip." + goldenCarrot).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.GOLD));
+			tooltip.add(new TranslatableComponent("snowmancy.tooltip.attackType", new TranslatableComponent(attackType.getDescriptionId()).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.BLUE));
+			tooltip.add(new TranslatableComponent("snowmancy.tooltip.damage", new TextComponent("" + damage).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.RED));
+			tooltip.add(new TranslatableComponent("snowmancy.tooltip.evercold", new TranslatableComponent("snowmancy.tooltip." + evercold).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.AQUA));
 		}
 	}
 

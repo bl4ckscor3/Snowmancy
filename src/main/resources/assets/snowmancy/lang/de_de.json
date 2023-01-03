@@ -1,0 +1,28 @@
+{
+    "block.snowmancy.snowman_builder": "Schneemann-Erbauer",
+    "block.snowmancy.evercold_ice": "Ewig kaltes Eis",
+    "item.snowmancy.frozen_snowman": "Gefrorener Schneemann",
+    "entity.snowmancy.snowman": "Schneemann-Gefährte",
+    "itemGroup.snowmancy:item_group": "Snowmancy",
+    
+    "snowmancy.screen.biomeTooWarm": "Biom zu warm!",
+
+	"snowmancy.tooltip.goldenCarrot": "Goldene Karrote: %s",
+	"snowmancy.tooltip.attackType": "Art der Attacke: %s",
+	"snowmancy.tooltip.damage": "Schaden: %s",
+	"snowmancy.tooltip.evercold": "Ewig kalt: %s",
+	"snowmancy.tooltip.true": "Ja",
+	"snowmancy.tooltip.false": "Nein",
+	
+	"snowmancy.attackType.none": "Keiner",
+	"snowmancy.attackType.arrow": "Pfeil",
+	"snowmancy.attackType.egg": "Ei",
+	"snowmancy.attackType.hit": "Nahkampf",
+	"snowmancy.attackType.snowball": "Schneeball",
+
+    "snowmancy.advancement.root.description": "Stelle den Schneemann-Erbauer her",
+    "snowmancy.advancement.snowman_companion.title": "Gefroren",
+    "snowmancy.advancement.snowman_companion.description": "Stelle deinen ersten Schneemann-Gefährten her!",
+    "snowmancy.advancement.evercold_snowman.title": "Ewig kalt",
+    "snowmancy.advancement.evercold_snowman.description": "Verhindere, dass dein Schneemann-Gefährte schmilzt, indem du ihm ewig kaltes Eis als Kopfbedeckung gibst."
+}
