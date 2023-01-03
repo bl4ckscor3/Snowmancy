@@ -12,7 +12,7 @@ public class SnowmanAttackMeleeGoal extends MeleeAttackGoal {
 
 	@Override
 	public boolean canUse() {
-		return ((SnowmanCompanion) mob).getAttackType().equals(AttackType.HIT.name()) && super.canUse();
+		return ((SnowmanCompanion) mob).getAttackType().isMelee() && super.canUse();
 	}
 
 	@Override

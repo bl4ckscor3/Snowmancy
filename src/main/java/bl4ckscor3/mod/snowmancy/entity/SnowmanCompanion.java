@@ -3,6 +3,7 @@ package bl4ckscor3.mod.snowmancy.entity;
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
@@ -35,7 +36,7 @@ import net.minecraft.world.level.block.Block;
 public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	//TODO: add wearables
 	private static final EntityDataAccessor<Boolean> GOLDEN_NOSE = SynchedEntityData.<Boolean>defineId(SnowmanCompanion.class, EntityDataSerializers.BOOLEAN);
-	private static final EntityDataAccessor<String> ATTACK_TYPE = SynchedEntityData.<String>defineId(SnowmanCompanion.class, EntityDataSerializers.STRING);
+	private static final EntityDataAccessor<AttackType> ATTACK_TYPE = SynchedEntityData.<AttackType>defineId(SnowmanCompanion.class, (EntityDataSerializer<AttackType>) Snowmancy.ATTACK_TYPE_SERIALIZER.get().getSerializer());
 	private static final EntityDataAccessor<Float> DAMAGE = SynchedEntityData.<Float>defineId(SnowmanCompanion.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Boolean> EVERCOLD = SynchedEntityData.<Boolean>defineId(SnowmanCompanion.class, EntityDataSerializers.BOOLEAN);
 
@@ -43,7 +44,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 		super(type, world);
 	}
 
-	public SnowmanCompanion(Level world, boolean goldenNose, String attackType, float damage, boolean evercold) {
+	public SnowmanCompanion(Level world, boolean goldenNose, AttackType attackType, float damage, boolean evercold) {
 		this(Snowmancy.SNOWMAN_ENTITY.get(), world);
 		entityData.set(GOLDEN_NOSE, goldenNose);
 		entityData.set(ATTACK_TYPE, attackType);
@@ -55,7 +56,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 		entityData.define(GOLDEN_NOSE, false);
-		entityData.define(ATTACK_TYPE, AttackType.HIT.name());
+		entityData.define(ATTACK_TYPE, AttackType.NONE);
 		entityData.define(DAMAGE, 0.0F);
 		entityData.define(EVERCOLD, false);
 	}
@@ -107,7 +108,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float distanceFactor) {
-		AttackType type = AttackType.valueOf(getAttackType());
+		AttackType type = getAttackType();
 		Projectile throwableEntity = switch (type) {
 			case ARROW -> ((ArrowItem) Items.ARROW).createArrow(level, new ItemStack(Items.ARROW, 1), this);
 			case EGG -> new ThrownEgg(level, this);
@@ -131,7 +132,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
 		entityData.set(GOLDEN_NOSE, tag.getBoolean("goldenCarrot"));
-		entityData.set(ATTACK_TYPE, tag.getString("attackType"));
+		entityData.set(ATTACK_TYPE, AttackType.fromTag(tag));
 		entityData.set(DAMAGE, tag.getFloat("damage"));
 		entityData.set(EVERCOLD, tag.getBoolean("evercold"));
 	}
@@ -139,7 +140,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		tag.putBoolean("goldenCarrot", isNoseGolden());
-		tag.putString("attackType", getAttackType());
+		tag.putInt("attackType", getAttackType().ordinal());
 		tag.putFloat("damage", getDamage());
 		tag.putBoolean("evercold", isEvercold());
 	}
@@ -154,7 +155,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	/**
 	 * @return The attack type of the snowman (does he have to hit or throw?)
 	 */
-	public String getAttackType() {
+	public AttackType getAttackType() {
 		return entityData.get(ATTACK_TYPE);
 	}
 
