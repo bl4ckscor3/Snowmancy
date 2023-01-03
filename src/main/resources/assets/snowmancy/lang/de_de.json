@@ -3,7 +3,7 @@
     "block.snowmancy.evercold_ice": "Ewig kaltes Eis",
     "item.snowmancy.frozen_snowman": "Gefrorener Schneemann",
     "entity.snowmancy.snowman": "Schneemann-Gefährte",
-    "itemGroup.snowmancy:item_group": "Snowmancy",
+    "itemGroup.snowmancy": "Snowmancy",
     
     "snowmancy.screen.biomeTooWarm": "Biom zu warm!",
 

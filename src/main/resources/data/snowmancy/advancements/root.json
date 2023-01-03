@@ -4,12 +4,12 @@
             "item": "snowmancy:snowman_builder"
         },
         "title": {
-            "translate": "itemGroup.snowmancy:item_group"
+            "translate": "itemGroup.snowmancy"
         },
         "description": {
             "translate": "snowmancy.advancement.root.description"
         },
-        "background": "snowmancy:textures/blocks/evercold_ice.png",
+        "background": "snowmancy:textures/block/evercold_ice.png",
         "show_toast": true,
         "announce_to_chat": true
     },

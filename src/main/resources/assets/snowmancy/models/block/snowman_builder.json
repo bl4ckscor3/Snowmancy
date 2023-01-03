@@ -1,7 +1,7 @@
 {
     "parent": "block/cube_column",
     "textures": {
-        "end": "snowmancy:blocks/builder_top",
-        "side": "snowmancy:blocks/builder_side"
+        "end": "snowmancy:block/builder_top",
+        "side": "snowmancy:block/builder_side"
     }
 }

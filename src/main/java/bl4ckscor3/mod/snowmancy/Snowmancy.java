@@ -1,6 +1,7 @@
 package bl4ckscor3.mod.snowmancy;
 
 import java.util.Arrays;
+import java.util.List;
 
 import bl4ckscor3.mod.snowmancy.advancement.CraftEvercoldSnowmanTrigger;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlock;
@@ -10,14 +11,16 @@ import bl4ckscor3.mod.snowmancy.entity.AttackType;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.item.FrozenSnowmanItem;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -25,6 +28,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -42,7 +46,6 @@ import net.minecraftforge.registries.RegistryObject;
 public class Snowmancy {
 	public static final String MODID = "snowmancy";
 	public static final String PREFIX = MODID + ":";
-	public static final CreativeModeTab ITEM_GROUP = new SnowmancyItemGroup();
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
@@ -56,9 +59,9 @@ public class Snowmancy {
 			.friction(0.98F)
 			.sound(SoundType.GLASS)));
 	//@formatter:on
-	public static final RegistryObject<BlockItem> SNOWMAN_BUILDER_ITEM = ITEMS.register("snowman_builder", () -> new BlockItem(SNOWMAN_BUILDER.get(), new Item.Properties().tab(ITEM_GROUP)));
-	public static final RegistryObject<BlockItem> EVERCOLD_ITEM = ITEMS.register("evercold_ice", () -> new BlockItem(EVERCOLD_ICE.get(), new Item.Properties().tab(ITEM_GROUP)));
-	public static final RegistryObject<FrozenSnowmanItem> FROZEN_SNOWMAN = ITEMS.register("frozen_snowman", () -> new FrozenSnowmanItem(new Item.Properties().tab(ITEM_GROUP)));
+	public static final RegistryObject<BlockItem> SNOWMAN_BUILDER_ITEM = ITEMS.register("snowman_builder", () -> new BlockItem(SNOWMAN_BUILDER.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> EVERCOLD_ITEM = ITEMS.register("evercold_ice", () -> new BlockItem(EVERCOLD_ICE.get(), new Item.Properties()));
+	public static final RegistryObject<FrozenSnowmanItem> FROZEN_SNOWMAN = ITEMS.register("frozen_snowman", () -> new FrozenSnowmanItem(new Item.Properties()));
 	public static final RegistryObject<BlockEntityType<SnowmanBuilderBlockEntity>> SNOWMAN_BUILDER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("snowman_builder", () -> BlockEntityType.Builder.of(SnowmanBuilderBlockEntity::new, SNOWMAN_BUILDER.get()).build(null));
 	public static final RegistryObject<MenuType<SnowmanBuilderContainer>> SNOWMAN_BUILDER_MENU = MENU_TYPES.register("snowman_builder", () -> IForgeMenuType.create((windowId, inv, data) -> new SnowmanBuilderContainer(windowId, inv.player.level, data.readBlockPos(), inv)));
 	//@formatter:off
@@ -98,5 +101,20 @@ public class Snowmancy {
 	@SubscribeEvent
 	public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
 		event.put(SNOWMAN_ENTITY.get(), SnowmanCompanion.createAttributes().build());
+	}
+
+	@SubscribeEvent
+	public static void onCreativeModeTabRegister(CreativeModeTabEvent.Register event) {
+		//@formatter:off
+		event.registerCreativeModeTab(new ResourceLocation(MODID, "tab"), builder -> builder
+				.icon(() -> new ItemStack(SNOWMAN_BUILDER.get()))
+				.title(Component.translatable("itemGroup.snowmancy"))
+				.displayItems((features, output, hasPermissions) -> {
+					output.acceptAll(List.of(
+							new ItemStack(SNOWMAN_BUILDER.get()),
+							new ItemStack(FROZEN_SNOWMAN.get()),
+							new ItemStack(EVERCOLD_ICE.get())));
+				}));
+		//@formatter:on
 	}
 }
