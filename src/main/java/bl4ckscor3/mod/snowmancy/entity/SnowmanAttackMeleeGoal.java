@@ -1,7 +1,9 @@
 package bl4ckscor3.mod.snowmancy.entity;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 
@@ -20,7 +22,7 @@ public class SnowmanAttackMeleeGoal extends MeleeAttackGoal {
 		if (distToEnemySqr <= getAttackReachSqr(enemy) && isTimeToAttack()) {
 			resetAttackCooldown();
 			mob.swing(InteractionHand.MAIN_HAND);
-			enemy.hurt(Snowmancy.SNOWMAN_DAMAGE, ((SnowmanCompanion) mob).getDamage());
+			enemy.hurt(new DamageSource(enemy.level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(Snowmancy.SNOWMAN_DAMAGE), mob), ((SnowmanCompanion) mob).getDamage());
 		}
 	}
 }

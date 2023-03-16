@@ -11,10 +11,12 @@ import bl4ckscor3.mod.snowmancy.entity.AttackType;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.item.FrozenSnowmanItem;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.MenuType;
@@ -74,7 +76,7 @@ public class Snowmancy {
 	//@formatter:on
 	public static final RegistryObject<EntityDataSerializer<AttackType>> ATTACK_TYPE_SERIALIZER = ENTITY_DATA_SERIALIZERS.register("attack_type", () -> EntityDataSerializer.simpleEnum(AttackType.class));
 	public static final CraftEvercoldSnowmanTrigger CRAFT_EVERCOLD_SNOWMAN = CriteriaTriggers.register(new CraftEvercoldSnowmanTrigger());
-	public static final DamageSource SNOWMAN_DAMAGE = new DamageSource(PREFIX + "snowman_damage");
+	public static final ResourceKey<DamageType> SNOWMAN_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MODID, "snowman_damage"));
 
 	public Snowmancy() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -109,7 +111,7 @@ public class Snowmancy {
 		event.registerCreativeModeTab(new ResourceLocation(MODID, "tab"), builder -> builder
 				.icon(() -> new ItemStack(SNOWMAN_BUILDER.get()))
 				.title(Component.translatable("itemGroup.snowmancy"))
-				.displayItems((features, output, hasPermissions) -> {
+				.displayItems((displayParameters, output) -> {
 					output.acceptAll(List.of(
 							new ItemStack(SNOWMAN_BUILDER.get()),
 							new ItemStack(FROZEN_SNOWMAN.get()),

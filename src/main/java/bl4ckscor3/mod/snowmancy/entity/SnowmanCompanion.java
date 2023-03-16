@@ -11,7 +11,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -96,7 +95,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 		super.aiStep();
 
 		if (!isEvercold() && level.getBiome(blockPosition()).value().getBaseTemperature() >= 0.2F)
-			hurt(DamageSource.ON_FIRE, 1.0F);
+			hurt(damageSources().onFire(), 1.0F);
 	}
 
 	@Override
