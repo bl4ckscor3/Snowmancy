@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,8 +19,8 @@ public class CraftEvercoldSnowmanTrigger extends SimpleCriterionTrigger<CraftEve
 	}
 
 	@Override
-	public CraftEvercoldSnowmanTrigger.Instance createInstance(JsonObject json, EntityPredicate.Composite andPredicate, DeserializationContext conditionArrayParser) {
-		return new CraftEvercoldSnowmanTrigger.Instance(andPredicate);
+	public CraftEvercoldSnowmanTrigger.Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext ctx) {
+		return new CraftEvercoldSnowmanTrigger.Instance(predicate);
 	}
 
 	public void trigger(ServerPlayer player) {
@@ -28,8 +28,8 @@ public class CraftEvercoldSnowmanTrigger extends SimpleCriterionTrigger<CraftEve
 	}
 
 	public static class Instance extends AbstractCriterionTriggerInstance {
-		public Instance(EntityPredicate.Composite andPredicate) {
-			super(CraftEvercoldSnowmanTrigger.ID, andPredicate);
+		public Instance(ContextAwarePredicate predicate) {
+			super(CraftEvercoldSnowmanTrigger.ID, predicate);
 		}
 	}
 }

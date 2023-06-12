@@ -21,15 +21,9 @@
     "criteria": {
         "snowman_builder": {
             "conditions": {
-                "items": [
-                    {
-                        "items": [
-                            "snowmancy:snowman_builder"
-                        ]
-                    }
-                ]
+                "recipe_id": "snowmancy:snowman_builder"
             },
-            "trigger": "minecraft:inventory_changed"
+            "trigger": "minecraft:recipe_crafted"
         }
     }
 }

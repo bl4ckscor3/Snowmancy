@@ -19,7 +19,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onProjectileImpactThrowable(ProjectileImpactEvent event) {
 		if (event.getProjectile() instanceof Snowball snowball && event.getRayTraceResult().getType() == Type.BLOCK) {
-			BlockEntity be = snowball.level.getBlockEntity(((BlockHitResult) event.getRayTraceResult()).getBlockPos());
+			BlockEntity be = snowball.level().getBlockEntity(((BlockHitResult) event.getRayTraceResult()).getBlockPos());
 
 			if (be instanceof SnowmanBuilderBlockEntity builder) {
 				if (builder.isCraftReady() && builder.getProgress() < builder.getMaxProgress())
@@ -33,6 +33,6 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent event) {
 		if (event.getEntity() instanceof SnowmanCompanion snowman)
-			Block.popResource(snowman.level, snowman.blockPosition(), snowman.createItem());
+			Block.popResource(snowman.level(), snowman.blockPosition(), snowman.createItem());
 	}
 }

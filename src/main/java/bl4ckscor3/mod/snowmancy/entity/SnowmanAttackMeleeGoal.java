@@ -22,7 +22,7 @@ public class SnowmanAttackMeleeGoal extends MeleeAttackGoal {
 		if (distToEnemySqr <= getAttackReachSqr(enemy) && isTimeToAttack()) {
 			resetAttackCooldown();
 			mob.swing(InteractionHand.MAIN_HAND);
-			enemy.hurt(new DamageSource(enemy.level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(Snowmancy.SNOWMAN_DAMAGE), mob), ((SnowmanCompanion) mob).getDamage());
+			enemy.hurt(new DamageSource(enemy.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(Snowmancy.SNOWMAN_DAMAGE), mob), ((SnowmanCompanion) mob).getDamage());
 		}
 	}
 }

@@ -94,14 +94,14 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	public void aiStep() {
 		super.aiStep();
 
-		if (!isEvercold() && level.getBiome(blockPosition()).value().getBaseTemperature() >= 0.2F)
+		if (!isEvercold() && level().getBiome(blockPosition()).value().getBaseTemperature() >= 0.2F)
 			hurt(damageSources().onFire(), 1.0F);
 	}
 
 	@Override
 	protected InteractionResult mobInteract(Player player, InteractionHand hand) {
 		if (player.isCrouching() && hand == InteractionHand.MAIN_HAND) {
-			Block.popResource(level, blockPosition(), createItem());
+			Block.popResource(level(), blockPosition(), createItem());
 			discard();
 			return InteractionResult.SUCCESS;
 		}
@@ -132,9 +132,9 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	public void performRangedAttack(LivingEntity target, float distanceFactor) {
 		AttackType type = getAttackType();
 		Projectile throwableEntity = switch (type) {
-			case ARROW -> ((ArrowItem) Items.ARROW).createArrow(level, new ItemStack(Items.ARROW, 1), this);
-			case EGG -> new ThrownEgg(level, this);
-			case SNOWBALL -> new Snowball(level, this);
+			case ARROW -> ((ArrowItem) Items.ARROW).createArrow(level(), new ItemStack(Items.ARROW, 1), this);
+			case EGG -> new ThrownEgg(level(), this);
+			case SNOWBALL -> new Snowball(level(), this);
 			default -> null;
 		};
 
@@ -147,7 +147,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 
 			throwableEntity.shoot(d1, d2 + f, d3, 1.6F, 12.0F);
 			playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));
-			level.addFreshEntity(throwableEntity);
+			level().addFreshEntity(throwableEntity);
 		}
 	}
 
