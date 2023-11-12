@@ -18,8 +18,8 @@ public class SnowmanAttackMeleeGoal extends MeleeAttackGoal {
 	}
 
 	@Override
-	protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-		if (distToEnemySqr <= getAttackReachSqr(enemy) && isTimeToAttack()) {
+	protected void checkAndPerformAttack(LivingEntity enemy) {
+		if (canPerformAttack(enemy)) {
 			resetAttackCooldown();
 			mob.swing(InteractionHand.MAIN_HAND);
 			enemy.hurt(new DamageSource(enemy.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(Snowmancy.SNOWMAN_DAMAGE), mob), ((SnowmanCompanion) mob).getDamage());

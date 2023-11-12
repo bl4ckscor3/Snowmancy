@@ -2,7 +2,7 @@ package bl4ckscor3.mod.snowmancy.inventory;
 
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 public class SnowmanBuilderItemHandler implements IItemHandlerModifiable {
 	public SnowmanBuilderBlockEntity be;

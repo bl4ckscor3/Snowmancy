@@ -1,7 +1,5 @@
 package bl4ckscor3.mod.snowmancy.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderContainer;
@@ -42,8 +40,6 @@ public class SnowmanBuilderScreen extends AbstractContainerScreen<SnowmanBuilder
 
 	@Override
 	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
-		renderBackground(guiGraphics);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		guiGraphics.blit(TEXTURE, (width - imageWidth) / 2, (height - imageHeight) / 2, 0, 0, imageWidth, imageHeight);
 	}
 }
