@@ -58,13 +58,13 @@ public class Snowmancy {
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 	public static final DeferredBlock<SnowmanBuilderBlock> SNOWMAN_BUILDER = BLOCKS.register("snowman_builder", () -> new SnowmanBuilderBlock(Properties.of().strength(3.5F).sound(SoundType.STONE)));
 	//@formatter:off
-	public static final DeferredBlock<Block> EVERCOLD_ICE = BLOCKS.registerBlock("evercold_ice", BlockBehaviour.Properties.of()
+	public static final DeferredBlock<Block> EVERCOLD_ICE = BLOCKS.registerSimpleBlock("evercold_ice", BlockBehaviour.Properties.of()
 			.strength(2.0F)
 			.friction(0.98F)
 			.sound(SoundType.GLASS));
 	//@formatter:on
-	public static final DeferredItem<BlockItem> SNOWMAN_BUILDER_ITEM = ITEMS.registerBlockItem("snowman_builder", SNOWMAN_BUILDER);
-	public static final DeferredItem<BlockItem> EVERCOLD_ITEM = ITEMS.registerBlockItem("evercold_ice", EVERCOLD_ICE);
+	public static final DeferredItem<BlockItem> SNOWMAN_BUILDER_ITEM = ITEMS.registerSimpleBlockItem("snowman_builder", SNOWMAN_BUILDER);
+	public static final DeferredItem<BlockItem> EVERCOLD_ITEM = ITEMS.registerSimpleBlockItem("evercold_ice", EVERCOLD_ICE);
 	public static final DeferredItem<FrozenSnowmanItem> FROZEN_SNOWMAN = ITEMS.register("frozen_snowman", () -> new FrozenSnowmanItem(new Item.Properties()));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SnowmanBuilderBlockEntity>> SNOWMAN_BUILDER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("snowman_builder", () -> BlockEntityType.Builder.of(SnowmanBuilderBlockEntity::new, SNOWMAN_BUILDER.get()).build(null));
 	public static final DeferredHolder<MenuType<?>, MenuType<SnowmanBuilderContainer>> SNOWMAN_BUILDER_MENU = MENU_TYPES.register("snowman_builder", () -> IMenuTypeExtension.create((windowId, inv, data) -> new SnowmanBuilderContainer(windowId, inv.player.level(), data.readBlockPos(), inv)));

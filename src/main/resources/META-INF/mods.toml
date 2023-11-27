@@ -14,7 +14,7 @@ issueTrackerURL="https://github.com/bl4ckscor3/Snowmancy/issues"
 [[dependencies.snowmancy]]
     modId="neoforge"
     mandatory=true
-    versionRange="[20.2.59-beta,)"
+    versionRange="[20.2.64-beta,)"
     ordering="NONE"
     side="BOTH"
 
