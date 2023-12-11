@@ -3,14 +3,14 @@ package bl4ckscor3.mod.snowmancy;
 import java.util.Arrays;
 import java.util.List;
 
-import bl4ckscor3.mod.snowmancy.advancement.CraftEvercoldSnowmanTrigger;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlock;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderContainer;
 import bl4ckscor3.mod.snowmancy.entity.AttackType;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.item.FrozenSnowmanItem;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -36,6 +36,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.common.Mod.EventBusSubscriber;
 import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -56,6 +58,7 @@ public class Snowmancy {
 	public static final DeferredRegister<EntityDataSerializer<?>> ENTITY_DATA_SERIALIZERS = DeferredRegister.create(Keys.ENTITY_DATA_SERIALIZERS, MODID);
 	public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, MODID);
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+	public static final DeferredRegister<CriterionTrigger<?>> TRIGGER_TYPES = DeferredRegister.create(Registries.TRIGGER_TYPE, MODID);
 	public static final DeferredBlock<SnowmanBuilderBlock> SNOWMAN_BUILDER = BLOCKS.register("snowman_builder", () -> new SnowmanBuilderBlock(Properties.of().strength(3.5F).sound(SoundType.STONE)));
 	//@formatter:off
 	public static final DeferredBlock<Block> EVERCOLD_ICE = BLOCKS.registerSimpleBlock("evercold_ice", BlockBehaviour.Properties.of()
@@ -77,7 +80,7 @@ public class Snowmancy {
 			.build(PREFIX + "snowman"));
 	//@formatter:on
 	public static final DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<AttackType>> ATTACK_TYPE_SERIALIZER = ENTITY_DATA_SERIALIZERS.register("attack_type", () -> EntityDataSerializer.simpleEnum(AttackType.class));
-	public static final CraftEvercoldSnowmanTrigger CRAFT_EVERCOLD_SNOWMAN = CriteriaTriggers.register(Snowmancy.MODID + ":craft_evercold_snowman", new CraftEvercoldSnowmanTrigger());
+	public static final DeferredHolder<CriterionTrigger<?>, PlayerTrigger> CRAFT_EVERCOLD_SNOWMAN = TRIGGER_TYPES.register("craft_evercold_snowman", () -> new PlayerTrigger());
 	public static final ResourceKey<DamageType> SNOWMAN_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MODID, "snowman_damage"));
 	//@formatter:off
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TECHNICAL_TAB = CREATIVE_MODE_TABS.register("tab", () -> CreativeModeTab.builder()
@@ -100,6 +103,7 @@ public class Snowmancy {
 		ENTITY_DATA_SERIALIZERS.register(modEventBus);
 		MENU_TYPES.register(modEventBus);
 		CREATIVE_MODE_TABS.register(modEventBus);
+		TRIGGER_TYPES.register(modEventBus);
 		//@formatter:off
 		Arrays.asList(Items.BOW,
 				Items.DIAMOND_SWORD,
@@ -111,6 +115,11 @@ public class Snowmancy {
 				Items.STONE_SWORD,
 				Items.WOODEN_SWORD).stream().forEach(SnowmanBuilderContainer::registerWeapon);
 		//@formatter:on
+	}
+
+	@SubscribeEvent
+	public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SNOWMAN_BUILDER_BLOCK_ENTITY.get(), (be, side) -> be.getInventory().getItemHandler());
 	}
 
 	@SubscribeEvent

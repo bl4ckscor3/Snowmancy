@@ -1,5 +1,7 @@
 package bl4ckscor3.mod.snowmancy.block;
 
+import com.mojang.serialization.MapCodec;
+
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,5 +45,10 @@ public class SnowmanBuilderBlock extends BaseEntityBlock {
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
 		return level.isClientSide ? null : createTickerHelper(type, Snowmancy.SNOWMAN_BUILDER_BLOCK_ENTITY.get(), SnowmanBuilderBlockEntity::tick);
+	}
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return null;
 	}
 }

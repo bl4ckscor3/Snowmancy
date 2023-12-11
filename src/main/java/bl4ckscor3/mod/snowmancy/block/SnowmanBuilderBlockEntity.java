@@ -20,16 +20,11 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
-import net.neoforged.neoforge.items.IItemHandler;
 
 public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvider {
 	private SnowmanBuilderInventory inventory = new SnowmanBuilderInventory(this);
 	private byte progress = 0;
 	private final byte maxProgress = 8;
-	private final LazyOptional<IItemHandler> inventoryHolder = LazyOptional.of(() -> inventory.getItemHandler());
 
 	public SnowmanBuilderBlockEntity(BlockPos pos, BlockState state) {
 		super(Snowmancy.SNOWMAN_BUILDER_BLOCK_ENTITY.get(), pos, state);
@@ -177,14 +172,6 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	@Override
 	public void handleUpdateTag(CompoundTag tag) {
 		load(tag);
-	}
-
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-		if (cap == Capabilities.ITEM_HANDLER)
-			return inventoryHolder.cast();
-		else
-			return super.getCapability(cap, side);
 	}
 
 	/**
