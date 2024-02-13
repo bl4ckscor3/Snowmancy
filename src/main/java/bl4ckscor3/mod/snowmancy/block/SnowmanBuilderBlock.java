@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 public class SnowmanBuilderBlock extends BaseEntityBlock {
 	public SnowmanBuilderBlock(Properties properties) {
@@ -32,7 +31,7 @@ public class SnowmanBuilderBlock extends BaseEntityBlock {
 	@Override
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 		if (!level.isClientSide && level.getBlockEntity(pos) instanceof MenuProvider be)
-			NetworkHooks.openScreen((ServerPlayer) player, be, pos);
+			((ServerPlayer) player).openMenu(be, pos);
 
 		return InteractionResult.SUCCESS;
 	}
