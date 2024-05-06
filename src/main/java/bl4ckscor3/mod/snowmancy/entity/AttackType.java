@@ -2,8 +2,9 @@ package bl4ckscor3.mod.snowmancy.entity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.util.StringRepresentable;
 
-public enum AttackType {
+public enum AttackType implements StringRepresentable {
 	NONE,
 	ARROW,
 	EGG,
@@ -20,6 +21,11 @@ public enum AttackType {
 
 	public String getDescriptionId() {
 		return "snowmancy.attackType." + name().toLowerCase();
+	}
+
+	@Override
+	public String getSerializedName() {
+		return name().toLowerCase();
 	}
 
 	public static AttackType fromTag(CompoundTag tag) {

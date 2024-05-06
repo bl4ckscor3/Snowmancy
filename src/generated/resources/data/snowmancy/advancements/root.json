@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "snowman_builder": {
+      "conditions": {
+        "recipe_id": "snowmancy:snowman_builder"
+      },
+      "trigger": "minecraft:recipe_crafted"
+    }
+  },
+  "display": {
+    "background": "snowmancy:textures/block/evercold_ice.png",
+    "description": {
+      "translate": "snowmancy.advancement.root.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "snowmancy:snowman_builder"
+    },
+    "title": {
+      "translate": "itemGroup.snowmancy"
+    }
+  },
+  "requirements": [
+    [
+      "snowman_builder"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

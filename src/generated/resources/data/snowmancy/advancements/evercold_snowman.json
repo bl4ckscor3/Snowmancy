@@ -1,0 +1,26 @@
+{
+  "parent": "snowmancy:snowman_companion",
+  "criteria": {
+    "evercold_snowman": {
+      "trigger": "snowmancy:craft_evercold_snowman"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "snowmancy.advancement.evercold_snowman.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "snowmancy:evercold_ice"
+    },
+    "title": {
+      "translate": "snowmancy.advancement.evercold_snowman.title"
+    }
+  },
+  "requirements": [
+    [
+      "evercold_snowman"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

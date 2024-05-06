@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.inventory.RestrictedSlot;
 import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
+import bl4ckscor3.mod.snowmancy.item.SnowmanData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -110,8 +111,12 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 			if (be.getProgress() == be.getMaxProgress()) {
 				be.resetProgress();
 
-				if (player instanceof ServerPlayer sp && inv.getItem(inv.getContainerSize() - 1).getTag().getBoolean("evercold"))
-					Snowmancy.CRAFT_EVERCOLD_SNOWMAN.get().trigger(sp);
+				if (player instanceof ServerPlayer sp) {
+					SnowmanData snowmanData = inv.getItem(inv.getContainerSize() - 1).get(Snowmancy.SNOWMAN_DATA);
+
+					if (snowmanData != null && snowmanData.evercold())
+						Snowmancy.CRAFT_EVERCOLD_SNOWMAN.get().trigger(sp);
+				}
 
 				super.clicked(slotId, dragType, clickType, player);
 			}

@@ -12,6 +12,6 @@ public class SnowmanAttackRangedGoal extends RangedAttackGoal {
 
 	@Override
 	public boolean canUse() {
-		return snowman.getAttackType().isRanged() && super.canUse();
+		return snowman.getSnowmanData().attackType().isRanged() && super.canUse();
 	}
 }

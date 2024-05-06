@@ -1,13 +1,15 @@
 package bl4ckscor3.mod.snowmancy.entity;
 
+import com.mojang.datafixers.util.Pair;
+
 import bl4ckscor3.mod.snowmancy.Snowmancy;
+import bl4ckscor3.mod.snowmancy.item.SnowmanData;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -38,27 +40,21 @@ import net.minecraft.world.level.block.Block;
 
 public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	//TODO: add wearables
-	private static final EntityDataAccessor<Boolean> GOLDEN_NOSE = SynchedEntityData.<Boolean>defineId(SnowmanCompanion.class, EntityDataSerializers.BOOLEAN);
-	private static final EntityDataAccessor<AttackType> ATTACK_TYPE = SynchedEntityData.<AttackType>defineId(SnowmanCompanion.class, Snowmancy.ATTACK_TYPE_SERIALIZER.get());
-	private static final EntityDataAccessor<Float> DAMAGE = SynchedEntityData.<Float>defineId(SnowmanCompanion.class, EntityDataSerializers.FLOAT);
-	private static final EntityDataAccessor<Boolean> EVERCOLD = SynchedEntityData.<Boolean>defineId(SnowmanCompanion.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<SnowmanData> SNOWMAN_DATA = SynchedEntityData.<SnowmanData>defineId(SnowmanCompanion.class, Snowmancy.SNOWMAN_DATA_SERIALIZER.get());
 
 	public SnowmanCompanion(EntityType<SnowmanCompanion> type, Level world) {
 		super(type, world);
 	}
 
-	public SnowmanCompanion(Level world, boolean goldenNose, AttackType attackType, float damage, boolean evercold) {
+	public SnowmanCompanion(Level world, SnowmanData snowmanData) {
 		this(Snowmancy.SNOWMAN_ENTITY.get(), world);
-		setData(goldenNose, attackType, damage, evercold);
+		entityData.set(SNOWMAN_DATA, snowmanData);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		entityData.define(GOLDEN_NOSE, false);
-		entityData.define(ATTACK_TYPE, AttackType.NONE);
-		entityData.define(DAMAGE, 0.0F);
-		entityData.define(EVERCOLD, false);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(SNOWMAN_DATA, SnowmanData.EMPTY);
 	}
 
 	@Override
@@ -76,25 +72,18 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, SpawnGroupData spawnData, CompoundTag dataTag) {
-		if (reason == MobSpawnType.COMMAND) {
-			RandomSource random = level.getRandom();
-			boolean goldenNose = random.nextBoolean();
-			AttackType attackType = AttackType.values()[random.nextInt(AttackType.values().length)];
-			float damage = attackType.isMelee() ? random.nextInt(21) + random.nextFloat() : 0.0F;
-			boolean evercold = random.nextBoolean();
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, SpawnGroupData spawnData) {
+		if (reason == MobSpawnType.COMMAND)
+			entityData.set(SNOWMAN_DATA, SnowmanData.random(level.getRandom()));
 
-			setData(goldenNose, attackType, damage, evercold);
-		}
-
-		return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
+		return super.finalizeSpawn(level, difficulty, reason, spawnData);
 	}
 
 	@Override
 	public void aiStep() {
 		super.aiStep();
 
-		if (!isEvercold() && level().getBiome(blockPosition()).value().getBaseTemperature() >= 0.2F)
+		if (!getSnowmanData().evercold() && level().getBiome(blockPosition()).value().getBaseTemperature() >= 0.2F)
 			hurt(damageSources().onFire(), 1.0F);
 	}
 
@@ -114,23 +103,14 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	 */
 	public ItemStack createItem() {
 		ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN.get());
-		CompoundTag tag = new CompoundTag();
 
-		addAdditionalSaveData(tag);
-		stack.setTag(tag);
+		stack.set(Snowmancy.SNOWMAN_DATA, entityData.get(SNOWMAN_DATA));
 		return stack;
-	}
-
-	public void setData(boolean goldenNose, AttackType attackType, float damage, boolean evercold) {
-		entityData.set(GOLDEN_NOSE, goldenNose);
-		entityData.set(ATTACK_TYPE, attackType);
-		entityData.set(DAMAGE, damage);
-		entityData.set(EVERCOLD, evercold);
 	}
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float distanceFactor) {
-		AttackType type = getAttackType();
+		AttackType type = getSnowmanData().attackType();
 		Projectile throwableEntity = switch (type) {
 			case ARROW -> ((ArrowItem) Items.ARROW).createArrow(level(), new ItemStack(Items.ARROW, 1), this);
 			case EGG -> new ThrownEgg(level(), this);
@@ -153,45 +133,21 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
-		entityData.set(GOLDEN_NOSE, tag.getBoolean("goldenCarrot"));
-		entityData.set(ATTACK_TYPE, AttackType.fromTag(tag));
-		entityData.set(DAMAGE, tag.getFloat("damage"));
-		entityData.set(EVERCOLD, tag.getBoolean("evercold"));
+		if (tag.contains("snowman_data"))
+			entityData.set(SNOWMAN_DATA, SnowmanData.CODEC.decode(NbtOps.INSTANCE, tag).result().orElseGet(() -> Pair.of(SnowmanData.EMPTY, tag)).getFirst());
+		else //legacy
+			entityData.set(SNOWMAN_DATA, new SnowmanData(AttackType.fromTag(tag), tag.getFloat("damage"), tag.getBoolean("evercold"), tag.getBoolean("goldenCarrot")));
 	}
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
-		tag.putBoolean("goldenCarrot", isNoseGolden());
-		tag.putInt("attackType", getAttackType().ordinal());
-		tag.putFloat("damage", getDamage());
-		tag.putBoolean("evercold", isEvercold());
+		tag.put("snowman_data", SnowmanData.CODEC.encodeStart(NbtOps.INSTANCE, getSnowmanData()).getOrThrow());
 	}
 
 	/**
-	 * @return true if this snowman has been created with a golden nose, false otherwhise
+	 * @return The data of this snowman
 	 */
-	public boolean isNoseGolden() {
-		return entityData.get(GOLDEN_NOSE);
-	}
-
-	/**
-	 * @return The attack type of the snowman (does he have to hit or throw?)
-	 */
-	public AttackType getAttackType() {
-		return entityData.get(ATTACK_TYPE);
-	}
-
-	/**
-	 * @return The damage this snowman does when a hit type weapon is equipped
-	 */
-	public float getDamage() {
-		return entityData.get(DAMAGE);
-	}
-
-	/**
-	 * @return true if this snowman can live in biomes that are not cold
-	 */
-	public boolean isEvercold() {
-		return entityData.get(EVERCOLD);
+	public SnowmanData getSnowmanData() {
+		return entityData.get(SNOWMAN_DATA);
 	}
 }

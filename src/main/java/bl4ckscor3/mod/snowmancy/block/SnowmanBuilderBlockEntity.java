@@ -3,17 +3,17 @@ package bl4ckscor3.mod.snowmancy.block;
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.AttackType;
 import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
+import bl4ckscor3.mod.snowmancy.item.SnowmanData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
@@ -46,19 +46,18 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 
 			if (!isCraftReady()) {
 				ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN.get());
-				Item weapon = inventory.getItem(inventory.getContainerSize() - 2).getItem();
-				CompoundTag tag = new CompoundTag();
+				ItemStack weapon = inventory.getItem(inventory.getContainerSize() - 2);
 				//@formatter:off
-				AttackType attackType = (weapon == Items.BOW ? AttackType.ARROW :
-					(weapon == Items.EGG ? AttackType.EGG :
-						(weapon == Items.SNOWBALL ? AttackType.SNOWBALL : AttackType.HIT)));
-				//@formatter:on
+				AttackType attackType = (weapon.is(Items.BOW) ? AttackType.ARROW :
+					(weapon.is(Items.EGG) ? AttackType.EGG :
+						(weapon.is(Items.SNOWBALL) ? AttackType.SNOWBALL : AttackType.HIT)));
 
-				tag.putBoolean("goldenCarrot", inventory.getItem(1).getItem() == Items.GOLDEN_CARROT);
-				tag.putString("attackType", attackType.name());
-				tag.putFloat("damage", attackType == AttackType.HIT && weapon instanceof SwordItem ? 4.0F + ((SwordItem) weapon).getDamage() : 0.0F);
-				tag.putBoolean("evercold", inventory.getItem(0).getItem() == Snowmancy.EVERCOLD_ICE.get().asItem());
-				stack.setTag(tag);
+				stack.set(Snowmancy.SNOWMAN_DATA, new SnowmanData(
+						attackType,
+						attackType == AttackType.HIT && weapon.getItem() instanceof SwordItem sword ? 4.0F + sword.getDamage(weapon) : 0.0F,
+						inventory.getItem(0).is(Snowmancy.EVERCOLD_ICE_ITEM),
+						inventory.getItem(1).is(Items.GOLDEN_CARROT)));
+				//@formatter:on
 				inventory.getItemHandler().setStackInSlot(inventory.getContainerSize() - 1, stack);
 			}
 		}
@@ -125,32 +124,41 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	}
 
 	@Override
-	public void load(CompoundTag tag) {
+	public void loadAdditional(CompoundTag tag, HolderLookup.Provider lookupProvider) {
 		CompoundTag invTag = (CompoundTag) tag.get("SnowmanBuilderInventory");
 
 		if (invTag != null) {
-			for (int i = 0; i < inventory.getContents().size(); i++) {
-				if (invTag.contains("Slot" + i))
-					inventory.setItem(i, ItemStack.of((CompoundTag) invTag.get("Slot" + i)));
-			}
+			for (int i = 0; i < inventory.getContainerSize(); i++) {
+				if (invTag.contains("Slot" + i)) {
+					CompoundTag stackTag = invTag.getCompound("Slot" + i);
+					ItemStack stack = ItemStack.EMPTY;
 
-			progress = tag.getByte("progress");
+					if (stackTag.getInt("count") > 0)
+						stack = ItemStack.parse(lookupProvider, stackTag).orElse(ItemStack.EMPTY);
+
+					inventory.setItem(i, stack);
+				}
+			}
 		}
 
-		super.load(tag);
+		progress = tag.getByte("progress");
+		super.loadAdditional(tag, lookupProvider);
 	}
 
 	@Override
-	public void saveAdditional(CompoundTag tag) {
+	public void saveAdditional(CompoundTag tag, HolderLookup.Provider lookupProvider) {
 		CompoundTag invTag = new CompoundTag();
 
 		for (int i = 0; i < inventory.getContents().size(); i++) {
-			invTag.put("Slot" + i, inventory.getItem(i).save(new CompoundTag()));
+			ItemStack stack = inventory.getItem(i);
+
+			if (!stack.isEmpty())
+				invTag.put("Slot" + i, stack.save(lookupProvider, new CompoundTag()));
 		}
 
 		tag.put("SnowmanBuilderInventory", invTag);
 		tag.putByte("progress", progress);
-		super.saveAdditional(tag);
+		super.saveAdditional(tag, lookupProvider);
 	}
 
 	@Override
@@ -159,19 +167,8 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	}
 
 	@Override
-	public CompoundTag getUpdateTag() {
-		return saveWithoutMetadata();
-	}
-
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-		super.onDataPacket(net, pkt);
-		handleUpdateTag(pkt.getTag());
-	}
-
-	@Override
-	public void handleUpdateTag(CompoundTag tag) {
-		load(tag);
+	public CompoundTag getUpdateTag(HolderLookup.Provider lookupProvider) {
+		return saveCustomOnly(lookupProvider);
 	}
 
 	/**

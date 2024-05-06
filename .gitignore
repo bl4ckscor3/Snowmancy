@@ -8,3 +8,5 @@
 *.launch
 /run
 .idea/
+
+src/generated/resources/.cache/

@@ -1,23 +1,22 @@
 package bl4ckscor3.mod.snowmancy.client;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 @EventBusSubscriber(bus = Bus.MOD, modid = Snowmancy.MODID, value = Dist.CLIENT)
 public class ClientReg {
 	public static final ModelLayerLocation SNOWMAN_LOCATION = new ModelLayerLocation(new ResourceLocation(Snowmancy.MODID, "snowman"), "main");
 
 	@SubscribeEvent
-	public static void onFMLClientSetup(FMLClientSetupEvent event) {
-		event.enqueueWork(() -> MenuScreens.register(Snowmancy.SNOWMAN_BUILDER_MENU.get(), SnowmanBuilderScreen::new));
+	public static void onFMLClientSetup(RegisterMenuScreensEvent event) {
+		event.register(Snowmancy.SNOWMAN_BUILDER_MENU.get(), SnowmanBuilderScreen::new);
 	}
 
 	@SubscribeEvent

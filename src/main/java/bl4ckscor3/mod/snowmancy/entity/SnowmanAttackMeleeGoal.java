@@ -14,7 +14,7 @@ public class SnowmanAttackMeleeGoal extends MeleeAttackGoal {
 
 	@Override
 	public boolean canUse() {
-		return ((SnowmanCompanion) mob).getAttackType().isMelee() && super.canUse();
+		return ((SnowmanCompanion) mob).getSnowmanData().attackType().isMelee() && super.canUse();
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class SnowmanAttackMeleeGoal extends MeleeAttackGoal {
 		if (canPerformAttack(enemy)) {
 			resetAttackCooldown();
 			mob.swing(InteractionHand.MAIN_HAND);
-			enemy.hurt(new DamageSource(enemy.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(Snowmancy.SNOWMAN_DAMAGE), mob), ((SnowmanCompanion) mob).getDamage());
+			enemy.hurt(new DamageSource(enemy.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(Snowmancy.SNOWMAN_DAMAGE), mob), ((SnowmanCompanion) mob).getSnowmanData().damage());
 		}
 	}
 }
