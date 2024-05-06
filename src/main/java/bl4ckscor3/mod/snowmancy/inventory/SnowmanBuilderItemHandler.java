@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 public class SnowmanBuilderItemHandler implements IItemHandlerModifiable {
-	public SnowmanBuilderBlockEntity be;
+	protected SnowmanBuilderBlockEntity be;
 
 	public SnowmanBuilderItemHandler(SnowmanBuilderBlockEntity be) {
 		this.be = be;

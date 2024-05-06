@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 public class SnowmanBuilderInventory implements Container {
 	public static final int SLOTS = 14;
 	private NonNullList<ItemStack> contents = NonNullList.<ItemStack>withSize(SLOTS, ItemStack.EMPTY);
-	public SnowmanBuilderItemHandler itemHandler;
+	private SnowmanBuilderItemHandler itemHandler;
 
 	/**
 	 * Sets up this inventory with the container

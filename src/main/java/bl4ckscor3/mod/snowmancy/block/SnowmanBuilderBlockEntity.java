@@ -7,24 +7,28 @@ import bl4ckscor3.mod.snowmancy.item.SnowmanData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.ItemAttributeModifiers.Entry;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvider {
+	public static final byte MAX_PROGRESS = 8;
 	private SnowmanBuilderInventory inventory = new SnowmanBuilderInventory(this);
 	private byte progress = 0;
-	private final byte maxProgress = 8;
 
 	public SnowmanBuilderBlockEntity(BlockPos pos, BlockState state) {
 		super(Snowmancy.SNOWMAN_BUILDER_BLOCK_ENTITY.get(), pos, state);
@@ -47,11 +51,9 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 			if (!isCraftReady()) {
 				ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN.get());
 				ItemStack weapon = inventory.getItem(inventory.getContainerSize() - 2);
-				//@formatter:off
-				AttackType attackType = (weapon.is(Items.BOW) ? AttackType.ARROW :
-					(weapon.is(Items.EGG) ? AttackType.EGG :
-						(weapon.is(Items.SNOWBALL) ? AttackType.SNOWBALL : AttackType.HIT)));
+				AttackType attackType = AttackType.byItem(weapon);
 
+				//@formatter:off
 				stack.set(Snowmancy.SNOWMAN_DATA, new SnowmanData(
 						attackType,
 						attackType == AttackType.HIT && weapon.getItem() instanceof SwordItem ? 4.0F + getAttackDamage(weapon) : 0.0F,
@@ -78,7 +80,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	 * Increases the progress of the current craft (if applicable) by one
 	 */
 	public void increaseProgress() {
-		if (isCraftReady() && progress < maxProgress) {
+		if (isCraftReady() && progress < MAX_PROGRESS) {
 			progress++;
 			markDirtyClient();
 		}
@@ -196,15 +198,6 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	 */
 	public byte getProgress() {
 		return progress;
-	}
-
-	/**
-	 * Gets the crafting progress' maximum progress (upon which the craft will be completed)
-	 *
-	 * @return The crafting progress' maximum progress
-	 */
-	public byte getMaxProgress() {
-		return maxProgress;
 	}
 
 	@Override

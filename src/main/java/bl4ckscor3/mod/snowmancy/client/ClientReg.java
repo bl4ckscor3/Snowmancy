@@ -14,6 +14,8 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 public class ClientReg {
 	public static final ModelLayerLocation SNOWMAN_LOCATION = new ModelLayerLocation(new ResourceLocation(Snowmancy.MODID, "snowman"), "main");
 
+	private ClientReg() {}
+
 	@SubscribeEvent
 	public static void onFMLClientSetup(RegisterMenuScreensEvent event) {
 		event.register(Snowmancy.SNOWMAN_BUILDER_MENU.get(), SnowmanBuilderScreen::new);

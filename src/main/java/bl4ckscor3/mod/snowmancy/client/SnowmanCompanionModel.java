@@ -15,12 +15,11 @@ import net.minecraft.util.Mth;
 
 // vanilla snowman model with added nose
 public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion> {
-	public ModelPart body;
-	public ModelPart bottomBody;
-	public ModelPart head;
-	public ModelPart rightHand;
-	public ModelPart leftHand;
-	public ModelPart nose;
+	private ModelPart body;
+	private ModelPart bottomBody;
+	private ModelPart head;
+	private ModelPart rightHand;
+	private ModelPart leftHand;
 
 	public SnowmanCompanionModel(ModelPart modelPart) {
 		body = modelPart.getChild("body");
@@ -28,7 +27,6 @@ public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion> {
 		head = modelPart.getChild("head");
 		rightHand = modelPart.getChild("right_hand");
 		leftHand = modelPart.getChild("left_hand");
-		nose = head.getChild("nose");
 	}
 
 	public static LayerDefinition createLayer() {

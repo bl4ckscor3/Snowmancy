@@ -64,7 +64,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 		goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0D, 1.0000001E-5F));
 		goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
 		goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false, e -> e instanceof Enemy));
+		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false, Enemy.class::isInstance));
 	}
 
 	public static Builder createAttributes() {

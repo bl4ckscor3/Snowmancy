@@ -3,6 +3,8 @@ package bl4ckscor3.mod.snowmancy.entity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public enum AttackType implements StringRepresentable {
 	NONE,
@@ -26,6 +28,19 @@ public enum AttackType implements StringRepresentable {
 	@Override
 	public String getSerializedName() {
 		return name().toLowerCase();
+	}
+
+	public static AttackType byItem(ItemStack stack) {
+		if (stack.isEmpty())
+			return NONE;
+		else if (stack.is(Items.BOW))
+			return ARROW;
+		else if (stack.is(Items.EGG))
+			return EGG;
+		else if (stack.is(Items.SNOWBALL))
+			return SNOWBALL;
+		else
+			return HIT;
 	}
 
 	public static AttackType fromTag(CompoundTag tag) {

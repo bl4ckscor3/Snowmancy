@@ -16,13 +16,15 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 @EventBusSubscriber(modid = Snowmancy.MODID)
 public class EventHandler {
+	private EventHandler() {}
+
 	@SubscribeEvent
 	public static void onProjectileImpactThrowable(ProjectileImpactEvent event) {
 		if (event.getProjectile() instanceof Snowball snowball && event.getRayTraceResult().getType() == Type.BLOCK) {
 			BlockEntity be = snowball.level().getBlockEntity(((BlockHitResult) event.getRayTraceResult()).getBlockPos());
 
 			if (be instanceof SnowmanBuilderBlockEntity builder) {
-				if (builder.isCraftReady() && builder.getProgress() < builder.getMaxProgress())
+				if (builder.isCraftReady() && builder.getProgress() < SnowmanBuilderBlockEntity.MAX_PROGRESS)
 					be.getLevel().playSound(null, be.getBlockPos(), SoundEvents.CHICKEN_EGG, SoundSource.BLOCKS, 1.0F, 1.0F);
 
 				builder.increaseProgress();

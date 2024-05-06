@@ -1,6 +1,7 @@
 package bl4ckscor3.mod.snowmancy.block;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
@@ -24,7 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
 public class SnowmanBuilderContainer extends AbstractContainerMenu {
-	public static final ArrayList<ItemStack> WEAPONS = new ArrayList<>();
+	private static final List<ItemStack> WEAPONS = new ArrayList<>();
 	public SnowmanBuilderBlockEntity be;
 
 	/**
@@ -61,7 +62,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 		int slot = 0;
 
 		//hat slot (always index 0!!)
-		addSlot(new RestrictedSlot(beInv, slot++, 80, 7, 1, stack -> stack.is(Snowmancy.EVERCOLD_ICE.get().asItem()) || (stack.getItem() instanceof ArmorItem && ((ArmorItem) stack.getItem()).getEquipmentSlot() == EquipmentSlot.HEAD))); //allow any helmet
+		addSlot(new RestrictedSlot(beInv, slot++, 80, 7, 1, stack -> stack.is(Snowmancy.EVERCOLD_ICE.get().asItem()) || (stack.getItem() instanceof ArmorItem armor && armor.getEquipmentSlot() == EquipmentSlot.HEAD))); //allow any helmet
 		//nose slot (always index 1!!)
 		addSlot(new RestrictedSlot(beInv, slot++, 80, 28, 1, stack -> stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT)));
 		//eye slots (left, right)
@@ -98,7 +99,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 		if (slotId == 36 + inv.getContainerSize() - 1 && !inv.getItem(inv.getContainerSize() - 1).isEmpty()) { //last slot
 			clickedOutput = true;
 
-			if (be.getProgress() == be.getMaxProgress()) {
+			if (be.getProgress() == SnowmanBuilderBlockEntity.MAX_PROGRESS) {
 				for (int i = 0; i < inv.getContainerSize() - 1; i++) { //remove all input items
 					inv.getItemHandler().extractItem(i, 1, false);
 				}
@@ -108,7 +109,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 		if (!clickedOutput)
 			super.clicked(slotId, dragType, clickType, player);
 		else {
-			if (be.getProgress() == be.getMaxProgress()) {
+			if (be.getProgress() == SnowmanBuilderBlockEntity.MAX_PROGRESS) {
 				be.resetProgress();
 
 				if (player instanceof ServerPlayer sp) {
@@ -128,7 +129,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 		ItemStack copy = ItemStack.EMPTY;
 		Slot slot = slots.get(index);
 
-		if (slot != null && slot.hasItem()) {
+		if (slot.hasItem()) {
 			ItemStack slotStack = slot.getItem();
 
 			copy = slotStack.copy();
@@ -137,10 +138,8 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 				if (!moveItemStackTo(slotStack, 36, 36 + be.getInventory().getContainerSize(), false))
 					return ItemStack.EMPTY;
 			}
-			else if (index >= 36) {
-				if (!moveItemStackTo(slotStack, 0, 36, false))
-					return ItemStack.EMPTY;
-			}
+			else if (index >= 36 && !moveItemStackTo(slotStack, 0, 36, false))
+				return ItemStack.EMPTY;
 
 			if (slotStack.isEmpty())
 				slot.set(ItemStack.EMPTY);
