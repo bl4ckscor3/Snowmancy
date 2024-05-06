@@ -54,13 +54,24 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 
 				stack.set(Snowmancy.SNOWMAN_DATA, new SnowmanData(
 						attackType,
-						attackType == AttackType.HIT && weapon.getItem() instanceof SwordItem sword ? 4.0F + sword.getDamage(weapon) : 0.0F,
+						attackType == AttackType.HIT && weapon.getItem() instanceof SwordItem ? 4.0F + getAttackDamage(weapon) : 0.0F,
 						inventory.getItem(0).is(Snowmancy.EVERCOLD_ICE_ITEM),
 						inventory.getItem(1).is(Items.GOLDEN_CARROT)));
 				//@formatter:on
 				inventory.getItemHandler().setStackInSlot(inventory.getContainerSize() - 1, stack);
 			}
 		}
+	}
+
+	private float getAttackDamage(ItemStack stack) {
+		ItemAttributeModifiers attributeModifiers = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
+
+		for (Entry entry : attributeModifiers.modifiers()) {
+			if (entry.attribute().is(Attributes.ATTACK_DAMAGE))
+				return (float) entry.modifier().amount();
+		}
+
+		return 0.0F;
 	}
 
 	/**
