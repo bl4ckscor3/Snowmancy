@@ -12,7 +12,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 @EventBusSubscriber(bus = Bus.MOD, modid = Snowmancy.MODID, value = Dist.CLIENT)
 public class ClientReg {
-	public static final ModelLayerLocation SNOWMAN_LOCATION = new ModelLayerLocation(new ResourceLocation(Snowmancy.MODID, "snowman"), "main");
+	public static final ModelLayerLocation SNOWMAN_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "snowman"), "main");
 
 	private ClientReg() {}
 

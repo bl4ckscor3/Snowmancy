@@ -112,7 +112,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	public void performRangedAttack(LivingEntity target, float distanceFactor) {
 		AttackType type = getSnowmanData().attackType();
 		Projectile throwableEntity = switch (type) {
-			case ARROW -> ((ArrowItem) Items.ARROW).createArrow(level(), new ItemStack(Items.ARROW, 1), this);
+			case ARROW -> ((ArrowItem) Items.ARROW).createArrow(level(), new ItemStack(Items.ARROW), this, new ItemStack(Items.BOW));
 			case EGG -> new ThrownEgg(level(), this);
 			case SNOWBALL -> new Snowball(level(), this);
 			default -> null;

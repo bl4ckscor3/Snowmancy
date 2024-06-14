@@ -84,7 +84,7 @@ public class Snowmancy {
 	//@formatter:on
 	public static final DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<SnowmanData>> SNOWMAN_DATA_SERIALIZER = ENTITY_DATA_SERIALIZERS.register("snowman_data", () -> EntityDataSerializer.forValueType(SnowmanData.STREAM_CODEC));
 	public static final DeferredHolder<CriterionTrigger<?>, PlayerTrigger> CRAFT_EVERCOLD_SNOWMAN = TRIGGER_TYPES.register("craft_evercold_snowman", () -> new PlayerTrigger());
-	public static final ResourceKey<DamageType> SNOWMAN_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MODID, "snowman_damage"));
+	public static final ResourceKey<DamageType> SNOWMAN_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(MODID, "snowman_damage"));
 	//@formatter:off
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TECHNICAL_TAB = CREATIVE_MODE_TABS.register("tab", () -> CreativeModeTab.builder()
 			.withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
@@ -98,7 +98,7 @@ public class Snowmancy {
 			}).build());
 	//@formatter:on
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<SnowmanData>> SNOWMAN_DATA = DATA_COMPONENTS.registerComponentType("snowman_data", builder -> builder.persistent(SnowmanData.CODEC).networkSynchronized(SnowmanData.STREAM_CODEC).cacheEncoding());
-	public static final TagKey<Item> STAINED_GLASS_BLOCKS = TagKey.create(Registries.ITEM, new ResourceLocation(MODID, "stained_glass"));
+	public static final TagKey<Item> STAINED_GLASS_BLOCKS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "stained_glass"));
 
 	public Snowmancy(IEventBus modEventBus) {
 		BLOCKS.register(modEventBus);

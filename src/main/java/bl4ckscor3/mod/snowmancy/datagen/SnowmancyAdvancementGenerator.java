@@ -24,9 +24,9 @@ public class SnowmancyAdvancementGenerator implements AdvancementGenerator {
 				.display(Snowmancy.SNOWMAN_BUILDER,
 						Component.translatable("itemGroup.snowmancy"),
 						Component.translatable("snowmancy.advancement.root.description"),
-						new ResourceLocation(Snowmancy.MODID, "textures/block/evercold_ice.png"),
+						ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "textures/block/evercold_ice.png"),
 						AdvancementType.TASK, true, true, false)
-				.addCriterion("snowman_builder", RecipeCraftedTrigger.TriggerInstance.craftedItem(new ResourceLocation(Snowmancy.MODID, "snowman_builder")))
+				.addCriterion("snowman_builder", RecipeCraftedTrigger.TriggerInstance.craftedItem(ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "snowman_builder")))
 				.save(saver, Snowmancy.MODID + ":root");
 		AdvancementHolder snowmanCompanion = Advancement.Builder.advancement()
 				.parent(root)

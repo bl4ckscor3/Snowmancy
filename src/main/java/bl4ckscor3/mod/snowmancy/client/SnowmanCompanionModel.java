@@ -63,13 +63,13 @@ public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack pose, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(PoseStack pose, VertexConsumer buffer, int packedLight, int packedOverlay, int packedARGB) {
 		pose.translate(0.0D, 0.75D, 0.0D);
 		pose.scale(0.5F, 0.5F, 0.5F);
-		body.render(pose, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-		bottomBody.render(pose, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-		head.render(pose, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-		rightHand.render(pose, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-		leftHand.render(pose, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		body.render(pose, buffer, packedLight, packedOverlay, packedARGB);
+		bottomBody.render(pose, buffer, packedLight, packedOverlay, packedARGB);
+		head.render(pose, buffer, packedLight, packedOverlay, packedARGB);
+		rightHand.render(pose, buffer, packedLight, packedOverlay, packedARGB);
+		leftHand.render(pose, buffer, packedLight, packedOverlay, packedARGB);
 	}
 }
