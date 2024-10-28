@@ -1,9 +1,5 @@
 package bl4ckscor3.mod.snowmancy.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-
-import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -14,19 +10,18 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
 // vanilla snowman model with added nose
-public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion> {
+public class SnowmanCompanionModel extends EntityModel<SnowmanCompanionRenderState> {
 	private ModelPart body;
-	private ModelPart bottomBody;
 	private ModelPart head;
 	private ModelPart rightHand;
 	private ModelPart leftHand;
 
-	public SnowmanCompanionModel(ModelPart modelPart) {
-		body = modelPart.getChild("body");
-		bottomBody = modelPart.getChild("bottom_body");
-		head = modelPart.getChild("head");
-		rightHand = modelPart.getChild("right_hand");
-		leftHand = modelPart.getChild("left_hand");
+	public SnowmanCompanionModel(ModelPart root) {
+		super(root);
+		body = root.getChild("body");
+		head = root.getChild("head");
+		rightHand = root.getChild("right_hand");
+		leftHand = root.getChild("left_hand");
 	}
 
 	public static LayerDefinition createLayer() {
@@ -43,33 +38,22 @@ public class SnowmanCompanionModel extends EntityModel<SnowmanCompanion> {
 	}
 
 	@Override
-	public void setupAnim(SnowmanCompanion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(SnowmanCompanionRenderState renderState) {
 		float f;
 		float f1;
 
-		head.yRot = netHeadYaw * 0.017453292F;
-		head.xRot = headPitch * 0.017453292F;
-		body.yRot = netHeadYaw * 0.017453292F * 0.25F;
+		head.yRot = renderState.yRot * (float) (Math.PI / 180.0);
+		head.xRot = renderState.xRot * (float) (Math.PI / 180.0);
+		body.yRot = renderState.yRot * (float) (Math.PI / 180.0) * 0.25F;
 		f = Mth.sin(body.yRot);
 		f1 = Mth.cos(body.yRot);
 		rightHand.zRot = 1.0F;
 		leftHand.zRot = -1.0F;
-		rightHand.yRot = 0.0F + body.yRot;
+		rightHand.yRot = body.yRot;
 		leftHand.yRot = (float) Math.PI + body.yRot;
 		rightHand.x = f1 * 5.0F;
 		rightHand.z = -f * 5.0F;
 		leftHand.x = -f1 * 5.0F;
 		leftHand.z = f * 5.0F;
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack pose, VertexConsumer buffer, int packedLight, int packedOverlay, int packedARGB) {
-		pose.translate(0.0D, 0.75D, 0.0D);
-		pose.scale(0.5F, 0.5F, 0.5F);
-		body.render(pose, buffer, packedLight, packedOverlay, packedARGB);
-		bottomBody.render(pose, buffer, packedLight, packedOverlay, packedARGB);
-		head.render(pose, buffer, packedLight, packedOverlay, packedARGB);
-		rightHand.render(pose, buffer, packedLight, packedOverlay, packedARGB);
-		leftHand.render(pose, buffer, packedLight, packedOverlay, packedARGB);
 	}
 }

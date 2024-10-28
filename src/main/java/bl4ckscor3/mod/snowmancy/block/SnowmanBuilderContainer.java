@@ -17,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -62,7 +61,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 		int slot = 0;
 
 		//hat slot (always index 0!!)
-		addSlot(new RestrictedSlot(beInv, slot++, 80, 7, 1, stack -> stack.is(Snowmancy.EVERCOLD_ICE.get().asItem()) || (stack.getItem() instanceof ArmorItem armor && armor.getEquipmentSlot() == EquipmentSlot.HEAD))); //allow any helmet
+		addSlot(new RestrictedSlot(beInv, slot++, 80, 7, 1, stack -> stack.is(Snowmancy.EVERCOLD_ICE.get().asItem()) || (stack.getEquipmentSlot() == EquipmentSlot.HEAD))); //allow any helmet
 		//nose slot (always index 1!!)
 		addSlot(new RestrictedSlot(beInv, slot++, 80, 28, 1, stack -> stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT)));
 		//eye slots (left, right)

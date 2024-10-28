@@ -11,7 +11,9 @@ import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.advancements.critereon.RecipeCraftedTrigger;
 import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.AdvancementProvider.AdvancementGenerator;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -26,7 +28,7 @@ public class SnowmancyAdvancementGenerator implements AdvancementGenerator {
 						Component.translatable("snowmancy.advancement.root.description"),
 						ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "textures/block/evercold_ice.png"),
 						AdvancementType.TASK, true, true, false)
-				.addCriterion("snowman_builder", RecipeCraftedTrigger.TriggerInstance.craftedItem(ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "snowman_builder")))
+				.addCriterion("snowman_builder", RecipeCraftedTrigger.TriggerInstance.craftedItem(ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "snowman_builder"))))
 				.save(saver, Snowmancy.MODID + ":root");
 		AdvancementHolder snowmanCompanion = Advancement.Builder.advancement()
 				.parent(root)

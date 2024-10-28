@@ -2,24 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "tag": "c:cobblestones"
-    },
-    "G": {
-      "tag": "snowmancy:stained_glass"
-    },
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "N": {
-      "item": "minecraft:ice"
-    },
-    "P": {
-      "item": "minecraft:packed_ice"
-    },
-    "S": {
-      "item": "minecraft:snow"
-    }
+    "C": "#c:cobblestones",
+    "G": "#snowmancy:stained_glass",
+    "I": "#c:ingots/iron",
+    "N": "minecraft:ice",
+    "P": "minecraft:packed_ice",
+    "S": "minecraft:snow"
   },
   "pattern": [
     "SNS",

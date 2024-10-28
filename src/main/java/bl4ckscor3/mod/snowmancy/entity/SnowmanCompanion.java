@@ -13,10 +13,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier.Builder;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -64,7 +64,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 		goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0D, 1.0000001E-5F));
 		goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
 		goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false, Enemy.class::isInstance));
+		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false, (entity, level) -> entity instanceof Enemy));
 	}
 
 	public static Builder createAttributes() {
@@ -72,8 +72,8 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, SpawnGroupData spawnData) {
-		if (reason == MobSpawnType.COMMAND)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason reason, SpawnGroupData spawnData) {
+		if (reason == EntitySpawnReason.COMMAND)
 			entityData.set(SNOWMAN_DATA, SnowmanData.random(level.getRandom()));
 
 		return super.finalizeSpawn(level, difficulty, reason, spawnData);
@@ -113,8 +113,8 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 		AttackType type = getSnowmanData().attackType();
 		Projectile throwableEntity = switch (type) {
 			case ARROW -> ((ArrowItem) Items.ARROW).createArrow(level(), new ItemStack(Items.ARROW), this, new ItemStack(Items.BOW));
-			case EGG -> new ThrownEgg(level(), this);
-			case SNOWBALL -> new Snowball(level(), this);
+			case EGG -> new ThrownEgg(level(), this, new ItemStack(Items.EGG));
+			case SNOWBALL -> new Snowball(level(), this, new ItemStack(Items.SNOWBALL));
 			default -> null;
 		};
 

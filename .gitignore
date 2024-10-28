@@ -7,6 +7,7 @@
 *.log
 *.launch
 /run
+/runs
 .idea/
 
 src/generated/resources/.cache/

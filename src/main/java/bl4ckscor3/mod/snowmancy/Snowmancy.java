@@ -32,7 +32,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -52,17 +51,16 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries.Keys;
 @EventBusSubscriber(bus = Bus.MOD)
 public class Snowmancy {
 	public static final String MODID = "snowmancy";
-	public static final String PREFIX = MODID + ":";
 	public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
 	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MODID);
-	public static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(MODID);
+	public static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, MODID);
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, MODID);
 	public static final DeferredRegister<EntityDataSerializer<?>> ENTITY_DATA_SERIALIZERS = DeferredRegister.create(Keys.ENTITY_DATA_SERIALIZERS, MODID);
 	public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, MODID);
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 	public static final DeferredRegister<CriterionTrigger<?>> TRIGGER_TYPES = DeferredRegister.create(Registries.TRIGGER_TYPE, MODID);
-	public static final DeferredBlock<SnowmanBuilderBlock> SNOWMAN_BUILDER = BLOCKS.register("snowman_builder", () -> new SnowmanBuilderBlock(Properties.of().strength(3.5F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
+	public static final DeferredBlock<SnowmanBuilderBlock> SNOWMAN_BUILDER = BLOCKS.registerBlock("snowman_builder", SnowmanBuilderBlock::new, BlockBehaviour.Properties.of().strength(3.5F).sound(SoundType.STONE).requiresCorrectToolForDrops());
 	//@formatter:off
 	public static final DeferredBlock<Block> EVERCOLD_ICE = BLOCKS.registerSimpleBlock("evercold_ice", BlockBehaviour.Properties.of()
 			.strength(2.0F)
@@ -71,8 +69,8 @@ public class Snowmancy {
 	//@formatter:on
 	public static final DeferredItem<BlockItem> SNOWMAN_BUILDER_ITEM = ITEMS.registerSimpleBlockItem("snowman_builder", SNOWMAN_BUILDER);
 	public static final DeferredItem<BlockItem> EVERCOLD_ICE_ITEM = ITEMS.registerSimpleBlockItem("evercold_ice", EVERCOLD_ICE);
-	public static final DeferredItem<FrozenSnowmanItem> FROZEN_SNOWMAN = ITEMS.register("frozen_snowman", () -> new FrozenSnowmanItem(new Item.Properties()));
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SnowmanBuilderBlockEntity>> SNOWMAN_BUILDER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("snowman_builder", () -> BlockEntityType.Builder.of(SnowmanBuilderBlockEntity::new, SNOWMAN_BUILDER.get()).build(null));
+	public static final DeferredItem<FrozenSnowmanItem> FROZEN_SNOWMAN = ITEMS.registerItem("frozen_snowman", FrozenSnowmanItem::new);
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SnowmanBuilderBlockEntity>> SNOWMAN_BUILDER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("snowman_builder", () -> new BlockEntityType<>(SnowmanBuilderBlockEntity::new, SNOWMAN_BUILDER.get()));
 	public static final DeferredHolder<MenuType<?>, MenuType<SnowmanBuilderContainer>> SNOWMAN_BUILDER_MENU = MENU_TYPES.register("snowman_builder", () -> IMenuTypeExtension.create((windowId, inv, data) -> new SnowmanBuilderContainer(windowId, inv.player.level(), data.readBlockPos(), inv)));
 	//@formatter:off
 	public static final DeferredHolder<EntityType<?>, EntityType<SnowmanCompanion>> SNOWMAN_ENTITY = ENTITY_TYPES.register("snowman", () -> EntityType.Builder.<SnowmanCompanion>of(SnowmanCompanion::new, MobCategory.CREATURE)
@@ -80,7 +78,7 @@ public class Snowmancy {
 			.setTrackingRange(128)
 			.setUpdateInterval(1)
 			.setShouldReceiveVelocityUpdates(true)
-			.build(PREFIX + "snowman"));
+			.build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(MODID, "snowman"))));
 	//@formatter:on
 	public static final DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<SnowmanData>> SNOWMAN_DATA_SERIALIZER = ENTITY_DATA_SERIALIZERS.register("snowman_data", () -> EntityDataSerializer.forValueType(SnowmanData.STREAM_CODEC));
 	public static final DeferredHolder<CriterionTrigger<?>, PlayerTrigger> CRAFT_EVERCOLD_SNOWMAN = TRIGGER_TYPES.register("craft_evercold_snowman", () -> new PlayerTrigger());
