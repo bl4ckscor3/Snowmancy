@@ -8,6 +8,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterConditionalItemModelPropertyEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 @EventBusSubscriber(bus = Bus.MOD, modid = Snowmancy.MODID, value = Dist.CLIENT)
@@ -29,5 +30,10 @@ public class ClientReg {
 	@SubscribeEvent
 	public static void registerEntityRenderers(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(SNOWMAN_LOCATION, SnowmanCompanionModel::createLayer);
+	}
+
+	@SubscribeEvent
+	public static void registerConditionalItemModelProperty(RegisterConditionalItemModelPropertyEvent event) {
+		event.register(ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "golden_nose"), GoldenNose.MAP_CODEC);
 	}
 }

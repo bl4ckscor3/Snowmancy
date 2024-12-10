@@ -1,0 +1,14 @@
+{
+	"model": {
+		"type": "minecraft:condition",
+		"property": "snowmancy:golden_nose",
+		"on_true": {
+			"type": "minecraft:model",
+			"model": "snowmancy:item/frozen_snowman_golden"
+		},
+		"on_false": {
+			"type": "minecraft:model",
+			"model": "snowmancy:item/frozen_snowman"
+		}
+	}
+}

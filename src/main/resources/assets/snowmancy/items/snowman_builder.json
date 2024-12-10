@@ -1,0 +1,6 @@
+{
+	"model": {
+		"type": "minecraft:model",
+		"model": "snowmancy:block/snowman_builder"
+	}
+}

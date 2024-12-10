@@ -3,13 +3,9 @@ package bl4ckscor3.mod.snowmancy.datagen;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import net.minecraft.DetectedVersion;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.LootTableProvider.SubProviderEntry;
 import net.minecraft.data.metadata.PackMetadataGenerator;
@@ -22,28 +18,21 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataEvent.DataProviderFromOutputLookup;
 
 @EventBusSubscriber(modid = Snowmancy.MODID, bus = Bus.MOD)
 public class DataGenRegistrar {
 	private DataGenRegistrar() {}
 
 	@SubscribeEvent
-	public static void onGatherData(GatherDataEvent event) {
-		DataGenerator generator = event.getGenerator();
-		PackOutput output = generator.getPackOutput();
-		CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-		BlockTagGenerator blockTagGenerator = new BlockTagGenerator(output, lookupProvider, existingFileHelper);
-
-		generator.addProvider(event.includeServer(), new AdvancementProvider(output, lookupProvider, event.getExistingFileHelper(), List.of(new SnowmancyAdvancementGenerator())));
-		generator.addProvider(event.includeServer(), blockTagGenerator);
-		generator.addProvider(event.includeServer(), new ItemTagGenerator(output, lookupProvider, blockTagGenerator.contentsGetter(), existingFileHelper));
-		generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(), List.of(new SubProviderEntry(BlockLootTableGenerator::new, LootContextParamSets.BLOCK)), lookupProvider));
-		generator.addProvider(event.includeServer(), new RecipeGenerator.Runner(output, lookupProvider));
+	public static void onGatherData(GatherDataEvent.Client event) {
+		event.createProvider((output, lookupProvider, existingFileHelper) -> new AdvancementProvider(output, lookupProvider, existingFileHelper, List.of(new SnowmancyAdvancementGenerator())));
+		event.createBlockAndItemTags(BlockTagGenerator::new, ItemTagGenerator::new);
+		event.createProvider((DataProviderFromOutputLookup<LootTableProvider>) (output, lookupProvider) -> new LootTableProvider(output, Set.of(), List.of(new SubProviderEntry(BlockLootTableGenerator::new, LootContextParamSets.BLOCK)), lookupProvider));
+		event.createProvider(RecipeGenerator.Runner::new);
 		//@formatter:off
-		generator.addProvider(true, new PackMetadataGenerator(output)
+		event.createProvider(output -> new PackMetadataGenerator(output)
                 .add(PackMetadataSection.TYPE, new PackMetadataSection(Component.literal("Snowmancy resources & data"),
                         DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES),
                         Optional.of(new InclusiveRange<>(0, Integer.MAX_VALUE)))));
