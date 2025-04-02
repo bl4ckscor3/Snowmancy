@@ -18,7 +18,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.ItemAttributeModifiers.Entry;
 import net.minecraft.world.level.Level;
@@ -56,7 +55,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 				//@formatter:off
 				stack.set(Snowmancy.SNOWMAN_DATA, new SnowmanData(
 						attackType,
-						attackType == AttackType.HIT && weapon.getItem() instanceof SwordItem ? 4.0F + getAttackDamage(weapon) : 0.0F,
+						attackType == AttackType.HIT ? getAttackDamage(weapon) : 0.0F,
 						inventory.getItem(0).is(Snowmancy.EVERCOLD_ICE_ITEM),
 						inventory.getItem(1).is(Items.GOLDEN_CARROT)));
 				//@formatter:on
@@ -143,10 +142,10 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 		if (invTag != null) {
 			for (int i = 0; i < inventory.getContainerSize(); i++) {
 				if (invTag.contains("Slot" + i)) {
-					CompoundTag stackTag = invTag.getCompound("Slot" + i);
+					CompoundTag stackTag = invTag.getCompoundOrEmpty("Slot" + i);
 					ItemStack stack = ItemStack.EMPTY;
 
-					if (stackTag.getInt("count") > 0)
+					if (stackTag.getIntOr("count", 0) > 0)
 						stack = ItemStack.parse(lookupProvider, stackTag).orElse(ItemStack.EMPTY);
 
 					inventory.setItem(i, stack);
@@ -154,7 +153,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 			}
 		}
 
-		progress = tag.getByte("progress");
+		progress = tag.getByte("progress").orElse((byte) 0);
 		super.loadAdditional(tag, lookupProvider);
 	}
 

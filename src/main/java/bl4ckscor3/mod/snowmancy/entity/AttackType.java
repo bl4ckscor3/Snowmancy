@@ -1,7 +1,6 @@
 package bl4ckscor3.mod.snowmancy.entity;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -44,28 +43,24 @@ public enum AttackType implements StringRepresentable {
 	}
 
 	public static AttackType fromTag(CompoundTag tag) {
-		AttackType attackType = NONE;
-
 		//legacy data support
-		if (tag.contains("attackType", Tag.TAG_STRING)) {
-			String legacyAttackType = tag.getString("attackType");
-
+		return tag.getString("attackType").map(legacyAttackType -> {
 			if (!legacyAttackType.isEmpty()) {
 				for (AttackType type : AttackType.values()) {
 					if (type.name().equals(legacyAttackType)) {
-						attackType = type;
-						break;
+						return type;
 					}
 				}
 			}
-		}
-		else {
-			int attackTypeData = tag.getInt("attackType");
+
+			return AttackType.NONE;
+		}).orElseGet(() -> {
+			int attackTypeData = tag.getIntOr("attackType", 0);
 
 			if (attackTypeData >= 0 && attackTypeData < AttackType.values().length)
-				attackType = AttackType.values()[attackTypeData];
-		}
+				return AttackType.values()[attackTypeData];
 
-		return attackType;
+			return AttackType.NONE;
+		});
 	}
 }

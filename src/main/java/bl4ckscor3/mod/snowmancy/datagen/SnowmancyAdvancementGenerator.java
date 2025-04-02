@@ -12,15 +12,14 @@ import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.advancements.critereon.RecipeCraftedTrigger;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.data.AdvancementProvider.AdvancementGenerator;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-public class SnowmancyAdvancementGenerator implements AdvancementGenerator {
+public class SnowmancyAdvancementGenerator implements AdvancementSubProvider {
 	@Override
-	public void generate(Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+	public void generate(Provider registries, Consumer<AdvancementHolder> saver) {
 		//@formatter:off
 		AdvancementHolder root = Advancement.Builder.advancement()
 				.display(Snowmancy.SNOWMAN_BUILDER,

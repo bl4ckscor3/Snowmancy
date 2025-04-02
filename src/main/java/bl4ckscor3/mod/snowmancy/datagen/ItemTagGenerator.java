@@ -9,11 +9,10 @@ import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 public class ItemTagGenerator extends ItemTagsProvider {
-	public ItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagsProvider.TagLookup<Block>> blockTags, ExistingFileHelper existingFileHelper) {
-		super(output, lookupProvider, blockTags, Snowmancy.MODID, existingFileHelper);
+	public ItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagsProvider.TagLookup<Block>> blockTags) {
+		super(output, lookupProvider, blockTags, Snowmancy.MODID);
 	}
 
 	@Override

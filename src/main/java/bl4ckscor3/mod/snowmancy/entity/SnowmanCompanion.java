@@ -136,7 +136,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 		if (tag.contains("snowman_data"))
 			entityData.set(SNOWMAN_DATA, SnowmanData.CODEC.decode(NbtOps.INSTANCE, tag).result().orElseGet(() -> Pair.of(SnowmanData.EMPTY, tag)).getFirst());
 		else //legacy
-			entityData.set(SNOWMAN_DATA, new SnowmanData(AttackType.fromTag(tag), tag.getFloat("damage"), tag.getBoolean("evercold"), tag.getBoolean("goldenCarrot")));
+			entityData.set(SNOWMAN_DATA, new SnowmanData(AttackType.fromTag(tag), tag.getFloatOr("damage", 0.0F), tag.getBooleanOr("evercold", false), tag.getBooleanOr("goldenCarrot", false)));
 	}
 
 	@Override

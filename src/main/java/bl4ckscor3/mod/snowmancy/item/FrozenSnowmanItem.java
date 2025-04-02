@@ -1,10 +1,11 @@
 package bl4ckscor3.mod.snowmancy.item;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
@@ -46,10 +48,10 @@ public class FrozenSnowmanItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> tooltipAdder, TooltipFlag flag) {
 		SnowmanData snowmanData = stack.get(Snowmancy.SNOWMAN_DATA);
 
-		if (snowmanData != null)
-			snowmanData.addToTooltip(ctx, tooltip::add, flag);
+		if (snowmanData != null && (!stack.has(DataComponents.TOOLTIP_DISPLAY) || stack.get(DataComponents.TOOLTIP_DISPLAY).shows(Snowmancy.SNOWMAN_DATA.get())))
+			snowmanData.addToTooltip(ctx, tooltipAdder, flag, stack);
 	}
 }

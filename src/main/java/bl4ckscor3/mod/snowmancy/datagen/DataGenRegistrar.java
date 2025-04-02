@@ -6,6 +6,7 @@ import java.util.Set;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import net.minecraft.DetectedVersion;
+import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.LootTableProvider.SubProviderEntry;
 import net.minecraft.data.metadata.PackMetadataGenerator;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.EventBusSubscriber.Bus;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent.DataProviderFromOutputLookup;
 
@@ -27,7 +27,7 @@ public class DataGenRegistrar {
 
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent.Client event) {
-		event.createProvider((output, lookupProvider, existingFileHelper) -> new AdvancementProvider(output, lookupProvider, existingFileHelper, List.of(new SnowmancyAdvancementGenerator())));
+		event.createProvider((DataProviderFromOutputLookup<AdvancementProvider>) (output, lookupProvider) -> new AdvancementProvider(output, lookupProvider, List.of(new SnowmancyAdvancementGenerator())));
 		event.createBlockAndItemTags(BlockTagGenerator::new, ItemTagGenerator::new);
 		event.createProvider((DataProviderFromOutputLookup<LootTableProvider>) (output, lookupProvider) -> new LootTableProvider(output, Set.of(), List.of(new SubProviderEntry(BlockLootTableGenerator::new, LootContextParamSets.BLOCK)), lookupProvider));
 		event.createProvider(RecipeGenerator.Runner::new);

@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import bl4ckscor3.mod.snowmancy.entity.AttackType;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -43,7 +44,7 @@ public record SnowmanData(AttackType attackType, float damage, boolean evercold,
 	}
 
 	@Override
-	public void addToTooltip(TooltipContext ctx, Consumer<Component> lineAdder, TooltipFlag flag) {
+	public void addToTooltip(TooltipContext ctx, Consumer<Component> lineAdder, TooltipFlag flag, DataComponentGetter getter) {
 		lineAdder.accept(Component.translatable("snowmancy.tooltip.goldenCarrot", Component.translatable("snowmancy.tooltip." + goldenCarrot).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.GOLD));
 		lineAdder.accept(Component.translatable("snowmancy.tooltip.attackType", Component.translatable(attackType.getDescriptionId()).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.BLUE));
 		lineAdder.accept(Component.translatable("snowmancy.tooltip.damage", Component.literal("" + damage).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.RED));
