@@ -23,6 +23,8 @@ import net.minecraft.world.item.component.ItemAttributeModifiers.Entry;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvider {
 	public static final byte MAX_PROGRESS = 8;
@@ -136,41 +138,32 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	}
 
 	@Override
-	public void loadAdditional(CompoundTag tag, HolderLookup.Provider lookupProvider) {
-		CompoundTag invTag = (CompoundTag) tag.get("SnowmanBuilderInventory");
+	public void loadAdditional(ValueInput tag) {
+		ValueInput invTag = tag.child("SnowmanBuilderInventory").orElse(null);
 
 		if (invTag != null) {
 			for (int i = 0; i < inventory.getContainerSize(); i++) {
-				if (invTag.contains("Slot" + i)) {
-					CompoundTag stackTag = invTag.getCompoundOrEmpty("Slot" + i);
-					ItemStack stack = ItemStack.EMPTY;
-
-					if (stackTag.getIntOr("count", 0) > 0)
-						stack = ItemStack.parse(lookupProvider, stackTag).orElse(ItemStack.EMPTY);
-
-					inventory.setItem(i, stack);
-				}
+				inventory.setItem(i, invTag.read("Slot" + i, ItemStack.CODEC).orElse(ItemStack.EMPTY));
 			}
 		}
 
-		progress = tag.getByte("progress").orElse((byte) 0);
-		super.loadAdditional(tag, lookupProvider);
+		progress = tag.getByteOr("progress", (byte) 0);
+		super.loadAdditional(tag);
 	}
 
 	@Override
-	public void saveAdditional(CompoundTag tag, HolderLookup.Provider lookupProvider) {
-		CompoundTag invTag = new CompoundTag();
+	public void saveAdditional(ValueOutput tag) {
+		ValueOutput child = tag.child("SnowmanBuilderInventory");
 
 		for (int i = 0; i < inventory.getContents().size(); i++) {
 			ItemStack stack = inventory.getItem(i);
 
 			if (!stack.isEmpty())
-				invTag.put("Slot" + i, stack.save(lookupProvider, new CompoundTag()));
+				child.store("Slot" + i, ItemStack.CODEC, stack);
 		}
 
-		tag.put("SnowmanBuilderInventory", invTag);
 		tag.putByte("progress", progress);
-		super.saveAdditional(tag, lookupProvider);
+		super.saveAdditional(tag);
 	}
 
 	@Override

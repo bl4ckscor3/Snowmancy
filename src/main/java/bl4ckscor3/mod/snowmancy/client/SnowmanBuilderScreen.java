@@ -5,7 +5,7 @@ import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
 import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderContainer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -28,7 +28,7 @@ public class SnowmanBuilderScreen extends AbstractContainerScreen<SnowmanBuilder
 		int color = be.getProgress() < 5 ? 0xFFFF0000 : (be.getProgress() < 8 ? 0xFFFFFF00 : 0xFF00FF00); //red, yellow, green (0xAARRGGBB)
 
 		if (!be.canOperate())
-			guiGraphics.drawString(minecraft.font, biomeTooWarm, 0, -10, 0x00FFFF);
+			guiGraphics.drawString(minecraft.font, biomeTooWarm, 0, -10, 0xFF00FFFF);
 
 		guiGraphics.fill(152, 130, 152 + length, 131, color);
 	}
@@ -41,6 +41,6 @@ public class SnowmanBuilderScreen extends AbstractContainerScreen<SnowmanBuilder
 
 	@Override
 	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
-		guiGraphics.blit(RenderType::guiTextured, TEXTURE, (width - imageWidth) / 2, (height - imageHeight) / 2, 0, 0, imageWidth, imageHeight, 256, 256);
+		guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, (width - imageWidth) / 2, (height - imageHeight) / 2, 0, 0, imageWidth, imageHeight, 256, 256);
 	}
 }

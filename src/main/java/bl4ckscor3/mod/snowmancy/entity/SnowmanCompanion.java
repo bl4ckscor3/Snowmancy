@@ -1,11 +1,7 @@
 package bl4ckscor3.mod.snowmancy.entity;
 
-import com.mojang.datafixers.util.Pair;
-
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.item.SnowmanData;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
@@ -37,6 +33,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	//TODO: add wearables
@@ -132,16 +130,13 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag tag) {
-		if (tag.contains("snowman_data"))
-			entityData.set(SNOWMAN_DATA, SnowmanData.CODEC.decode(NbtOps.INSTANCE, tag).result().orElseGet(() -> Pair.of(SnowmanData.EMPTY, tag)).getFirst());
-		else //legacy
-			entityData.set(SNOWMAN_DATA, new SnowmanData(AttackType.fromTag(tag), tag.getFloatOr("damage", 0.0F), tag.getBooleanOr("evercold", false), tag.getBooleanOr("goldenCarrot", false)));
+	public void readAdditionalSaveData(ValueInput tag) {
+		entityData.set(SNOWMAN_DATA, tag.read("snowman_data", SnowmanData.CODEC).orElse(SnowmanData.EMPTY));
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag tag) {
-		tag.put("snowman_data", SnowmanData.CODEC.encodeStart(NbtOps.INSTANCE, getSnowmanData()).getOrThrow());
+	public void addAdditionalSaveData(ValueOutput tag) {
+		tag.store("snowman_data", SnowmanData.CODEC, getSnowmanData());
 	}
 
 	/**

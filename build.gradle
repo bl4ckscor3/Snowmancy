@@ -9,7 +9,7 @@ version = '1.1.3'
 group = 'bl4ckscor3.mod.snowmancy'
 
 base {
-	archivesName = 'snowmancy-1.21.5'
+	archivesName = 'snowmancy-1.21.6'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -24,7 +24,7 @@ sourceSets.main.resources {
 }
 
 neoForge {
-	version = "21.5.62-beta"
+	version = "21.6.0-beta"
 
 	runs {
 		configureEach {
