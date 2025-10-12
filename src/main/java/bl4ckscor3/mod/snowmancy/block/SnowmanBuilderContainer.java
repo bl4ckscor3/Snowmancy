@@ -6,11 +6,9 @@ import java.util.function.Predicate;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.inventory.RestrictedSlot;
-import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
 import bl4ckscor3.mod.snowmancy.item.SnowmanData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -41,8 +39,6 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 
 		be = (SnowmanBuilderBlockEntity) level.getBlockEntity(pos);
 
-		Container beInv = be.getInventory();
-
 		//player inventory
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -61,24 +57,24 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 		int slot = 0;
 
 		//hat slot (always index 0!!)
-		addSlot(new RestrictedSlot(beInv, slot++, 80, 7, 1, stack -> stack.is(Snowmancy.EVERCOLD_ICE.get().asItem()) || (stack.getEquipmentSlot() == EquipmentSlot.HEAD))); //allow any helmet
+		addSlot(new RestrictedSlot(be, slot++, 80, 7, 1, stack -> stack.is(Snowmancy.EVERCOLD_ICE.get().asItem()) || (stack.getEquipmentSlot() == EquipmentSlot.HEAD))); //allow any helmet
 		//nose slot (always index 1!!)
-		addSlot(new RestrictedSlot(beInv, slot++, 80, 28, 1, stack -> stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT)));
+		addSlot(new RestrictedSlot(be, slot++, 80, 28, 1, stack -> stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT)));
 		//eye slots (left, right)
-		addSlot(new RestrictedSlot(beInv, slot++, 59, 18, 1, coalValidator));
-		addSlot(new RestrictedSlot(beInv, slot++, 101, 18, 1, coalValidator));
+		addSlot(new RestrictedSlot(be, slot++, 59, 18, 1, coalValidator));
+		addSlot(new RestrictedSlot(be, slot++, 101, 18, 1, coalValidator));
 		//mouth slots (left to right)
-		addSlot(new RestrictedSlot(beInv, slot++, 38, 38, 1, coalValidator));
-		addSlot(new RestrictedSlot(beInv, slot++, 59, 49, 1, coalValidator));
-		addSlot(new RestrictedSlot(beInv, slot++, 80, 49, 1, coalValidator));
-		addSlot(new RestrictedSlot(beInv, slot++, 101, 49, 1, coalValidator));
-		addSlot(new RestrictedSlot(beInv, slot++, 122, 38, 1, coalValidator));
+		addSlot(new RestrictedSlot(be, slot++, 38, 38, 1, coalValidator));
+		addSlot(new RestrictedSlot(be, slot++, 59, 49, 1, coalValidator));
+		addSlot(new RestrictedSlot(be, slot++, 80, 49, 1, coalValidator));
+		addSlot(new RestrictedSlot(be, slot++, 101, 49, 1, coalValidator));
+		addSlot(new RestrictedSlot(be, slot++, 122, 38, 1, coalValidator));
 		//body slots (top to bottom)
-		addSlot(new RestrictedSlot(beInv, slot++, 80, 74, 1, snowValidator));
-		addSlot(new RestrictedSlot(beInv, slot++, 80, 103, 1, snowValidator));
-		addSlot(new RestrictedSlot(beInv, slot++, 80, 132, 1, snowValidator));
+		addSlot(new RestrictedSlot(be, slot++, 80, 74, 1, snowValidator));
+		addSlot(new RestrictedSlot(be, slot++, 80, 103, 1, snowValidator));
+		addSlot(new RestrictedSlot(be, slot++, 80, 132, 1, snowValidator));
 		//weapon slot (always second last slot!)
-		addSlot(new RestrictedSlot(beInv, slot++, 105, 89, 1, stack -> {
+		addSlot(new RestrictedSlot(be, slot++, 105, 89, 1, stack -> {
 			for (ItemStack weapon : WEAPONS) {
 				if (stack.getItem() == weapon.getItem())
 					return true;
@@ -87,20 +83,19 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 			return false;
 		}));
 		//output (always last slot!)
-		addSlot(new RestrictedSlot(beInv, slot++, 152, 132, 1, stack -> false));
+		addSlot(new RestrictedSlot(be, slot++, 152, 132, 1, stack -> false));
 	}
 
 	@Override
 	public void clicked(int slotId, int dragType, ClickType clickType, Player player) {
-		SnowmanBuilderInventory inv = be.getInventory();
 		boolean clickedOutput = false;
 
-		if (slotId == 36 + inv.getContainerSize() - 1 && !inv.getItem(inv.getContainerSize() - 1).isEmpty()) { //last slot
+		if (slotId == 36 + be.getContainerSize() - 1 && !be.getItem(be.getContainerSize() - 1).isEmpty()) { //last slot
 			clickedOutput = true;
 
 			if (be.getProgress() == SnowmanBuilderBlockEntity.MAX_PROGRESS) {
-				for (int i = 0; i < inv.getContainerSize() - 1; i++) { //remove all input items
-					inv.getItemHandler().extractItem(i, 1, false);
+				for (int i = 0; i < be.getContainerSize() - 1; i++) { //remove all input items
+					be.setItem(i, ItemStack.EMPTY);
 				}
 			}
 		}
@@ -112,7 +107,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 				be.resetProgress();
 
 				if (player instanceof ServerPlayer sp) {
-					SnowmanData snowmanData = inv.getItem(inv.getContainerSize() - 1).get(Snowmancy.SNOWMAN_DATA);
+					SnowmanData snowmanData = be.getItem(be.getContainerSize() - 1).get(Snowmancy.SNOWMAN_DATA);
 
 					if (snowmanData != null && snowmanData.evercold())
 						Snowmancy.CRAFT_EVERCOLD_SNOWMAN.get().trigger(sp);
@@ -134,7 +129,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 			copy = slotStack.copy();
 
 			if (index <= 35) {
-				if (!moveItemStackTo(slotStack, 36, 36 + be.getInventory().getContainerSize(), false))
+				if (!moveItemStackTo(slotStack, 36, 36 + be.getContainerSize(), false))
 					return ItemStack.EMPTY;
 			}
 			else if (index >= 36 && !moveItemStackTo(slotStack, 0, 36, false))

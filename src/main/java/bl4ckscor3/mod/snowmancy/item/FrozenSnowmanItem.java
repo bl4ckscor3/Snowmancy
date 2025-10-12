@@ -29,7 +29,7 @@ public class FrozenSnowmanItem extends Item {
 		ItemStack stack = player.getItemInHand(player.getUsedItemHand());
 		BlockPos pos = context.getClickedPos();
 
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			SnowmanData snowmanData = stack.get(Snowmancy.SNOWMAN_DATA);
 
 			if (snowmanData == null)

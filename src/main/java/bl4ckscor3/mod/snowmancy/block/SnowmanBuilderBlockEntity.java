@@ -2,33 +2,32 @@ package bl4ckscor3.mod.snowmancy.block;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.AttackType;
-import bl4ckscor3.mod.snowmancy.inventory.SnowmanBuilderInventory;
 import bl4ckscor3.mod.snowmancy.item.SnowmanData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.ItemAttributeModifiers.Entry;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvider {
+public class SnowmanBuilderBlockEntity extends BaseContainerBlockEntity {
+	public static final int SLOTS = 14;
+	private NonNullList<ItemStack> contents = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
 	public static final byte MAX_PROGRESS = 8;
-	private SnowmanBuilderInventory inventory = new SnowmanBuilderInventory(this);
 	private byte progress = 0;
 
 	public SnowmanBuilderBlockEntity(BlockPos pos, BlockState state) {
@@ -41,9 +40,9 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 
 	public void tick() {
 		if (canOperate()) {
-			for (int i = 0; i < inventory.getContainerSize() - 1; i++) { //last slot is output
-				if (inventory.getItem(i).isEmpty()) {
-					inventory.getItemHandler().setStackInSlot(inventory.getContainerSize() - 1, ItemStack.EMPTY);
+			for (int i = 0; i < getContainerSize() - 1; i++) { //last slot is output
+				if (getItem(i).isEmpty()) {
+					setItem(getContainerSize() - 1, ItemStack.EMPTY);
 					resetProgress();
 					return;
 				}
@@ -51,17 +50,17 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 
 			if (!isCraftReady()) {
 				ItemStack stack = new ItemStack(Snowmancy.FROZEN_SNOWMAN.get());
-				ItemStack weapon = inventory.getItem(inventory.getContainerSize() - 2);
+				ItemStack weapon = getItem(getContainerSize() - 2);
 				AttackType attackType = AttackType.byItem(weapon);
 
 				//@formatter:off
 				stack.set(Snowmancy.SNOWMAN_DATA, new SnowmanData(
 						attackType,
 						attackType == AttackType.HIT ? getAttackDamage(weapon) : 0.0F,
-						inventory.getItem(0).is(Snowmancy.EVERCOLD_ICE_ITEM),
-						inventory.getItem(1).is(Items.GOLDEN_CARROT)));
+						getItem(0).is(Snowmancy.EVERCOLD_ICE_ITEM),
+						getItem(1).is(Items.GOLDEN_CARROT)));
 				//@formatter:on
-				inventory.getItemHandler().setStackInSlot(inventory.getContainerSize() - 1, stack);
+				setItem(getContainerSize() - 1, stack);
 			}
 		}
 	}
@@ -102,7 +101,7 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	 * @return true if the crafting status is ready, false otherwhise
 	 */
 	public boolean isCraftReady() {
-		return !inventory.getItem(inventory.getContainerSize() - 1).isEmpty();
+		return !getItem(getContainerSize() - 1).isEmpty();
 	}
 
 	/**
@@ -142,8 +141,8 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 		ValueInput invTag = tag.child("SnowmanBuilderInventory").orElse(null);
 
 		if (invTag != null) {
-			for (int i = 0; i < inventory.getContainerSize(); i++) {
-				inventory.setItem(i, invTag.read("Slot" + i, ItemStack.CODEC).orElse(ItemStack.EMPTY));
+			for (int i = 0; i < getContainerSize(); i++) {
+				setItem(i, invTag.read("Slot" + i, ItemStack.CODEC).orElse(ItemStack.EMPTY));
 			}
 		}
 
@@ -155,8 +154,8 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	public void saveAdditional(ValueOutput tag) {
 		ValueOutput child = tag.child("SnowmanBuilderInventory");
 
-		for (int i = 0; i < inventory.getContents().size(); i++) {
-			ItemStack stack = inventory.getItem(i);
+		for (int i = 0; i < getItems().size(); i++) {
+			ItemStack stack = getItem(i);
 
 			if (!stack.isEmpty())
 				child.store("Slot" + i, ItemStack.CODEC, stack);
@@ -176,11 +175,19 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 		return saveCustomOnly(lookupProvider);
 	}
 
-	/**
-	 * @return This block entity's inventory
-	 */
-	public SnowmanBuilderInventory getInventory() {
-		return inventory;
+	@Override
+	protected NonNullList<ItemStack> getItems() {
+		return contents;
+	}
+
+	@Override
+	protected void setItems(NonNullList<ItemStack> items) {
+		contents = items;
+	}
+
+	@Override
+	public int getContainerSize() {
+		return SLOTS;
 	}
 
 	/**
@@ -193,12 +200,12 @@ public class SnowmanBuilderBlockEntity extends BlockEntity implements MenuProvid
 	}
 
 	@Override
-	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv) {
 		return new SnowmanBuilderContainer(windowId, level, worldPosition, inv);
 	}
 
 	@Override
-	public Component getDisplayName() {
+	public Component getDefaultName() {
 		return Component.translatable(Snowmancy.SNOWMAN_BUILDER.get().getDescriptionId());
 	}
 }

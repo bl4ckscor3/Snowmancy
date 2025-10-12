@@ -28,7 +28,7 @@ public class SnowmanBuilderBlock extends BaseEntityBlock {
 
 	@Override
 	public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-		if (!level.isClientSide && level.getBlockEntity(pos) instanceof MenuProvider be)
+		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof MenuProvider be)
 			player.openMenu(be, pos);
 
 		return InteractionResult.SUCCESS;
@@ -41,7 +41,7 @@ public class SnowmanBuilderBlock extends BaseEntityBlock {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return level.isClientSide ? null : createTickerHelper(type, Snowmancy.SNOWMAN_BUILDER_BLOCK_ENTITY.get(), SnowmanBuilderBlockEntity::tick);
+		return level.isClientSide() ? null : createTickerHelper(type, Snowmancy.SNOWMAN_BUILDER_BLOCK_ENTITY.get(), SnowmanBuilderBlockEntity::tick);
 	}
 
 	@Override

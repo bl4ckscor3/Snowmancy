@@ -4,9 +4,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.resources.ResourceLocation;
 
 public class SnowmanCompanionRenderer extends MobRenderer<SnowmanCompanion, SnowmanCompanionRenderState, SnowmanCompanionModel> {
@@ -18,9 +19,9 @@ public class SnowmanCompanionRenderer extends MobRenderer<SnowmanCompanion, Snow
 	}
 
 	@Override
-	public void render(SnowmanCompanionRenderState renderState, PoseStack pose, MultiBufferSource bufferSource, int packedLight) {
+	public void submit(SnowmanCompanionRenderState state, PoseStack pose, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
 		pose.scale(0.5F, 0.5F, 0.5F);
-		super.render(renderState, pose, bufferSource, packedLight);
+		super.submit(state, pose, submitNodeCollector, camera);
 	}
 
 	@Override

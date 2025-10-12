@@ -24,7 +24,7 @@ public class SnowmanAttackMeleeGoal extends MeleeAttackGoal {
 			resetAttackCooldown();
 			mob.swing(InteractionHand.MAIN_HAND);
 
-			if (!enemy.level().isClientSide)
+			if (!enemy.level().isClientSide())
 				enemy.hurtServer((ServerLevel) enemy.level(), new DamageSource(enemy.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(Snowmancy.SNOWMAN_DAMAGE), mob), ((SnowmanCompanion) mob).getSnowmanData().damage());
 		}
 	}

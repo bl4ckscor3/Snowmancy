@@ -45,6 +45,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries.Keys;
+import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
 
 @Mod(Snowmancy.MODID)
 @EventBusSubscriber
@@ -122,7 +123,7 @@ public class Snowmancy {
 
 	@SubscribeEvent
 	public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SNOWMAN_BUILDER_BLOCK_ENTITY.get(), (be, side) -> be.getInventory().getItemHandler());
+		event.registerBlockEntity(Capabilities.Item.BLOCK, SNOWMAN_BUILDER_BLOCK_ENTITY.get(), (be, side) -> VanillaContainerWrapper.of(be));
 	}
 
 	@SubscribeEvent
