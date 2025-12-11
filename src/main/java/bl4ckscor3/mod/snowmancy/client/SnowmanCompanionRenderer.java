@@ -8,11 +8,11 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.state.CameraRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class SnowmanCompanionRenderer extends MobRenderer<SnowmanCompanion, SnowmanCompanionRenderState, SnowmanCompanionModel> {
-	private static final ResourceLocation SNOWMAN_TEXTURE = ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "textures/entity/snowman.png");
-	private static final ResourceLocation SNOWMAN_TEXTURE_GOLDEN = ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "textures/entity/snowman_golden.png");
+	private static final Identifier SNOWMAN_TEXTURE = Identifier.fromNamespaceAndPath(Snowmancy.MODID, "textures/entity/snowman.png");
+	private static final Identifier SNOWMAN_TEXTURE_GOLDEN = Identifier.fromNamespaceAndPath(Snowmancy.MODID, "textures/entity/snowman_golden.png");
 
 	public SnowmanCompanionRenderer(EntityRendererProvider.Context ctx) {
 		super(ctx, new SnowmanCompanionModel(ctx.bakeLayer(ClientReg.SNOWMAN_LOCATION)), 0.25F);
@@ -25,7 +25,7 @@ public class SnowmanCompanionRenderer extends MobRenderer<SnowmanCompanion, Snow
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(SnowmanCompanionRenderState renderState) {
+	public Identifier getTextureLocation(SnowmanCompanionRenderState renderState) {
 		return renderState.goldenCarrot ? SNOWMAN_TEXTURE_GOLDEN : SNOWMAN_TEXTURE;
 	}
 

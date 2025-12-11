@@ -4,7 +4,7 @@ import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderBlockEntity;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;

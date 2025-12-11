@@ -7,15 +7,15 @@ import bl4ckscor3.mod.snowmancy.Snowmancy;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.PlayerTrigger;
-import net.minecraft.advancements.critereon.RecipeCraftedTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.PlayerTrigger;
+import net.minecraft.advancements.criterion.RecipeCraftedTrigger;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
 public class SnowmancyAdvancementGenerator implements AdvancementSubProvider {
 	@Override
@@ -25,9 +25,9 @@ public class SnowmancyAdvancementGenerator implements AdvancementSubProvider {
 				.display(Snowmancy.SNOWMAN_BUILDER,
 						Component.translatable("itemGroup.snowmancy"),
 						Component.translatable("snowmancy.advancement.root.description"),
-						ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "textures/block/evercold_ice.png"),
+						Identifier.fromNamespaceAndPath(Snowmancy.MODID, "textures/block/evercold_ice.png"),
 						AdvancementType.TASK, true, true, false)
-				.addCriterion("snowman_builder", RecipeCraftedTrigger.TriggerInstance.craftedItem(ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "snowman_builder"))))
+				.addCriterion("snowman_builder", RecipeCraftedTrigger.TriggerInstance.craftedItem(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(Snowmancy.MODID, "snowman_builder"))))
 				.save(saver, Snowmancy.MODID + ":root");
 		AdvancementHolder snowmanCompanion = Advancement.Builder.advancement()
 				.parent(root)

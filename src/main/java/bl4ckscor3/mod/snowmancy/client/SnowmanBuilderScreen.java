@@ -7,11 +7,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 public class SnowmanBuilderScreen extends AbstractContainerScreen<SnowmanBuilderContainer> {
-	public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "textures/gui/container/snowman_builder.png");
+	public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Snowmancy.MODID, "textures/gui/container/snowman_builder.png");
 	private final Component biomeTooWarm = Component.translatable("snowmancy.screen.biomeTooWarm");
 	private SnowmanBuilderBlockEntity be;
 

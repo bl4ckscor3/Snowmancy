@@ -2,7 +2,7 @@ package bl4ckscor3.mod.snowmancy.client;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -12,7 +12,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 @EventBusSubscriber(modid = Snowmancy.MODID, value = Dist.CLIENT)
 public class ClientReg {
-	public static final ModelLayerLocation SNOWMAN_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "snowman"), "main");
+	public static final ModelLayerLocation SNOWMAN_LOCATION = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Snowmancy.MODID, "snowman"), "main");
 
 	private ClientReg() {}
 
@@ -33,6 +33,6 @@ public class ClientReg {
 
 	@SubscribeEvent
 	public static void registerConditionalItemModelProperty(RegisterConditionalItemModelPropertyEvent event) {
-		event.register(ResourceLocation.fromNamespaceAndPath(Snowmancy.MODID, "golden_nose"), GoldenNose.MAP_CODEC);
+		event.register(Identifier.fromNamespaceAndPath(Snowmancy.MODID, "golden_nose"), GoldenNose.MAP_CODEC);
 	}
 }

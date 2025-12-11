@@ -10,13 +10,13 @@ import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.item.FrozenSnowmanItem;
 import bl4ckscor3.mod.snowmancy.item.SnowmanData;
 import net.minecraft.advancements.CriterionTrigger;
-import net.minecraft.advancements.critereon.PlayerTrigger;
+import net.minecraft.advancements.criterion.PlayerTrigger;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
@@ -60,9 +60,9 @@ public class Snowmancy {
 	public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, MODID);
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 	public static final DeferredRegister<CriterionTrigger<?>> TRIGGER_TYPES = DeferredRegister.create(Registries.TRIGGER_TYPE, MODID);
-	public static final DeferredBlock<SnowmanBuilderBlock> SNOWMAN_BUILDER = BLOCKS.registerBlock("snowman_builder", SnowmanBuilderBlock::new, BlockBehaviour.Properties.of().strength(3.5F).sound(SoundType.STONE).requiresCorrectToolForDrops());
+	public static final DeferredBlock<SnowmanBuilderBlock> SNOWMAN_BUILDER = BLOCKS.registerBlock("snowman_builder", SnowmanBuilderBlock::new, () -> BlockBehaviour.Properties.of().strength(3.5F).sound(SoundType.STONE).requiresCorrectToolForDrops());
 	//@formatter:off
-	public static final DeferredBlock<Block> EVERCOLD_ICE = BLOCKS.registerSimpleBlock("evercold_ice", BlockBehaviour.Properties.of()
+	public static final DeferredBlock<Block> EVERCOLD_ICE = BLOCKS.registerSimpleBlock("evercold_ice", () ->BlockBehaviour.Properties.of()
 			.strength(2.0F)
 			.friction(0.98F)
 			.sound(SoundType.GLASS));
@@ -78,11 +78,11 @@ public class Snowmancy {
 			.setTrackingRange(128)
 			.setUpdateInterval(1)
 			.setShouldReceiveVelocityUpdates(true)
-			.build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(MODID, "snowman"))));
+			.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "snowman"))));
 	//@formatter:on
 	public static final DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<SnowmanData>> SNOWMAN_DATA_SERIALIZER = ENTITY_DATA_SERIALIZERS.register("snowman_data", () -> EntityDataSerializer.forValueType(SnowmanData.STREAM_CODEC));
 	public static final DeferredHolder<CriterionTrigger<?>, PlayerTrigger> CRAFT_EVERCOLD_SNOWMAN = TRIGGER_TYPES.register("craft_evercold_snowman", () -> new PlayerTrigger());
-	public static final ResourceKey<DamageType> SNOWMAN_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(MODID, "snowman_damage"));
+	public static final ResourceKey<DamageType> SNOWMAN_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, Identifier.fromNamespaceAndPath(MODID, "snowman_damage"));
 	//@formatter:off
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TECHNICAL_TAB = CREATIVE_MODE_TABS.register("tab", () -> CreativeModeTab.builder()
 			.withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
@@ -96,7 +96,7 @@ public class Snowmancy {
 			}).build());
 	//@formatter:on
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<SnowmanData>> SNOWMAN_DATA = DATA_COMPONENTS.registerComponentType("snowman_data", builder -> builder.persistent(SnowmanData.CODEC).networkSynchronized(SnowmanData.STREAM_CODEC).cacheEncoding());
-	public static final TagKey<Item> STAINED_GLASS_BLOCKS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "stained_glass"));
+	public static final TagKey<Item> STAINED_GLASS_BLOCKS = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MODID, "stained_glass"));
 
 	public Snowmancy(IEventBus modEventBus) {
 		BLOCKS.register(modEventBus);
