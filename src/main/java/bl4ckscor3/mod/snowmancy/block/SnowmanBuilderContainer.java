@@ -13,16 +13,17 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
 public class SnowmanBuilderContainer extends AbstractContainerMenu {
-	private static final List<ItemStack> WEAPONS = new ArrayList<>();
+	private static final List<ItemStackTemplate> WEAPONS = new ArrayList<>();
 	public SnowmanBuilderBlockEntity be;
 
 	/**
@@ -31,7 +32,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 	 * @param item The item to register
 	 */
 	public static void registerWeapon(Item item) {
-		WEAPONS.add(new ItemStack(item));
+		WEAPONS.add(new ItemStackTemplate(item));
 	}
 
 	public SnowmanBuilderContainer(int windowId, Level level, BlockPos pos, Inventory inv) {
@@ -75,8 +76,8 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 		addSlot(new RestrictedSlot(be, slot++, 80, 132, 1, snowValidator));
 		//weapon slot (always second last slot!)
 		addSlot(new RestrictedSlot(be, slot++, 105, 89, 1, stack -> {
-			for (ItemStack weapon : WEAPONS) {
-				if (stack.getItem() == weapon.getItem())
+			for (ItemStackTemplate weapon : WEAPONS) {
+				if (stack.getItem() == weapon.item())
 					return true;
 			}
 
@@ -87,7 +88,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 	}
 
 	@Override
-	public void clicked(int slotId, int dragType, ClickType clickType, Player player) {
+	public void clicked(int slotId, int dragType, ContainerInput containerInput, Player player) {
 		boolean clickedOutput = false;
 
 		if (slotId == 36 + be.getContainerSize() - 1 && !be.getItem(be.getContainerSize() - 1).isEmpty()) { //last slot
@@ -101,7 +102,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 		}
 
 		if (!clickedOutput)
-			super.clicked(slotId, dragType, clickType, player);
+			super.clicked(slotId, dragType, containerInput, player);
 		else {
 			if (be.getProgress() == SnowmanBuilderBlockEntity.MAX_PROGRESS) {
 				be.resetProgress();
@@ -113,7 +114,7 @@ public class SnowmanBuilderContainer extends AbstractContainerMenu {
 						Snowmancy.CRAFT_EVERCOLD_SNOWMAN.get().trigger(sp);
 				}
 
-				super.clicked(slotId, dragType, clickType, player);
+				super.clicked(slotId, dragType, containerInput, player);
 			}
 		}
 	}

@@ -17,7 +17,6 @@
       "translate": "snowmancy.advancement.snowman_companion.description"
     },
     "icon": {
-      "count": 1,
       "id": "snowmancy:frozen_snowman"
     },
     "title": {
