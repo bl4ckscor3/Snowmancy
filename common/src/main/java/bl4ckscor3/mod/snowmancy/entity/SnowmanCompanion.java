@@ -2,10 +2,12 @@ package bl4ckscor3.mod.snowmancy.entity;
 
 import bl4ckscor3.mod.snowmancy.Snowmancy;
 import bl4ckscor3.mod.snowmancy.item.SnowmanData;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,6 +27,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.hurtingprojectile.windcharge.AbstractWindCharge;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEgg;
 import net.minecraft.world.item.ArrowItem;
@@ -35,6 +38,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.Vec3;
 
 public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 	//TODO: add wearables
@@ -113,6 +117,12 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 			case ARROW -> ((ArrowItem) Items.ARROW).createArrow(level(), new ItemStack(Items.ARROW), this, new ItemStack(Items.BOW));
 			case EGG -> new ThrownEgg(level(), this, new ItemStack(Items.EGG));
 			case SNOWBALL -> new Snowball(level(), this, new ItemStack(Items.SNOWBALL));
+			case WIND_CHARGE -> new AbstractWindCharge(EntityType.BREEZE_WIND_CHARGE, level(), this, getX(), getY() + getEyeHeight(), getZ()) {
+				@Override
+				protected void explode(final Vec3 position) {
+					level().explode(this, null, EXPLOSION_DAMAGE_CALCULATOR, position.x(), position.y(), position.z(), 3.0F, false, Level.ExplosionInteraction.TRIGGER, ParticleTypes.GUST_EMITTER_SMALL, ParticleTypes.GUST_EMITTER_LARGE, WeightedList.of(), SoundEvents.BREEZE_WIND_CHARGE_BURST);
+				}
+			};
 			default -> null;
 		};
 

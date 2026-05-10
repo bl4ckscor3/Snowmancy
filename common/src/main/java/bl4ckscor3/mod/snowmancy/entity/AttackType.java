@@ -6,18 +6,27 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public enum AttackType implements StringRepresentable {
-	NONE,
-	ARROW,
-	EGG,
-	HIT,
-	SNOWBALL;
+	NONE(false, false),
+	ARROW(true, false),
+	EGG(true, false),
+	HIT(false, true),
+	SNOWBALL(true, false),
+	WIND_CHARGE(true, false);
+
+	private final boolean ranged;
+	private final boolean melee;
+
+	AttackType(boolean ranged, boolean melee) {
+		this.ranged = ranged;
+		this.melee = melee;
+	}
 
 	public boolean isRanged() {
-		return this == ARROW || this == EGG || this == SNOWBALL;
+		return ranged;
 	}
 
 	public boolean isMelee() {
-		return this == HIT;
+		return melee;
 	}
 
 	public String getDescriptionId() {
@@ -38,6 +47,8 @@ public enum AttackType implements StringRepresentable {
 			return EGG;
 		else if (stack.is(Items.SNOWBALL))
 			return SNOWBALL;
+		else if (stack.is(Items.WIND_CHARGE))
+			return WIND_CHARGE;
 		else
 			return HIT;
 	}

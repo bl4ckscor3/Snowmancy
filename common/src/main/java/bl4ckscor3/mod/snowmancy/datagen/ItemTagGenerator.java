@@ -36,6 +36,7 @@ public class ItemTagGenerator extends VanillaItemTagsProvider {
 		tag(Snowmancy.CAN_BE_USED_AS_WEAPON).addTag(ItemTags.SWORDS).add(
 			Items.BOW,
 			Items.EGG,
-			Items.SNOWBALL);
+			Items.SNOWBALL,
+			Items.WIND_CHARGE);
 	}
 }

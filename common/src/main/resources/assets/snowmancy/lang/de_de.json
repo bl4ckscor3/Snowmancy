@@ -4,7 +4,7 @@
     "item.snowmancy.frozen_snowman": "Schneemann-Gefährte",
     "entity.snowmancy.snowman": "Schneemann-Gefährte",
     "itemGroup.snowmancy": "Snowmancy",
-    
+
     "snowmancy.screen.biomeTooWarm": "Biom zu warm!",
 
 	"snowmancy.tooltip.goldenCarrot": "Goldene Karrote: %s",
@@ -13,12 +13,13 @@
 	"snowmancy.tooltip.evercold": "Ewig kalt: %s",
 	"snowmancy.tooltip.true": "Ja",
 	"snowmancy.tooltip.false": "Nein",
-	
+
 	"snowmancy.attackType.none": "Keiner",
 	"snowmancy.attackType.arrow": "Pfeil",
 	"snowmancy.attackType.egg": "Ei",
 	"snowmancy.attackType.hit": "Nahkampf",
 	"snowmancy.attackType.snowball": "Schneeball",
+	"snowmancy.attackType.wind_charge": "Windkugel",
 
     "snowmancy.advancement.root.description": "Stelle den Schneemann-Erbauer her",
     "snowmancy.advancement.snowman_companion.title": "Gefroren",

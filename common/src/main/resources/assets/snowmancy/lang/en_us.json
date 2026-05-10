@@ -4,7 +4,7 @@
     "item.snowmancy.frozen_snowman": "Snowman Companion",
     "entity.snowmancy.snowman": "Snowman Companion",
     "itemGroup.snowmancy": "Snowmancy",
-    
+
     "snowmancy.screen.biomeTooWarm": "Biome too warm!",
 
 	"snowmancy.tooltip.goldenCarrot": "Golden Carrot: %s",
@@ -13,12 +13,13 @@
 	"snowmancy.tooltip.evercold": "Evercold: %s",
 	"snowmancy.tooltip.true": "Yes",
 	"snowmancy.tooltip.false": "No",
-	
+
 	"snowmancy.attackType.none": "None",
 	"snowmancy.attackType.arrow": "Arrow",
 	"snowmancy.attackType.egg": "Egg",
 	"snowmancy.attackType.hit": "Melee",
 	"snowmancy.attackType.snowball": "Snowball",
+	"snowmancy.attackType.wind_charge": "Wind Charge",
 
     "snowmancy.advancement.root.description": "Craft the Snowman Builder",
     "snowmancy.advancement.snowman_companion.title": "Frozen",
