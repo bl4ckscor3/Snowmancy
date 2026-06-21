@@ -11,7 +11,10 @@ import bl4ckscor3.mod.snowmancy.block.SnowmanBuilderContainer;
 import bl4ckscor3.mod.snowmancy.entity.SnowmanCompanion;
 import bl4ckscor3.mod.snowmancy.item.FrozenSnowmanItem;
 import bl4ckscor3.mod.snowmancy.item.SnowmanData;
-import net.minecraft.advancements.criterion.PlayerTrigger;
+import bl4ckscor3.mod.snowmancy.lib.Platform;
+import bl4ckscor3.mod.snowmancy.lib.RegisteredBlock;
+import bl4ckscor3.mod.snowmancy.lib.RegisteredItem;
+import net.minecraft.advancements.triggers.PlayerTrigger;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -45,14 +48,14 @@ import net.minecraft.world.phys.HitResult;
 public class Snowmancy {
 	public static final String MODID = "snowmancy";
 	private static Platform platform;
-	public static final RegistryObject<SnowmanBuilderBlock> SNOWMAN_BUILDER = RegistryObject.block("snowman_builder", SnowmanBuilderBlock::new, () -> BlockBehaviour.Properties.of().strength(3.5F).sound(SoundType.STONE).requiresCorrectToolForDrops());
-	public static final RegistryObject<Block> EVERCOLD_ICE = RegistryObject.block("evercold_ice", Block::new, () -> BlockBehaviour.Properties.of()
+	public static final RegisteredBlock<SnowmanBuilderBlock> SNOWMAN_BUILDER = RegisteredBlock.create("snowman_builder", SnowmanBuilderBlock::new, () -> BlockBehaviour.Properties.of().strength(3.5F).sound(SoundType.STONE).requiresCorrectToolForDrops());
+	public static final RegisteredBlock<Block> EVERCOLD_ICE = RegisteredBlock.create("evercold_ice", Block::new, () -> BlockBehaviour.Properties.of()
 		.strength(2.0F)
 		.friction(0.98F)
 		.sound(SoundType.GLASS));
-	public static final RegistryObject<BlockItem> SNOWMAN_BUILDER_ITEM = RegistryObject.blockItem("snowman_builder", p -> new BlockItem(SNOWMAN_BUILDER.get(), p), Item.Properties::new);
-	public static final RegistryObject<BlockItem> EVERCOLD_ICE_ITEM = RegistryObject.blockItem("evercold_ice", p -> new BlockItem(EVERCOLD_ICE.get(), p), Item.Properties::new);
-	public static final RegistryObject<FrozenSnowmanItem> FROZEN_SNOWMAN = RegistryObject.item("frozen_snowman", FrozenSnowmanItem::new, Item.Properties::new);
+	public static final RegisteredItem<BlockItem> SNOWMAN_BUILDER_ITEM = RegisteredItem.blockItem(SNOWMAN_BUILDER, Item.Properties::new);
+	public static final RegisteredItem<BlockItem> EVERCOLD_ICE_ITEM = RegisteredItem.blockItem(EVERCOLD_ICE, Item.Properties::new);
+	public static final RegisteredItem<FrozenSnowmanItem> FROZEN_SNOWMAN = RegisteredItem.item("frozen_snowman", FrozenSnowmanItem::new, Item.Properties::new);
 	public static final Supplier<BlockEntityType<SnowmanBuilderBlockEntity>> SNOWMAN_BUILDER_BLOCK_ENTITY = Suppliers.memoize(() -> platform.createBlockEntity(SnowmanBuilderBlockEntity::new, SNOWMAN_BUILDER.get()));
 	public static final Supplier<MenuType<SnowmanBuilderContainer>> SNOWMAN_BUILDER_MENU = Suppliers.memoize(() -> platform.createMenuType(SnowmanBuilderContainer::new));
 	public static final Supplier<EntityType<SnowmanCompanion>> SNOWMAN_ENTITY = Suppliers.memoize(() -> EntityType.Builder.<SnowmanCompanion>of(SnowmanCompanion::new, MobCategory.CREATURE)

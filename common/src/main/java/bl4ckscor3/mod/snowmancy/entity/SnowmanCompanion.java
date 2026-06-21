@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -117,7 +118,7 @@ public class SnowmanCompanion extends AbstractGolem implements RangedAttackMob {
 			case ARROW -> ((ArrowItem) Items.ARROW).createArrow(level(), new ItemStack(Items.ARROW), this, new ItemStack(Items.BOW));
 			case EGG -> new ThrownEgg(level(), this, new ItemStack(Items.EGG));
 			case SNOWBALL -> new Snowball(level(), this, new ItemStack(Items.SNOWBALL));
-			case WIND_CHARGE -> new AbstractWindCharge(EntityType.BREEZE_WIND_CHARGE, level(), this, getX(), getY() + getEyeHeight(), getZ()) {
+			case WIND_CHARGE -> new AbstractWindCharge(EntityTypes.BREEZE_WIND_CHARGE, level(), this, getX(), getY() + getEyeHeight(), getZ()) {
 				@Override
 				protected void explode(final Vec3 position) {
 					level().explode(this, null, EXPLOSION_DAMAGE_CALCULATOR, position.x(), position.y(), position.z(), 3.0F, false, Level.ExplosionInteraction.TRIGGER, ParticleTypes.GUST_EMITTER_SMALL, ParticleTypes.GUST_EMITTER_LARGE, WeightedList.of(), SoundEvents.BREEZE_WIND_CHARGE_BURST);
