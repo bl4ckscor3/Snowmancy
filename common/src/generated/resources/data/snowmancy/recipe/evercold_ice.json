@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "I": "minecraft:ice",
     "P": "minecraft:packed_ice"
